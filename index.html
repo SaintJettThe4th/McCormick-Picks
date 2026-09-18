@@ -746,6 +746,26 @@
             'WAS': { name: 'Commanders', logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/was.png', stadium: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Northwest_Stadium_2024.jpg/640px-Northwest_Stadium_2024.jpg' }
         };
 
+        // Auto-pick function - selects favorite or home team if no pick made
+        function autoPickIfMissing(gameId, homeTeam, awayTeam, favorite) {
+            for (const user of ['Jett', 'Kevin']) {
+                if (!picks[user] || !picks[user][gameId]) {
+                    const selectedTeam = favorite || homeTeam;
+                    if (!picks[user]) picks[user] = {};
+                    picks[user][gameId] = selectedTeam;
+                    console.log(`Auto-picked ${selectedTeam} for ${user} in game ${gameId}`);
+                }
+            }
+        }
+
+        // Game favorites (spread favorites - can be updated from betting lines)
+        const favorites = {
+            '1-1': 'SEA', '1-2': 'SF', '1-3': 'CIN', '1-4': 'DET', '1-5': 'BAL',
+            '1-6': 'BAL', '1-7': 'PIT', '1-8': 'CHI', '1-9': 'JAX', '1-10': 'BUF',
+            '1-11': 'LAC', '1-12': 'MIA', '1-13': 'GB', '1-14': 'PHI', '1-15': 'DAL',
+            '1-16': 'KC'
+        };
+
         // Schedule version for tracking changes
         const SCHEDULE_VERSION = '2026-v2';
 
@@ -1443,19 +1463,25 @@
             }
         };
 
-        // Week 1 picks data (filled out as example)
+        // Week 1 and 2 picks data
         const picks = {
             'Jett': {
-                '1-1': 'KC', '1-2': 'BUF', '1-3': 'MIA', '1-4': 'CIN', '1-5': 'BAL',
-                '1-6': 'HOU', '1-7': 'IND', '1-8': 'DAL', '1-9': 'PHI', '1-10': 'GB',
-                '1-11': 'CHI', '1-12': 'NO', '1-13': 'ATL', '1-14': 'SF', '1-15': 'SEA',
-                '1-16': 'LV'
+                // Week 1 picks
+                '1-1': 'SEA', '1-2': 'LAR', '1-3': 'TB', '1-4': 'DET', '1-5': 'NYJ',
+                '1-6': 'BAL', '1-7': 'PIT', '1-8': 'CHI', '1-9': 'JAX', '1-10': 'BUF',
+                '1-11': 'LAC', '1-12': 'MIA', '1-13': 'GB', '1-14': 'PHI', '1-15': 'DAL',
+                '1-16': 'DEN',
+                // Week 2 picks
+                '2-1': 'BUF'
             },
             'Kevin': {
-                '1-1': 'KC', '1-2': 'BUF', '1-3': 'NE', '1-4': 'CLE', '1-5': 'BAL',
-                '1-6': 'HOU', '1-7': 'IND', '1-8': 'DAL', '1-9': 'PHI', '1-10': 'GB',
-                '1-11': 'DET', '1-12': 'NO', '1-13': 'TB', '1-14': 'SF', '1-15': 'SEA',
-                '1-16': 'LAC'
+                // Week 1 picks
+                '1-1': 'NE', '1-2': 'LAR', '1-3': 'CIN', '1-4': 'DET', '1-5': 'BAL',
+                '1-6': 'PIT', '1-7': 'JAX', '1-8': 'MIN', '1-9': 'DAL', '1-10': 'CIN',
+                '1-11': 'HOU', '1-12': 'LV', '1-13': 'TEN', '1-14': 'PHI', '1-15': 'DAL',
+                '1-16': 'DEN',
+                // Week 2 picks
+                '2-1': 'BUF'
             }
         };
 
@@ -1472,8 +1498,25 @@
             init: function() {
                 console.log('App initializing...');
                 this.createWeekButtons();
+                this.loadPicks();
+                this.autoPickLockedGames();
                 // Don't call updateAllSections or updateMoneyStatus until user is logged in
                 console.log('App initialized successfully');
+            },
+
+            autoPickLockedGames: function() {
+                // Auto-pick for games that are locked (have started)
+                for (let week = 1; week <= 18; week++) {
+                    const weekData = schedule[week];
+                    if (!weekData) continue;
+
+                    weekData.games.forEach(game => {
+                        if (this.isGameLocked(game)) {
+                            autoPickIfMissing(game.id, game.home, game.away, favorites[game.id]);
+                        }
+                    });
+                }
+                this.savePicks();
             },
 
             updateMoneyStatus: function() {

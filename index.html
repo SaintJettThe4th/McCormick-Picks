@@ -666,7 +666,7 @@
                             <button class="btn btn-primary" style="padding: 20px; font-size: 18px;" onclick="app.showGames()">Games</button>
                             <button class="btn btn-info" style="padding: 20px; font-size: 18px;" onclick="app.showPicks()">Picks</button>
                             <button class="btn btn-secondary" style="padding: 20px; font-size: 18px;" onclick="app.showResults()">Results</button>
-                            <button class="btn btn-secondary" style="padding: 20px; font-size: 18px;" onclick="app.showLeaderboard()">Standings</button>
+                            <button class="btn" style="padding: 20px; font-size: 18px; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
                             <button class="btn btn-danger" style="padding: 20px; font-size: 18px;" onclick="app.showHistory()">History</button>
                         </div>
                     </div>
@@ -759,7 +759,7 @@
             <button class="btn btn-primary" onclick="app.showGames()">Games</button>
             <button class="btn btn-info" onclick="app.showPicks()">Picks</button>
             <button class="btn btn-secondary" onclick="app.showResults()">Results</button>
-            <button class="btn btn-secondary" onclick="app.showLeaderboard()">Standings</button>
+            <button class="btn" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
             <button class="btn btn-danger" onclick="app.showHistory()">History</button>
         </div>
     </div>
@@ -1207,8 +1207,11 @@
                 '1-6': 'BUF', '1-7': 'BAL', '1-8': 'JAX', '1-9': 'PIT', '1-10': 'NYJ',
                 '1-11': 'LAC', '1-12': 'MIA', '1-13': 'GB', '1-14': 'PHI', '1-15': 'DAL',
                 '1-16': 'DEN',
-                // Week 2 picks
-                '2-1': 'BUF'
+                // Week 2 picks: Bills, Panthers, Ravens, Broncos, Bears, Chargers, Bengals, Seahawks, Patriots, Cowboys, Packers, 49ers, Buccaneers, Chiefs, Eagles, Rams
+                '2-1': 'BUF', '2-2': 'CAR', '2-3': 'BAL', '2-4': 'CHI', '2-5': 'CIN',
+                '2-6': 'NE', '2-7': 'GB', '2-8': 'TB', '2-9': 'PHI', '2-10': 'DEN',
+                '2-11': 'LAC', '2-12': 'SEA', '2-13': 'DAL', '2-14': 'SF', '2-15': 'KC',
+                '2-16': 'LAR'
             },
             'Kevin': {
                 // Week 1 picks: Patriots, Rams, Bears, Bengals, Lions, Texans, Ravens, Jaguars, Steelers, Titans, Chargers, Raiders, Vikings, Eagles, Cowboys, Broncos
@@ -1216,8 +1219,11 @@
                 '1-6': 'HOU', '1-7': 'BAL', '1-8': 'JAX', '1-9': 'PIT', '1-10': 'TEN',
                 '1-11': 'LAC', '1-12': 'LV', '1-13': 'MIN', '1-14': 'PHI', '1-15': 'DAL',
                 '1-16': 'DEN',
-                // Week 2 picks
-                '2-1': 'BUF'
+                // Week 2 picks: Bills, Panthers, Ravens, Jaguars, Bears, Chargers, Texans, Seahawks, Patriots, Cowboys, Packers, 49ers, Buccaneers, Chiefs, Eagles, Rams
+                '2-1': 'BUF', '2-2': 'CAR', '2-3': 'BAL', '2-4': 'CHI', '2-5': 'HOU',
+                '2-6': 'NE', '2-7': 'GB', '2-8': 'TB', '2-9': 'PHI', '2-10': 'JAX',
+                '2-11': 'LAC', '2-12': 'SEA', '2-13': 'DAL', '2-14': 'SF', '2-15': 'KC',
+                '2-16': 'LAR'
             }
         };
 
@@ -1654,10 +1660,11 @@
                         <div class="game-content">
                             <div style="text-align: center; margin-bottom: 12px;">
                                 <span class="status ${game.final ? 'final' : (isLocked ? 'locked' : 'upcoming')}">
-                                    ${game.final ? `Final ${game.homeScore}-${game.awayScore}` : (isLocked ? 'Locked' : 'Upcoming')}
+                                    ${game.final ? `Final` : (isLocked ? 'Locked' : 'Upcoming')}
                                 </span>
                                 ${isLocked ? '<span class="lock-indicator">LOCKED</span>' : ''}
                                 <div class="game-time">${game.date} ${game.time} EST</div>
+                                ${game.final ? `<div style="font-size: 14px; font-weight: bold; color: #1e293b;">${game.homeScore}-${game.awayScore}</div>` : ''}
                             </div>
 
                             <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
@@ -1720,6 +1727,7 @@
                         <div style="display: flex; align-items: center; flex: 1;">
                             <img src="${teams[game.away].logo}" alt="${teams[game.away].name}" class="team-logo-small">
                             <span style="font-size: 13px;">${teams[game.away].name}</span>
+                            ${game.final ? `<span style="font-size: 11px; color: #64748b; margin-left: 4px;">${game.awayScore}</span>` : ''}
                         </div>
                         <div style="text-align: center; flex: 1;">
                             <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">${game.time}</div>
@@ -1732,9 +1740,11 @@
                                         `` :
                                         `<span class="different-pick">Different</span>`))
                             }
+                            ${game.final ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">Final</div>` : ''}
                         </div>
                         <div style="display: flex; align-items: center; flex: 1; justify-content: flex-end;">
                             <span style="font-size: 13px;">${teams[game.home].name}</span>
+                            ${game.final ? `<span style="font-size: 11px; color: #64748b; margin-right: 4px;">${game.homeScore}</span>` : ''}
                             <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" class="team-logo-small">
                         </div>
                     `;

@@ -20,7 +20,8 @@
             margin: 0 auto;
             padding: 15px;
             text-align: center;
-            padding-bottom: 250px;
+            padding-bottom: 300px;
+            min-height: calc(100vh - 200px);
         }
         .header {
             background: linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%);
@@ -552,7 +553,8 @@
         @media (max-width: 600px) {
             .container {
                 padding: 10px;
-                padding-bottom: 280px;
+                padding-bottom: 350px;
+                min-height: calc(100vh - 250px);
             }
             .header {
                 padding: 20px 10px;
@@ -891,7 +893,7 @@
             },
             4: {
                 games: [
-                    { id: '4-1', home: 'CLE', away: 'PIT', date: 'Oct 1', time: 'Thu 8:15 PM', final: true, homeScore: 24, awayScore: 19 },
+                    { id: '4-1', home: 'CLE', away: 'PIT', date: 'Oct 1', time: 'Thu 8:15 PM', final: true, homeScore: 27, awayScore: 24 },
                     { id: '4-2', home: 'WAS', away: 'IND', date: 'Oct 4', time: 'Sun 9:30 AM', final: false },
                     { id: '4-3', home: 'BAL', away: 'TEN', date: 'Oct 4', time: 'Sun 1:00 PM', final: false },
                     { id: '4-4', home: 'NE', away: 'BUF', date: 'Oct 4', time: 'Sun 1:00 PM', final: false },
@@ -1423,7 +1425,6 @@
                     this.checkScheduleUpdate();
                     this.checkPickReminders();
                     this.showMainMenu();
-                    this.showResultsPopup();
                     console.log('Login successful for:', this.currentUser);
                 } else {
                     if (passwordError) passwordError.classList.remove('hidden');
@@ -1494,14 +1495,18 @@
                 document.getElementById('leaderboard-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
                 document.getElementById('bye-weeks').classList.add('hidden');
-                // Hide bottom navigation
-                document.getElementById('nav').classList.add('hidden');
+                // Show bottom navigation
+                document.getElementById('nav').classList.remove('hidden');
 
-                // Ensure header elements are visible
+                // Ensure header elements are visible and updated
                 const competitiveMsg = document.getElementById('competitive-message');
                 const recordsMsg = document.getElementById('records-message');
                 if (competitiveMsg) competitiveMsg.style.display = 'block';
                 if (recordsMsg) recordsMsg.style.display = 'block';
+
+                // Update header info
+                this.updateRecords();
+                this.updateStatusMessage();
             },
 
             checkScheduleUpdate: function() {
@@ -1760,9 +1765,11 @@
                     comparisonDiv.style.border = `${borderWidth} solid ${borderColor}`;
 
                     comparisonDiv.innerHTML = `
-                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column; position: relative;">
-                            ${awayWinner ? `<span style="position: absolute; top: -5px; left: -5px; font-size: 12px;">⭐</span>` : ''}
-                            <img src="${teams[game.away].logo}" alt="${teams[game.away].name}" style="width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px;">
+                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 2px; margin-bottom: 4px;">
+                                ${awayWinner ? `<span style="font-size: 14px; line-height: 1;">⭐</span>` : ''}
+                                <img src="${teams[game.away].logo}" alt="${teams[game.away].name}" style="width: 40px; height: 40px; object-fit: contain;">
+                            </div>
                             <span style="font-size: 14px; font-weight: 600;">${teams[game.away].name}</span>
                             ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.awayScore}</div>` : ''}
                         </div>
@@ -1777,9 +1784,11 @@
                             }
                             ${game.final ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">Final</div>` : ''}
                         </div>
-                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column; position: relative;">
-                            ${homeWinner ? `<span style="position: absolute; top: -5px; right: -5px; font-size: 12px;">⭐</span>` : ''}
-                            <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" style="width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px;">
+                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 2px; margin-bottom: 4px;">
+                                <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" style="width: 40px; height: 40px; object-fit: contain;">
+                                ${homeWinner ? `<span style="font-size: 14px; line-height: 1;">⭐</span>` : ''}
+                            </div>
                             <span style="font-size: 14px; font-weight: 600;">${teams[game.home].name}</span>
                             ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.homeScore}</div>` : ''}
                         </div>

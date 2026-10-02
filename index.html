@@ -1765,9 +1765,9 @@
 
                     comparisonDiv.innerHTML = `
                         <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
-                            <div style="display: flex; align-items: center; justify-content: center; gap: 2px; margin-bottom: 4px;">
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 4px; position: relative;">
                                 <img src="${teams[game.away].logo}" alt="${teams[game.away].name}" style="width: 40px; height: 40px; object-fit: contain;">
-                                ${awayWinner ? `<span style="font-size: 14px; line-height: 1;">⭐</span>` : ''}
+                                ${awayWinner ? `<span style="position: absolute; right: -18px; top: 50%; transform: translateY(-50%); font-size: 14px; line-height: 1;">⭐</span>` : ''}
                             </div>
                             <span style="font-size: 14px; font-weight: 600;">${teams[game.away].name}</span>
                             ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.awayScore}</div>` : ''}
@@ -1784,8 +1784,8 @@
                             ${game.final ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">Final</div>` : ''}
                         </div>
                         <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
-                            <div style="display: flex; align-items: center; justify-content: center; gap: 2px; margin-bottom: 4px;">
-                                ${homeWinner ? `<span style="font-size: 14px; line-height: 1;">⭐</span>` : ''}
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 4px; position: relative;">
+                                ${homeWinner ? `<span style="position: absolute; left: -18px; top: 50%; transform: translateY(-50%); font-size: 14px; line-height: 1;">⭐</span>` : ''}
                                 <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" style="width: 40px; height: 40px; object-fit: contain;">
                             </div>
                             <span style="font-size: 14px; font-weight: 600;">${teams[game.home].name}</span>

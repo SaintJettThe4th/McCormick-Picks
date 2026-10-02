@@ -1200,6 +1200,216 @@
             }
         };
 
+        // Historical data from 2009 through 2025
+        const historyData = {
+            2025: {
+                Jett: { wins: 183, losses: 101, ties: 1, winPercentage: 64.2, playoffWins: 12, playoffLosses: 1, playoffTies: 0, playoffWinPercentage: 92.3 },
+                Kevin: { wins: 180, losses: 104, ties: 1, winPercentage: 63.2, playoffWins: 7, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 53.8 },
+                champion: 'Jett',
+                superBowl: {
+                    number: 'LX',
+                    jettPick: 'SEA',
+                    jettResult: 'Correct',
+                    kevinPick: 'SEA',
+                    kevinResult: 'Correct'
+                }
+            },
+            2024: {
+                Jett: { wins: 204, losses: 81, ties: 0, winPercentage: 71.6, playoffWins: 8, playoffLosses: 5, playoffTies: 0, playoffWinPercentage: 61.5 },
+                Kevin: { wins: 194, losses: 91, ties: 0, winPercentage: 68.1, playoffWins: 8, playoffLosses: 5, playoffTies: 0, playoffWinPercentage: 61.5 },
+                champion: 'Jett',
+                superBowl: {
+                    number: 'LIX',
+                    jettPick: 'PHI',
+                    jettResult: 'Correct',
+                    kevinPick: 'PHI',
+                    kevinResult: 'Correct'
+                }
+            },
+            2023: {
+                Jett: { wins: 177, losses: 108, ties: 0, winPercentage: 62.1, playoffWins: 7, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 53.8 },
+                Kevin: { wins: 178, losses: 107, ties: 0, winPercentage: 62.5, playoffWins: 7, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 53.8 },
+                champion: 'Kevin',
+                superBowl: {
+                    number: 'LVIII',
+                    jettPick: 'KC',
+                    jettResult: 'Correct',
+                    kevinPick: 'SF',
+                    kevinResult: 'Incorrect'
+                }
+            },
+            2022: {
+                Jett: { wins: 177, losses: 105, ties: 4, winPercentage: 61.9, playoffWins: 7, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 53.8 },
+                Kevin: { wins: 174, losses: 108, ties: 4, winPercentage: 60.8, playoffWins: 10, playoffLosses: 3, playoffTies: 0, playoffWinPercentage: 76.9 },
+                champion: 'Jett',
+                superBowl: {
+                    number: 'LVII',
+                    jettPick: 'PHI',
+                    jettResult: 'Incorrect',
+                    kevinPick: 'KC',
+                    kevinResult: 'Correct'
+                }
+            },
+            2021: {
+                Jett: { wins: 183, losses: 101, ties: 1, winPercentage: 64.2, playoffWins: 9, playoffLosses: 4, playoffTies: 0, playoffWinPercentage: 69.2 },
+                Kevin: { wins: 182, losses: 102, ties: 1, winPercentage: 63.9, playoffWins: 9, playoffLosses: 4, playoffTies: 0, playoffWinPercentage: 69.2 },
+                champion: 'Jett',
+                superBowl: {
+                    number: 'LVI',
+                    jettPick: 'LAR',
+                    jettResult: 'Correct',
+                    kevinPick: 'LAR',
+                    kevinResult: 'Correct'
+                }
+            },
+            2020: {
+                Jett: { wins: 175, losses: 93, ties: 1, winPercentage: 65.1, playoffWins: 9, playoffLosses: 4, playoffTies: 0, playoffWinPercentage: 69.2 },
+                Kevin: { wins: 182, losses: 86, ties: 1, winPercentage: 67.7, playoffWins: 7, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 53.8 },
+                champion: 'Kevin',
+                superBowl: {
+                    number: 'LV',
+                    jettPick: 'TB',
+                    jettResult: 'Correct',
+                    kevinPick: 'TB',
+                    kevinResult: 'Correct'
+                }
+            },
+            2019: {
+                Jett: { wins: 172, losses: 94, ties: 1, winPercentage: 64.4, playoffWins: 9, playoffLosses: 2, playoffTies: 0, playoffWinPercentage: 81.8 },
+                Kevin: { wins: 155, losses: 111, ties: 1, winPercentage: 58.1, playoffWins: 6, playoffLosses: 5, playoffTies: 0, playoffWinPercentage: 54.5 },
+                champion: 'Jett',
+                superBowl: {
+                    number: 'LIV',
+                    jettPick: 'KC',
+                    jettResult: 'Correct',
+                    kevinPick: 'KC',
+                    kevinResult: 'Correct'
+                }
+            },
+            2018: {
+                Jett: { wins: 171, losses: 94, ties: 2, winPercentage: 64.0, playoffWins: 5, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 45.5 },
+                Kevin: { wins: 169, losses: 96, ties: 2, winPercentage: 63.3, playoffWins: 5, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 45.5 },
+                champion: 'Jett',
+                superBowl: {
+                    number: 'LIII',
+                    jettPick: 'NE',
+                    jettResult: 'Correct',
+                    kevinPick: 'NE',
+                    kevinResult: 'Correct'
+                }
+            },
+            2017: {
+                Jett: { wins: 172, losses: 95, ties: 0, winPercentage: 64.4, playoffWins: 5, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 45.5 },
+                Kevin: { wins: 171, losses: 96, ties: 0, winPercentage: 64.0, playoffWins: 6, playoffLosses: 5, playoffTies: 0, playoffWinPercentage: 54.5 },
+                champion: 'Jett',
+                superBowl: {
+                    number: 'LII',
+                    jettPick: 'PHI',
+                    jettResult: 'Correct',
+                    kevinPick: 'PHI',
+                    kevinResult: 'Correct'
+                }
+            },
+            2016: {
+                Jett: { wins: 155, losses: 109, ties: 2, winPercentage: 58.3, playoffWins: 10, playoffLosses: 1, playoffTies: 0, playoffWinPercentage: 90.9 },
+                Kevin: { wins: 156, losses: 108, ties: 2, winPercentage: 58.6, playoffWins: 10, playoffLosses: 1, playoffTies: 0, playoffWinPercentage: 90.9 },
+                champion: 'Kevin',
+                superBowl: {
+                    number: 'LI',
+                    jettPick: 'NE',
+                    jettResult: 'Correct',
+                    kevinPick: 'NE',
+                    kevinResult: 'Correct'
+                }
+            },
+            2015: {
+                Jett: { wins: 172, losses: 95, ties: 0, winPercentage: 64.4, playoffWins: 9, playoffLosses: 2, playoffTies: 0, playoffWinPercentage: 81.8 },
+                Kevin: { wins: 158, losses: 109, ties: 0, winPercentage: 59.2, playoffWins: 7, playoffLosses: 4, playoffTies: 0, playoffWinPercentage: 63.6 },
+                champion: 'Jett',
+                superBowl: {
+                    number: '50',
+                    jettPick: 'DEN',
+                    jettResult: 'Correct',
+                    kevinPick: 'CAR',
+                    kevinResult: 'Incorrect'
+                }
+            },
+            2014: {
+                Jett: { wins: 175, losses: 91, ties: 1, winPercentage: 65.5, playoffWins: 7, playoffLosses: 4, playoffTies: 0, playoffWinPercentage: 63.6 },
+                Kevin: { wins: 172, losses: 94, ties: 1, winPercentage: 64.4, playoffWins: 5, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 45.5 },
+                champion: 'Jett',
+                superBowl: {
+                    number: 'XLIX',
+                    jettPick: 'SEA',
+                    jettResult: 'Incorrect',
+                    kevinPick: 'SEA',
+                    kevinResult: 'Incorrect'
+                }
+            },
+            2013: {
+                Jett: { wins: 168, losses: 98, ties: 1, winPercentage: 62.9, playoffWins: 5, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 45.5 },
+                Kevin: { wins: 173, losses: 93, ties: 1, winPercentage: 64.8, playoffWins: 5, playoffLosses: 6, playoffTies: 0, playoffWinPercentage: 45.5 },
+                champion: 'Kevin',
+                superBowl: {
+                    number: 'XLVIII',
+                    jettPick: 'DEN',
+                    jettResult: 'Incorrect',
+                    kevinPick: 'DEN',
+                    kevinResult: 'Incorrect'
+                }
+            },
+            2012: {
+                Jett: { wins: 171, losses: 95, ties: 1, winPercentage: 64.0, playoffWins: 8, playoffLosses: 3, playoffTies: 0, playoffWinPercentage: 72.7 },
+                Kevin: { wins: 176, losses: 90, ties: 1, winPercentage: 65.9, playoffWins: 10, playoffLosses: 1, playoffTies: 0, playoffWinPercentage: 90.9 },
+                champion: 'Kevin',
+                superBowl: {
+                    number: 'XLVII',
+                    jettPick: 'BAL',
+                    jettResult: 'Correct',
+                    kevinPick: 'BAL',
+                    kevinResult: 'Correct'
+                }
+            },
+            2011: {
+                Jett: { wins: 182, losses: 85, ties: 0, winPercentage: 68.2, playoffWins: 7, playoffLosses: 4, playoffTies: 0, playoffWinPercentage: 63.6 },
+                Kevin: { wins: 184, losses: 83, ties: 0, winPercentage: 68.9, playoffWins: 6, playoffLosses: 5, playoffTies: 0, playoffWinPercentage: 54.5 },
+                champion: 'Kevin',
+                superBowl: {
+                    number: 'XLVI',
+                    jettPick: 'NYG',
+                    jettResult: 'Correct',
+                    kevinPick: 'NYG',
+                    kevinResult: 'Correct'
+                }
+            },
+            2010: {
+                Jett: { wins: 107, losses: 43, ties: 0, winPercentage: 71.3, playoffWins: 8, playoffLosses: 3, playoffTies: 0, playoffWinPercentage: 72.7 },
+                Kevin: { wins: 92, losses: 58, ties: 0, winPercentage: 61.3, playoffWins: 4, playoffLosses: 7, playoffTies: 0, playoffWinPercentage: 36.4 },
+                champion: 'Jett',
+                superBowl: {
+                    number: 'XLV',
+                    jettPick: 'GB',
+                    jettResult: 'Correct',
+                    kevinPick: 'PIT',
+                    kevinResult: 'Incorrect'
+                }
+            },
+            2009: {
+                isSuperBowlOnly: true,
+                superBowl: {
+                    number: 'XLIV',
+                    jettPick: 'NO',
+                    jettResult: 'Correct',
+                    kevinPick: 'NO',
+                    kevinResult: 'Correct',
+                    jettPlayoffWins: 1,
+                    jettPlayoffLosses: 0,
+                    kevinPlayoffWins: 1,
+                    kevinPlayoffLosses: 0
+                }
+            }
+        };
+
         // Week 1 and 2 picks data
         const picks = {
             'Jett': {
@@ -2106,30 +2316,109 @@
                     const yearDiv = document.createElement('div');
                     yearDiv.className = 'history-section';
 
-                    yearDiv.innerHTML = `
-                        <div class="history-year">🏆 ${year} Season</div>
-                        <div class="history-stats">
-                            <div class="history-stat">
-                                <div class="history-stat-value">${yearData.Jett.wins}-${yearData.Jett.losses}</div>
-                                <div class="history-stat-label">Jett Record</div>
+                    // Special handling for 2009 (Super Bowl only)
+                    if (yearData.isSuperBowlOnly) {
+                        const sb = yearData.superBowl;
+                        yearDiv.innerHTML = `
+                            <div class="history-year" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🏈 WHERE IT ALL BEGAN</div>
+                            <div style="text-align: center; font-size: 14px; color: #64748b; margin-bottom: 12px;">2009 • Super Bowl ${sb.number}</div>
+                            <div style="text-align: center; margin-bottom: 15px; font-size: 13px;">New Orleans Saints vs. Indianapolis Colts</div>
+                            <div class="history-stats">
+                                <div class="history-stat">
+                                    <div class="history-stat-value">1-0 (100%)</div>
+                                    <div class="history-stat-label">Jett Playoff Record</div>
+                                </div>
+                                <div class="history-stat">
+                                    <div class="history-stat-value">1-0 (100%)</div>
+                                    <div class="history-stat-label">Kevin Playoff Record</div>
+                                </div>
                             </div>
-                            <div class="history-stat">
-                                <div class="history-stat-value">${yearData.Kevin.wins}-${yearData.Kevin.losses}</div>
-                                <div class="history-stat-label">Kevin Record</div>
+                            <div style="margin-top: 15px; padding: 12px; background: rgba(0, 0, 0, 0.05); border-radius: 8px;">
+                                <div style="font-weight: bold; margin-bottom: 10px; text-align: center;">SUPER BOWL ${sb.number}</div>
+                                <div style="display: flex; justify-content: space-around; gap: 20px;">
+                                    <div style="text-align: center;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">JETT</div>
+                                        <img src="${teams[sb.jettPick].logo}" alt="${teams[sb.jettPick].name}" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
+                                        <div style="font-size: 12px;">${teams[sb.jettPick].name}</div>
+                                        <div style="color: ${sb.jettResult === 'Correct' ? '#16a34a' : '#dc2626'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.jettResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">KEVIN</div>
+                                        <img src="${teams[sb.kevinPick].logo}" alt="${teams[sb.kevinPick].name}" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
+                                        <div style="font-size: 12px;">${teams[sb.kevinPick].name}</div>
+                                        <div style="color: ${sb.kevinResult === 'Correct' ? '#16a34a' : '#dc2626'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.kevinResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="history-stat">
-                                <div class="history-stat-value">${yearData.Jett.winPercentage}%</div>
-                                <div class="history-stat-label">Jett Win %</div>
+                        `;
+                    } else {
+                        // Full season
+                        const jettRecord = yearData.Jett.ties > 0 ? `${yearData.Jett.wins}-${yearData.Jett.losses}-${yearData.Jett.ties}` : `${yearData.Jett.wins}-${yearData.Jett.losses}`;
+                        const kevinRecord = yearData.Kevin.ties > 0 ? `${yearData.Kevin.wins}-${yearData.Kevin.losses}-${yearData.Kevin.ties}` : `${yearData.Kevin.wins}-${yearData.Kevin.losses}`;
+                        const jettPlayoffRecord = yearData.Jett.playoffTies > 0 ? `${yearData.Jett.playoffWins}-${yearData.Jett.playoffLosses}-${yearData.Jett.playoffTies}` : `${yearData.Jett.playoffWins}-${yearData.Jett.playoffLosses}`;
+                        const kevinPlayoffRecord = yearData.Kevin.playoffTies > 0 ? `${yearData.Kevin.playoffWins}-${yearData.Kevin.playoffLosses}-${yearData.Kevin.playoffTies}` : `${yearData.Kevin.playoffWins}-${yearData.Kevin.playoffLosses}`;
+                        const sb = yearData.superBowl;
+
+                        yearDiv.innerHTML = `
+                            <div class="history-year">🏆 ${year} Season</div>
+                            <div class="history-stats">
+                                <div class="history-stat">
+                                    <div class="history-stat-value">${jettRecord}</div>
+                                    <div class="history-stat-label">Jett Record</div>
+                                </div>
+                                <div class="history-stat">
+                                    <div class="history-stat-value">${yearData.Jett.winPercentage}%</div>
+                                    <div class="history-stat-label">Jett Win %</div>
+                                </div>
+                                <div class="history-stat">
+                                    <div class="history-stat-value">${kevinRecord}</div>
+                                    <div class="history-stat-label">Kevin Record</div>
+                                </div>
+                                <div class="history-stat">
+                                    <div class="history-stat-value">${yearData.Kevin.winPercentage}%</div>
+                                    <div class="history-stat-label">Kevin Win %</div>
+                                </div>
                             </div>
-                            <div class="history-stat">
-                                <div class="history-stat-value">${yearData.Kevin.winPercentage}%</div>
-                                <div class="history-stat-label">Kevin Win %</div>
+                            <div style="text-align: center; padding: 10px; background: rgba(34, 197, 94, 0.2); border-radius: 8px; border: 1px solid #22c55e; margin-bottom: 15px;">
+                                <strong style="color: #22c55e;">🏆 Champion: ${yearData.champion}</strong>
                             </div>
-                        </div>
-                        <div style="text-align: center; padding: 10px; background: rgba(34, 197, 94, 0.2); border-radius: 8px; border: 1px solid #22c55e;">
-                            <strong style="color: #22c55e;">🏆 Champion: ${yearData.champion}</strong>
-                        </div>
-                    `;
+                            <div class="history-stats" style="background: rgba(59, 130, 246, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                                <div class="history-stat">
+                                    <div class="history-stat-value">${jettPlayoffRecord}</div>
+                                    <div class="history-stat-label">Jett Playoff Record</div>
+                                </div>
+                                <div class="history-stat">
+                                    <div class="history-stat-value">${yearData.Jett.playoffWinPercentage}%</div>
+                                    <div class="history-stat-label">Jett Playoff Win %</div>
+                                </div>
+                                <div class="history-stat">
+                                    <div class="history-stat-value">${kevinPlayoffRecord}</div>
+                                    <div class="history-stat-label">Kevin Playoff Record</div>
+                                </div>
+                                <div class="history-stat">
+                                    <div class="history-stat-value">${yearData.Kevin.playoffWinPercentage}%</div>
+                                    <div class="history-stat-label">Kevin Playoff Win %</div>
+                                </div>
+                            </div>
+                            <div style="padding: 12px; background: rgba(0, 0, 0, 0.05); border-radius: 8px;">
+                                <div style="font-weight: bold; margin-bottom: 10px; text-align: center;">SUPER BOWL ${sb.number}</div>
+                                <div style="display: flex; justify-content: space-around; gap: 20px;">
+                                    <div style="text-align: center;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">JETT</div>
+                                        <img src="${teams[sb.jettPick].logo}" alt="${teams[sb.jettPick].name}" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
+                                        <div style="font-size: 12px;">${teams[sb.jettPick].name}</div>
+                                        <div style="color: ${sb.jettResult === 'Correct' ? '#16a34a' : '#dc2626'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.jettResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">KEVIN</div>
+                                        <img src="${teams[sb.kevinPick].logo}" alt="${teams[sb.kevinPick].name}" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
+                                        <div style="font-size: 12px;">${teams[sb.kevinPick].name}</div>
+                                        <div style="color: ${sb.kevinResult === 'Correct' ? '#16a34a' : '#dc2626'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.kevinResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
 
                     container.appendChild(yearDiv);
                 });

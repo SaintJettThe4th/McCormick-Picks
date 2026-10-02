@@ -1535,14 +1535,13 @@
                 const currentWeekNum = this.getCurrentWeekNumber();
                 let missingPicks = [];
 
-                // Check current week and next week for missing picks
-                for (let week = currentWeekNum; week <= Math.min(currentWeekNum + 1, 18); week++) {
-                    const weekData = schedule[week];
-                    if (!weekData) continue;
-
+                // Only check current week for missing picks
+                const weekData = schedule[currentWeekNum];
+                if (weekData) {
                     weekData.games.forEach(game => {
+                        // Only count games that haven't been played and don't have picks
                         if (!game.final && !this.isGameLocked(game) && !userPicks[game.id]) {
-                            missingPicks.push(`Week ${week}: ${teams[game.away].name} at ${teams[game.home].name} (${game.date})`);
+                            missingPicks.push(`Week ${currentWeekNum}: ${teams[game.away].name} at ${teams[game.home].name} (${game.date})`);
                         }
                     });
                 }

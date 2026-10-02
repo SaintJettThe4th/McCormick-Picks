@@ -20,7 +20,7 @@
             margin: 0 auto;
             padding: 15px;
             text-align: center;
-            padding-bottom: 160px;
+            padding-bottom: 200px;
         }
         .header {
             background: linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%);
@@ -552,7 +552,7 @@
         @media (max-width: 600px) {
             .container {
                 padding: 10px;
-                padding-bottom: 180px;
+                padding-bottom: 220px;
             }
             .header {
                 padding: 20px 10px;
@@ -1681,9 +1681,8 @@
                                 <span class="status ${game.final ? 'final' : (isLocked ? 'locked' : 'upcoming')}">
                                     ${game.final ? `Final` : (isLocked ? 'Locked' : 'Upcoming')}
                                 </span>
-                                ${isLocked ? '<span class="lock-indicator">LOCKED</span>' : ''}
+                                ${isLocked && !game.final ? '<span class="lock-indicator">LOCKED</span>' : ''}
                                 <div class="game-time">${game.date} ${game.time} EST</div>
-                                ${game.final ? `<div style="font-size: 14px; font-weight: bold; color: #1e293b;">${game.homeScore}-${game.awayScore}</div>` : ''}
                             </div>
 
                             <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
@@ -1692,7 +1691,7 @@
                                         ${game.final || isLocked ? 'disabled' : ''}>
                                     <img src="${awayTeam.logo}" alt="${awayTeam.name}" class="logo">
                                     <div style="font-size: 12px; font-weight: 600;">${awayTeam.name}</div>
-                                    ${game.final ? `<div class="score-display">${game.awayScore}</div>` : ''}
+                                    ${game.final ? `<div class="score-display" style="color: #000;">${game.awayScore}</div>` : ''}
                                 </button>
 
                                 <div style="font-size: 14px; font-weight: bold; color: #1e293b;">at</div>
@@ -1702,7 +1701,7 @@
                                         ${game.final || isLocked ? 'disabled' : ''}>
                                     <img src="${homeTeam.logo}" alt="${homeTeam.name}" class="logo">
                                     <div style="font-size: 12px; font-weight: 600;">${homeTeam.name}</div>
-                                    ${game.final ? `<div class="score-display">${game.homeScore}</div>` : ''}
+                                    ${game.final ? `<div class="score-display" style="color: #000;">${game.homeScore}</div>` : ''}
                                 </button>
                             </div>
 
@@ -1750,7 +1749,7 @@
                         <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
                             <img src="${teams[game.away].logo}" alt="${teams[game.away].name}" style="width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px;">
                             <span style="font-size: 14px; font-weight: 600;">${teams[game.away].name}</span>
-                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.awayScore}${awayWinner ? ' ⭐' : ''}</div>` : ''}
+                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px; display: flex; align-items: center; justify-content: center; gap: 4px;">${awayWinner ? '⭐ ' : ''}${game.awayScore}${awayWinner ? '' : ''}</div>` : ''}
                         </div>
                         <div style="text-align: center; flex: 1;">
                             <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">${game.time}</div>
@@ -1764,10 +1763,10 @@
                             ${isLocked && !samePick ? `<span class="different-pick">Different</span>` : ''}
                             ${game.final ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">Final</div>` : ''}
                         </div>
-                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column; justify-content: flex-end;">
+                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
+                            <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" style="width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px;">
                             <span style="font-size: 14px; font-weight: 600;">${teams[game.home].name}</span>
-                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.homeScore}${homeWinner ? ' ⭐' : ''}</div>` : ''}
-                            <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" style="width: 40px; height: 40px; object-fit: contain; margin-top: 4px;">
+                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px; display: flex; align-items: center; justify-content: center; gap: 4px;">${homeWinner ? '⭐ ' : ''}${game.homeScore}${homeWinner ? '' : ''}</div>` : ''}
                         </div>
                     `;
 
@@ -1810,6 +1809,19 @@
                 const container = document.getElementById('weekly-results-list');
                 container.innerHTML = '';
 
+                // Create header row
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'result-row';
+                headerDiv.style.background = 'rgba(30, 58, 95, 0.1)';
+                headerDiv.style.fontWeight = 'bold';
+                headerDiv.innerHTML = `
+                    <div style="flex: 0 0 60px;">Week</div>
+                    <div style="flex: 1; text-align: center;">Jett</div>
+                    <div style="flex: 1; text-align: center;">Kevin</div>
+                    <div style="flex: 0 0 80px; text-align: right;">Winner</div>
+                `;
+                container.appendChild(headerDiv);
+
                 for (let week = 1; week <= 18; week++) {
                     const weekData = schedule[week];
                     const jettPicks = picks['Jett'] || {};
@@ -1843,21 +1855,16 @@
                         const jettWinner = jettCorrect > kevinCorrect;
                         const kevinWinner = kevinCorrect > jettCorrect;
                         const tied = jettCorrect === kevinCorrect;
+                        const diff = Math.abs(jettCorrect - kevinCorrect);
 
                         resultDiv.innerHTML = `
-                            <div style="font-weight: 600;">Week ${week}</div>
-                            <div style="display: flex; gap: 15px;">
-                                <div class="jett-pick">
-                                    Jett: <span class="correct-count">${jettCorrect}</span>/<span class="total-count">${jettTotal}</span>
-                                </div>
-                                <div class="kevin-pick">
-                                    Kevin: <span class="correct-count">${kevinCorrect}</span>/<span class="total-count">${kevinTotal}</span>
-                                </div>
-                            </div>
-                            <div>
-                                ${jettWinner ? '<span class="winner-indicator">Jett</span>' :
-                                  kevinWinner ? '<span class="winner-indicator">Kevin</span>' :
-                                  tied ? '<span class="winner-indicator">Tied</span>' : ''}
+                            <div style="flex: 0 0 60px; font-weight: 600;">${week}</div>
+                            <div style="flex: 1; text-align: center;">${jettCorrect}/${jettTotal}</div>
+                            <div style="flex: 1; text-align: center;">${kevinCorrect}/${kevinTotal}</div>
+                            <div style="flex: 0 0 80px; text-align: right; font-weight: 600;">
+                                ${jettWinner ? `Jett +${diff}` :
+                                  kevinWinner ? `Kevin +${diff}` :
+                                  tied ? 'Tied' : ''}
                             </div>
                         `;
 
@@ -2201,13 +2208,46 @@
             },
 
             getCurrentWeekNumber: function() {
-                // For demo/testing, return week 2 (since week 1 is complete)
-                // In production, this would calculate based on current date:
-                // const seasonStart = new Date('2026-09-09');
-                // const now = new Date();
-                // const diffDays = Math.floor((now - seasonStart) / (1000 * 60 * 60 * 24));
-                // return Math.floor(diffDays / 7) + 1;
-                return 2;
+                const now = new Date();
+
+                // Check each week to find the current one
+                for (let week = 1; week <= 18; week++) {
+                    const weekData = schedule[week];
+                    if (!weekData) continue;
+
+                    // Check if any game in this week is in the future or has just finished
+                    for (const game of weekData.games) {
+                        const gameDate = new Date(`2026-${this.parseMonth(game.date)}-${this.parseDay(game.date)} ${game.time}`);
+
+                        // If game is in the future, this is the current week
+                        if (gameDate > now) {
+                            return week;
+                        }
+
+                        // If game is in the past, check if we should move to next week
+                        // Move to next week if all games in current week are final
+                    }
+
+                    // Check if all games in this week are final
+                    const allFinal = weekData.games.every(g => g.final);
+                    if (!allFinal) {
+                        return week;
+                    }
+                }
+
+                // If all weeks are complete, return 18
+                return 18;
+            },
+
+            parseMonth: function(dateStr) {
+                const months = { 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12', 'Jan': '01' };
+                const month = dateStr.split(' ')[0];
+                return months[month] || '09';
+            },
+
+            parseDay: function(dateStr) {
+                const day = dateStr.split(' ')[1];
+                return day.padStart(2, '0');
             }
         };
 

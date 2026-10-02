@@ -2376,13 +2376,23 @@
                 const jettPlayoffRecord = jettPlayoffTies > 0 ? `${jettPlayoffWins}-${jettPlayoffLosses}-${jettPlayoffTies}` : `${jettPlayoffWins}-${jettPlayoffLosses}`;
                 const kevinPlayoffRecord = kevinPlayoffTies > 0 ? `${kevinPlayoffWins}-${kevinPlayoffLosses}-${kevinPlayoffTies}` : `${kevinPlayoffWins}-${kevinPlayoffLosses}`;
 
+                // Add overall section heading
+                const overallHeading = document.createElement('div');
+                overallHeading.style.textAlign = 'center';
+                overallHeading.style.fontSize = '24px';
+                overallHeading.style.fontWeight = 'bold';
+                overallHeading.style.color = '#1e3a5f';
+                overallHeading.style.margin = '20px 0 15px 0';
+                overallHeading.textContent = 'OVERALL HISTORY';
+                container.appendChild(overallHeading);
+
                 // Add overall section at the top
                 const overallDiv = document.createElement('div');
                 overallDiv.className = 'history-section';
                 overallDiv.style.background = 'linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%)';
                 overallDiv.style.color = 'white';
                 overallDiv.innerHTML = `
-                    <div class="history-year" style="color: #fbbf24;">🏆 OVERALL RECORD (2009-2025)</div>
+                    <div class="history-year" style="color: #fbbf24;">OVERALL RECORD (2009-2025)</div>
                     <div class="history-stats">
                         <div class="history-stat" style="background: rgba(255, 255, 255, 0.1);">
                             <div class="history-stat-value" style="color: #fbbf24;">${jettOverallRecord}</div>
@@ -2420,7 +2430,7 @@
                         </div>
                     </div>
                     <div style="text-align: center; padding: 10px; background: rgba(251, 191, 36, 0.2); border-radius: 8px; border: 1px solid #fbbf24;">
-                        <strong style="color: #fbbf24;">🏆 SUPER BOWL RECORD</strong>
+                        <strong style="color: #fbbf24;">SUPER BOWL RECORD</strong>
                         <div style="margin-top: 8px; display: flex; justify-content: space-around;">
                             <div style="color: #e5e7eb;">Jett: ${jettSuperBowlCorrect}/${totalSuperBowls}</div>
                             <div style="color: #e5e7eb;">Kevin: ${kevinSuperBowlCorrect}/${totalSuperBowls}</div>
@@ -2428,6 +2438,16 @@
                     </div>
                 `;
                 container.appendChild(overallDiv);
+
+                // Add season history heading
+                const seasonHeading = document.createElement('div');
+                seasonHeading.style.textAlign = 'center';
+                seasonHeading.style.fontSize = '24px';
+                seasonHeading.style.fontWeight = 'bold';
+                seasonHeading.style.color = '#1e3a5f';
+                seasonHeading.style.margin = '30px 0 15px 0';
+                seasonHeading.textContent = 'SEASON HISTORY';
+                container.appendChild(seasonHeading);
 
                 Object.keys(historyData).sort((a, b) => b - a).forEach(year => {
                     const yearData = historyData[year];
@@ -2438,7 +2458,7 @@
                     if (yearData.isSuperBowlOnly) {
                         const sb = yearData.superBowl;
                         yearDiv.innerHTML = `
-                            <div class="history-year" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🏈 WHERE IT ALL BEGAN</div>
+                            <div class="history-year" style="background: linear-gradient(135deg, #f59e0b, #d97706);">WHERE IT ALL BEGAN</div>
                             <div style="text-align: center; font-size: 14px; color: #64748b; margin-bottom: 12px;">2009 • Super Bowl ${sb.number}</div>
                             <div style="text-align: center; margin-bottom: 15px; font-size: 13px;">New Orleans Saints vs. Indianapolis Colts</div>
                             <div class="history-stats">
@@ -2478,7 +2498,7 @@
                         const sb = yearData.superBowl;
 
                         yearDiv.innerHTML = `
-                            <div class="history-year">🏆 ${year} Season</div>
+                            <div class="history-year">${year} SEASON</div>
                             <div class="history-stats">
                                 <div class="history-stat">
                                     <div class="history-stat-value">${jettRecord}</div>
@@ -2498,7 +2518,7 @@
                                 </div>
                             </div>
                             <div style="text-align: center; padding: 10px; background: rgba(34, 197, 94, 0.2); border-radius: 8px; border: 1px solid #22c55e; margin-bottom: 15px;">
-                                <strong style="color: #22c55e;">🏆 Champion: ${yearData.champion}</strong>
+                                <strong style="color: #22c55e;">Champion: ${yearData.champion}</strong>
                             </div>
                             <div class="history-stats" style="background: rgba(59, 130, 246, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
                                 <div class="history-stat">

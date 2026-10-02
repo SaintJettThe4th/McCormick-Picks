@@ -20,7 +20,7 @@
             margin: 0 auto;
             padding: 15px;
             text-align: center;
-            padding-bottom: 200px;
+            padding-bottom: 250px;
         }
         .header {
             background: linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%);
@@ -552,7 +552,7 @@
         @media (max-width: 600px) {
             .container {
                 padding: 10px;
-                padding-bottom: 220px;
+                padding-bottom: 280px;
             }
             .header {
                 padding: 20px 10px;
@@ -1337,13 +1337,24 @@
             createWeekButtons: function() {
                 const container = document.getElementById('week-buttons');
                 container.innerHTML = '';
-                
+
                 for (let i = 1; i <= 18; i++) {
                     const btn = document.createElement('button');
                     btn.className = 'week-btn';
                     if (i === 1) btn.classList.add('active');
                     btn.textContent = `Week ${i}`;
                     btn.onclick = () => this.selectWeek(i);
+
+                    // Check if all games in this week are final
+                    const weekData = schedule[i];
+                    if (weekData && weekData.games) {
+                        const allFinal = weekData.games.every(game => game.final);
+                        if (allFinal) {
+                            btn.style.background = '#9ca3af';
+                            btn.style.color = '#4b5563';
+                        }
+                    }
+
                     container.appendChild(btn);
                 }
             },
@@ -1740,16 +1751,20 @@
                     const awayWinner = game.final && game.awayScore > game.homeScore;
                     const homeWinner = game.final && game.homeScore > game.awayScore;
                     const bgColor = game.final ? 'rgba(200, 200, 200, 0.3)' : 'rgba(245, 245, 245, 0.6)';
+                    const borderColor = isLocked && !samePick ? '#FFD700' : 'rgba(0, 0, 0, 0.1)';
+                    const borderWidth = isLocked && !samePick ? '3px' : '1px';
 
                     const comparisonDiv = document.createElement('div');
                     comparisonDiv.className = 'pick-row';
                     comparisonDiv.style.background = bgColor;
+                    comparisonDiv.style.border = `${borderWidth} solid ${borderColor}`;
 
                     comparisonDiv.innerHTML = `
-                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
+                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column; position: relative;">
+                            ${awayWinner ? `<span style="position: absolute; top: -5px; left: -5px; font-size: 12px;">⭐</span>` : ''}
                             <img src="${teams[game.away].logo}" alt="${teams[game.away].name}" style="width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px;">
                             <span style="font-size: 14px; font-weight: 600;">${teams[game.away].name}</span>
-                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px; display: flex; align-items: center; justify-content: center; gap: 4px;">${awayWinner ? '⭐ ' : ''}${game.awayScore}${awayWinner ? '' : ''}</div>` : ''}
+                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.awayScore}</div>` : ''}
                         </div>
                         <div style="text-align: center; flex: 1;">
                             <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">${game.time}</div>
@@ -1760,13 +1775,13 @@
                                     `<span class="lock-indicator">LOCKED</span>` :
                                     ``)
                             }
-                            ${isLocked && !samePick ? `<span class="different-pick">Different</span>` : ''}
                             ${game.final ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">Final</div>` : ''}
                         </div>
-                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
+                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column; position: relative;">
+                            ${homeWinner ? `<span style="position: absolute; top: -5px; right: -5px; font-size: 12px;">⭐</span>` : ''}
                             <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" style="width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px;">
                             <span style="font-size: 14px; font-weight: 600;">${teams[game.home].name}</span>
-                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px; display: flex; align-items: center; justify-content: center; gap: 4px;">${homeWinner ? '⭐ ' : ''}${game.homeScore}${homeWinner ? '' : ''}</div>` : ''}
+                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.homeScore}</div>` : ''}
                         </div>
                     `;
 

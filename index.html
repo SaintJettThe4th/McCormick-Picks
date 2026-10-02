@@ -1557,20 +1557,23 @@
                 if (!this.currentUser) return;
 
                 const userPicks = picks[this.currentUser] || {};
-                const weekData = schedule[this.currentWeek];
+                const currentWeekNum = this.getCurrentWeekNumber();
+                const weekData = schedule[currentWeekNum];
                 let weekCorrect = 0, weekTotal = 0;
                 let overallCorrect = 0, overallTotal = 0;
 
-                // Week record: count all final games, then count correct picks
-                weekData.games.forEach(game => {
-                    if (game.final) {
-                        weekTotal++;
-                        if (userPicks[game.id]) {
-                            const winner = game.homeScore > game.awayScore ? game.home : game.away;
-                            if (userPicks[game.id] === winner) weekCorrect++;
+                // Week record: count all final games in current week, then count correct picks
+                if (weekData) {
+                    weekData.games.forEach(game => {
+                        if (game.final) {
+                            weekTotal++;
+                            if (userPicks[game.id]) {
+                                const winner = game.homeScore > game.awayScore ? game.home : game.away;
+                                if (userPicks[game.id] === winner) weekCorrect++;
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 // Overall record: count all final games across all weeks, then count correct picks
                 Object.values(schedule).forEach(week => {
@@ -1587,8 +1590,10 @@
 
                 const weekRecordEl = document.getElementById('week-record');
                 const overallRecordEl = document.getElementById('overall-record');
+                const currentWeekEl = document.getElementById('current-week');
                 if (weekRecordEl) weekRecordEl.textContent = `${weekCorrect}/${weekTotal}`;
                 if (overallRecordEl) overallRecordEl.textContent = `${overallCorrect}/${overallTotal}`;
+                if (currentWeekEl) currentWeekEl.textContent = currentWeekNum;
 
                 // Also update competitive message
                 this.updateStatusMessage();
@@ -1733,32 +1738,36 @@
                     const kevinPick = kevinPicks[game.id];
                     const samePick = jettPick === kevinPick;
                     const isLocked = this.isGameLocked(game);
+                    const awayWinner = game.final && game.awayScore > game.homeScore;
+                    const homeWinner = game.final && game.homeScore > game.awayScore;
+                    const bgColor = game.final ? 'rgba(200, 200, 200, 0.3)' : 'rgba(245, 245, 245, 0.6)';
 
                     const comparisonDiv = document.createElement('div');
                     comparisonDiv.className = 'pick-row';
+                    comparisonDiv.style.background = bgColor;
 
                     comparisonDiv.innerHTML = `
-                        <div style="display: flex; align-items: center; flex: 1;">
-                            <img src="${teams[game.away].logo}" alt="${teams[game.away].name}" class="team-logo-small">
-                            <span style="font-size: 13px;">${teams[game.away].name}</span>
-                            ${game.final ? `<span style="font-size: 11px; color: #64748b; margin-left: 4px;">${game.awayScore}</span>` : ''}
+                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
+                            <img src="${teams[game.away].logo}" alt="${teams[game.away].name}" style="width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px;">
+                            <span style="font-size: 14px; font-weight: 600;">${teams[game.away].name}</span>
+                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.awayScore}${awayWinner ? ' ⭐' : ''}</div>` : ''}
                         </div>
                         <div style="text-align: center; flex: 1;">
                             <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">${game.time}</div>
                             <div style="font-size: 12px; font-weight: bold;">at</div>
                             ${!isWeekEligible ?
-                                `<span class="lock-indicator" style="background: #f59e0b; color: white;">TBD</span>` :
+                                `` :
                                 (isLocked ?
                                     `<span class="lock-indicator">LOCKED</span>` :
-                                    (samePick ? `` : ``))
+                                    ``)
                             }
                             ${isLocked && !samePick ? `<span class="different-pick">Different</span>` : ''}
                             ${game.final ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">Final</div>` : ''}
                         </div>
-                        <div style="display: flex; align-items: center; flex: 1; justify-content: flex-end;">
-                            <span style="font-size: 13px;">${teams[game.home].name}</span>
-                            ${game.final ? `<span style="font-size: 11px; color: #64748b; margin-right: 4px;">${game.homeScore}</span>` : ''}
-                            <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" class="team-logo-small">
+                        <div style="display: flex; align-items: center; flex: 1; flex-direction: column; justify-content: flex-end;">
+                            <span style="font-size: 14px; font-weight: 600;">${teams[game.home].name}</span>
+                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.homeScore}${homeWinner ? ' ⭐' : ''}</div>` : ''}
+                            <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" style="width: 40px; height: 40px; object-fit: contain; margin-top: 4px;">
                         </div>
                     `;
 
@@ -1890,6 +1899,10 @@
                     container.appendChild(standingDiv);
                 });
 
+                // Ensure nav is visible
+                const nav = document.getElementById('nav');
+                if (nav) nav.classList.remove('hidden');
+
                 // Update competitive message
                 this.updateStatusMessage();
             },
@@ -2008,6 +2021,7 @@
 
                 this.updateRecords();
                 this.renderWeeklyResults();
+                this.updateStatusMessage();
             },
 
             showLeaderboard: function() {

@@ -1418,9 +1418,13 @@
                     if (competitiveMsg) competitiveMsg.style.display = 'block';
                     if (recordsMsg) recordsMsg.style.display = 'block';
 
-                    this.updateMoneyStatus();
-                    this.updateRecords();
-                    this.updateStatusMessage();
+                    // Force update header info with a small delay to ensure DOM is ready
+                    setTimeout(() => {
+                        this.updateMoneyStatus();
+                        this.updateRecords();
+                        this.updateStatusMessage();
+                    }, 50);
+
                     this.checkScheduleUpdate();
                     this.checkPickReminders();
                     this.showMainMenu();

@@ -905,9 +905,7 @@
                     { id: '4-11', home: 'MIA', away: 'MIN', date: 'Oct 4', time: 'Sun 4:05 PM', final: false },
                     { id: '4-12', home: 'DEN', away: 'SF', date: 'Oct 4', time: 'Sun 4:25 PM', final: false },
                     { id: '4-13', home: 'SEA', away: 'LAC', date: 'Oct 4', time: 'Sun 4:25 PM', final: false },
-                    { id: '4-14', home: 'KC', away: 'LV', date: 'Oct 4', time: 'Sun 4:25 PM', final: false },
-                    { id: '4-15', home: 'CAR', away: 'DET', date: 'Oct 4', time: 'Sun 8:20 PM', final: false },
-                    { id: '4-16', home: 'NO', away: 'ATL', date: 'Oct 5', time: 'Mon 8:15 PM', final: false }
+                    { id: '4-14', home: 'KC', away: 'LV', date: 'Oct 4', time: 'Sun 8:20 PM', final: false }
                 ],
                 byes: []
             },
@@ -1453,26 +1451,6 @@
                 this.autoPickLockedGames();
                 // Don't call updateAllSections or updateMoneyStatus until user is logged in
                 console.log('App initialized successfully');
-            },
-
-            loadPicks: function() {
-                // Load picks from localStorage if available
-                const savedPicks = localStorage.getItem('nflPicks');
-                if (savedPicks) {
-                    try {
-                        const parsed = JSON.parse(savedPicks);
-                        Object.assign(picks, parsed);
-                        console.log('Loaded picks from localStorage:', parsed);
-                    } catch (e) {
-                        console.error('Error loading picks:', e);
-                    }
-                }
-            },
-
-            savePicks: function() {
-                // Save picks to localStorage
-                localStorage.setItem('nflPicks', JSON.stringify(picks));
-                console.log('Saved picks to localStorage');
             },
 
             autoPickLockedGames: function() {
@@ -2205,7 +2183,6 @@
                 }
 
                 picks[this.currentUser][gameId] = selectedTeam;
-                this.savePicks();
                 this.updateAllSections();
                 this.updateMoneyStatus();
                 this.updateStatusMessage();
@@ -2259,7 +2236,6 @@
                 document.getElementById('results-section').classList.remove('hidden');
                 document.getElementById('leaderboard-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
-                document.getElementById('bye-weeks').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
                 // Ensure header elements are visible
@@ -2281,7 +2257,6 @@
                 document.getElementById('results-section').classList.add('hidden');
                 document.getElementById('leaderboard-section').classList.remove('hidden');
                 document.getElementById('history-section').classList.add('hidden');
-                document.getElementById('bye-weeks').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
                 // Ensure header elements are visible
@@ -2302,7 +2277,6 @@
                 document.getElementById('results-section').classList.add('hidden');
                 document.getElementById('leaderboard-section').classList.add('hidden');
                 document.getElementById('history-section').classList.remove('hidden');
-                document.getElementById('bye-weeks').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
                 // Ensure header elements are visible
@@ -2318,106 +2292,6 @@
             renderHistory: function() {
                 const container = document.getElementById('history-list');
                 container.innerHTML = '';
-
-                // Calculate overall records from 2009-2025
-                let jettOverallWins = 0, jettOverallLosses = 0, jettOverallTies = 0;
-                let kevinOverallWins = 0, kevinOverallLosses = 0, kevinOverallTies = 0;
-                let jettPlayoffWins = 0, jettPlayoffLosses = 0, jettPlayoffTies = 0;
-                let kevinPlayoffWins = 0, kevinPlayoffLosses = 0, kevinPlayoffTies = 0;
-                let jettSuperBowlCorrect = 0, kevinSuperBowlCorrect = 0;
-                let totalSuperBowls = 0;
-
-                Object.keys(historyData).sort((a, b) => b - a).forEach(year => {
-                    const yearData = historyData[year];
-                    
-                    if (!yearData.isSuperBowlOnly) {
-                        jettOverallWins += yearData.Jett.wins;
-                        jettOverallLosses += yearData.Jett.losses;
-                        jettOverallTies += yearData.Jett.ties || 0;
-                        kevinOverallWins += yearData.Kevin.wins;
-                        kevinOverallLosses += yearData.Kevin.losses;
-                        kevinOverallTies += yearData.Kevin.ties || 0;
-                        jettPlayoffWins += yearData.Jett.playoffWins;
-                        jettPlayoffLosses += yearData.Jett.playoffLosses;
-                        jettPlayoffTies += yearData.Jett.playoffTies || 0;
-                        kevinPlayoffWins += yearData.Kevin.playoffWins;
-                        kevinPlayoffLosses += yearData.Kevin.playoffLosses;
-                        kevinPlayoffTies += yearData.Kevin.playoffTies || 0;
-                        
-                        if (yearData.superBowl) {
-                            totalSuperBowls++;
-                            if (yearData.superBowl.jettResult === 'Correct') jettSuperBowlCorrect++;
-                            if (yearData.superBowl.kevinResult === 'Correct') kevinSuperBowlCorrect++;
-                        }
-                    } else {
-                        // 2009 Super Bowl only
-                        jettPlayoffWins += yearData.superBowl.jettPlayoffWins;
-                        jettPlayoffLosses += yearData.superBowl.jettPlayoffLosses;
-                        kevinPlayoffWins += yearData.superBowl.kevinPlayoffWins;
-                        kevinPlayoffLosses += yearData.superBowl.kevinPlayoffLosses;
-                        totalSuperBowls++;
-                        if (yearData.superBowl.jettResult === 'Correct') jettSuperBowlCorrect++;
-                        if (yearData.superBowl.kevinResult === 'Correct') kevinSuperBowlCorrect++;
-                    }
-                });
-
-                const jettOverallRecord = jettOverallTies > 0 ? `${jettOverallWins}-${jettOverallLosses}-${jettOverallTies}` : `${jettOverallWins}-${jettOverallLosses}`;
-                const kevinOverallRecord = kevinOverallTies > 0 ? `${kevinOverallWins}-${kevinOverallLosses}-${kevinOverallTies}` : `${kevinOverallWins}-${kevinOverallLosses}`;
-                const jettOverallWinPct = ((jettOverallWins + jettOverallTies/2) / (jettOverallWins + jettOverallLosses + jettOverallTies) * 100).toFixed(1);
-                const kevinOverallWinPct = ((kevinOverallWins + kevinOverallTies/2) / (kevinOverallWins + kevinOverallLosses + kevinOverallTies) * 100).toFixed(1);
-                const jettPlayoffRecord = jettPlayoffTies > 0 ? `${jettPlayoffWins}-${jettPlayoffLosses}-${jettPlayoffTies}` : `${jettPlayoffWins}-${jettPlayoffLosses}`;
-                const kevinPlayoffRecord = kevinPlayoffTies > 0 ? `${kevinPlayoffWins}-${kevinPlayoffLosses}-${kevinPlayoffTies}` : `${kevinPlayoffWins}-${kevinPlayoffLosses}`;
-                const jettPlayoffWinPct = ((jettPlayoffWins + jettPlayoffTies/2) / (jettPlayoffWins + jettPlayoffLosses + jettPlayoffTies) * 100).toFixed(1);
-                const kevinPlayoffWinPct = ((kevinPlayoffWins + kevinPlayoffTies/2) / (kevinPlayoffWins + kevinPlayoffLosses + kevinPlayoffTies) * 100).toFixed(1);
-
-                // Add Overall section at the top
-                const overallDiv = document.createElement('div');
-                overallDiv.className = 'history-section';
-                overallDiv.style.background = 'linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%)';
-                overallDiv.style.color = 'white';
-                overallDiv.innerHTML = `
-                    <div class="history-year" style="color: white;">🏆 OVERALL (2009-2025)</div>
-                    <div class="history-stats">
-                        <div class="history-stat">
-                            <div class="history-stat-value" style="color: white;">${jettOverallRecord}</div>
-                            <div class="history-stat-label" style="color: rgba(255,255,255,0.8);">Jett Record</div>
-                        </div>
-                        <div class="history-stat">
-                            <div class="history-stat-value" style="color: white;">${jettOverallWinPct}%</div>
-                            <div class="history-stat-label" style="color: rgba(255,255,255,0.8);">Jett Win %</div>
-                        </div>
-                        <div class="history-stat">
-                            <div class="history-stat-value" style="color: white;">${kevinOverallRecord}</div>
-                            <div class="history-stat-label" style="color: rgba(255,255,255,0.8);">Kevin Record</div>
-                        </div>
-                        <div class="history-stat">
-                            <div class="history-stat-value" style="color: white;">${kevinOverallWinPct}%</div>
-                            <div class="history-stat-label" style="color: rgba(255,255,255,0.8);">Kevin Win %</div>
-                        </div>
-                    </div>
-                    <div class="history-stats" style="background: rgba(59, 130, 246, 0.2); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-                        <div class="history-stat">
-                            <div class="history-stat-value" style="color: white;">${jettPlayoffRecord}</div>
-                            <div class="history-stat-label" style="color: rgba(255,255,255,0.8);">Jett Playoff Record</div>
-                        </div>
-                        <div class="history-stat">
-                            <div class="history-stat-value" style="color: white;">${jettPlayoffWinPct}%</div>
-                            <div class="history-stat-label" style="color: rgba(255,255,255,0.8);">Jett Playoff Win %</div>
-                        </div>
-                        <div class="history-stat">
-                            <div class="history-stat-value" style="color: white;">${kevinPlayoffRecord}</div>
-                            <div class="history-stat-label" style="color: rgba(255,255,255,0.8);">Kevin Playoff Record</div>
-                        </div>
-                        <div class="history-stat">
-                            <div class="history-stat-value" style="color: white;">${kevinPlayoffWinPct}%</div>
-                            <div class="history-stat-label" style="color: rgba(255,255,255,0.8);">Kevin Playoff Win %</div>
-                        </div>
-                    </div>
-                    <div style="text-align: center; padding: 10px; background: rgba(34, 197, 94, 0.2); border-radius: 8px; border: 1px solid #22c55e; margin-bottom: 15px;">
-                        <strong style="color: #22c55e;">Super Bowl: ${jettSuperBowlCorrect}/${totalSuperBowls} (Jett) | ${kevinSuperBowlCorrect}/${totalSuperBowls} (Kevin)</strong>
-                    </div>
-                `;
-                container.appendChild(overallDiv);
 
                 Object.keys(historyData).sort((a, b) => b - a).forEach(year => {
                     const yearData = historyData[year];

@@ -823,7 +823,7 @@
         };
 
         // Schedule version for tracking changes
-        const SCHEDULE_VERSION = '2026-v3';
+        const SCHEDULE_VERSION = '2026-v5';
 
         // Complete 2026 NFL Schedule (Official NFL data)
         const schedule = {
@@ -1068,18 +1068,18 @@
             13: {
                 games: [
                     { id: '13-1', home: 'LAR', away: 'KC', date: 'Dec 3', time: 'Thu 8:15 PM', final: false },
-                    { id: '13-2', home: 'ATL', away: 'DET', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
-                    { id: '13-3', home: 'TB', away: 'LAC', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
-                    { id: '13-4', home: 'TEN', away: 'WAS', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
-                    { id: '13-5', home: 'CLE', away: 'CIN', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
-                    { id: '13-6', home: 'NYG', away: 'SF', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
-                    { id: '13-7', home: 'NO', away: 'GB', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
-                    { id: '13-8', home: 'CHI', away: 'JAX', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
-                    { id: '13-9', home: 'ARI', away: 'PHI', date: 'Dec 6', time: 'Sun 4:05 PM', final: false },
-                    { id: '13-10', home: 'DEN', away: 'MIA', date: 'Dec 6', time: 'Sun 4:05 PM', final: false },
-                    { id: '13-11', home: 'MIN', away: 'CAR', date: 'Dec 6', time: 'Sun 4:25 PM', final: false },
-                    { id: '13-12', home: 'NE', away: 'BUF', date: 'Dec 6', time: 'Sun 4:25 PM', final: false },
-                    { id: '13-13', home: 'PIT', away: 'HOU', date: 'Dec 6', time: 'Sun 8:20 PM', final: false },
+                    { id: '13-2', home: 'CLE', away: 'CIN', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
+                    { id: '13-3', home: 'DET', away: 'ATL', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
+                    { id: '13-4', home: 'NO', away: 'GB', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
+                    { id: '13-5', home: 'CHI', away: 'JAX', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
+                    { id: '13-6', home: 'LAC', away: 'TB', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
+                    { id: '13-7', home: 'SF', away: 'NYG', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
+                    { id: '13-8', home: 'WAS', away: 'TEN', date: 'Dec 6', time: 'Sun 1:00 PM', final: false },
+                    { id: '13-9', home: 'PHI', away: 'ARI', date: 'Dec 6', time: 'Sun 4:05 PM', final: false },
+                    { id: '13-10', home: 'MIA', away: 'DEN', date: 'Dec 6', time: 'Sun 4:05 PM', final: false },
+                    { id: '13-11', home: 'BUF', away: 'NE', date: 'Dec 6', time: 'Sun 4:25 PM', final: false },
+                    { id: '13-12', home: 'CAR', away: 'MIN', date: 'Dec 6', time: 'Sun 4:25 PM', final: false },
+                    { id: '13-13', home: 'HOU', away: 'PIT', date: 'Dec 6', time: 'Sun 8:20 PM', final: false },
                     { id: '13-14', home: 'SEA', away: 'DAL', date: 'Dec 7', time: 'Mon 8:15 PM', final: false }
                 ],
                 byes: ['BAL', 'IND', 'LV', 'NYJ']
@@ -1112,15 +1112,14 @@
                     { id: '15-4', home: 'HOU', away: 'JAX', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
                     { id: '15-5', home: 'PIT', away: 'BAL', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
                     { id: '15-6', home: 'NYG', away: 'CLE', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
-                    { id: '15-7', home: 'TEN', away: 'IND', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
-                    { id: '15-8', home: 'GB', away: 'MIA', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
-                    { id: '15-9', home: 'TB', away: 'NO', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
-                    { id: '15-10', home: 'CAR', away: 'CIN', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
-                    { id: '15-11', home: 'WAS', away: 'ATL', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
-                    { id: '15-12', home: 'ARI', away: 'NYJ', date: 'Dec 20', time: 'Sun 4:05 PM', final: false },
-                    { id: '15-13', home: 'LAR', away: 'DAL', date: 'Dec 20', time: 'Sun 4:25 PM', final: false },
-                    { id: '15-14', home: 'LV', away: 'DEN', date: 'Dec 20', time: 'Sun 4:25 PM', final: false },
-                    { id: '15-15', home: 'MIN', away: 'DET', date: 'Dec 20', time: 'Sun 8:20 PM', final: false }
+                    { id: '15-7', home: 'IND', away: 'TEN', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
+                    { id: '15-8', home: 'WAS', away: 'ATL', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
+                    { id: '15-9', home: 'NO', away: 'TB', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
+                    { id: '15-10', home: 'DEN', away: 'LV', date: 'Dec 20', time: 'Sun 1:00 PM', final: false },
+                    { id: '15-11', home: 'NYJ', away: 'ARI', date: 'Dec 20', time: 'Sun 4:05 PM', final: false },
+                    { id: '15-12', home: 'LAR', away: 'DAL', date: 'Dec 20', time: 'Sun 4:25 PM', final: false },
+                    { id: '15-13', home: 'MIN', away: 'DET', date: 'Dec 20', time: 'Sun 4:25 PM', final: false },
+                    { id: '15-14', home: 'KC', away: 'NE', date: 'Dec 20', time: 'Sun 8:20 PM', final: false }
                 ],
                 byes: []
             },
@@ -1130,54 +1129,58 @@
                     { id: '16-2', home: 'CHI', away: 'GB', date: 'Dec 25', time: 'Fri 1:00 PM', final: false },
                     { id: '16-3', home: 'DEN', away: 'BUF', date: 'Dec 25', time: 'Fri 4:30 PM', final: false },
                     { id: '16-4', home: 'SEA', away: 'LAR', date: 'Dec 25', time: 'Fri 8:15 PM', final: false },
-                    { id: '16-5', home: 'NYJ', away: 'NE', date: 'Dec 27', time: 'Sun 1:00 PM', final: false },
+                    { id: '16-5', home: 'NE', away: 'NYJ', date: 'Dec 27', time: 'Sun 1:00 PM', final: false },
                     { id: '16-6', home: 'BAL', away: 'CLE', date: 'Dec 27', time: 'Sun 1:00 PM', final: false },
-                    { id: '16-7', home: 'MIA', away: 'LAC', date: 'Dec 27', time: 'Sun 1:00 PM', final: false },
-                    { id: '16-8', home: 'NO', away: 'ARI', date: 'Dec 27', time: 'Sun 1:00 PM', final: false },
+                    { id: '16-7', home: 'LAC', away: 'MIA', date: 'Dec 27', time: 'Sun 1:00 PM', final: false },
+                    { id: '16-8', home: 'ATL', away: 'TB', date: 'Dec 27', time: 'Sun 1:00 PM', final: false },
                     { id: '16-9', home: 'LV', away: 'TEN', date: 'Dec 27', time: 'Sun 4:05 PM', final: false },
                     { id: '16-10', home: 'KC', away: 'SF', date: 'Dec 27', time: 'Sun 4:25 PM', final: false },
                     { id: '16-11', home: 'DAL', away: 'JAX', date: 'Dec 27', time: 'Sun 8:20 PM', final: false },
-                    { id: '16-12', home: 'DET', away: 'NYG', date: 'Dec 28', time: 'Mon 8:15 PM', final: false }
+                    { id: '16-12', home: 'DET', away: 'NYG', date: 'Dec 28', time: 'Mon 8:15 PM', final: false },
+                    { id: '16-13', home: 'MIN', away: 'WAS', date: 'Dec 28', time: 'Mon 8:15 PM', final: false },
+                    { id: '16-14', home: 'IND', away: 'CIN', date: 'Dec 28', time: 'Mon 8:15 PM', final: false }
                 ],
                 byes: []
             },
             17: {
                 games: [
                     { id: '17-1', home: 'CIN', away: 'BAL', date: 'Dec 31', time: 'Thu 8:15 PM', final: false },
-                    { id: '17-2', home: 'JAX', away: 'WAS', date: 'Jan 2', time: 'Sat 4:30 PM', final: false },
-                    { id: '17-3', home: 'LAC', away: 'KC', date: 'Jan 2', time: 'Sat 8:00 PM', final: false },
-                    { id: '17-4', home: 'MIA', away: 'BUF', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
-                    { id: '17-5', home: 'TEN', away: 'PIT', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
-                    { id: '17-6', home: 'NYJ', away: 'MIN', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
-                    { id: '17-7', home: 'ATL', away: 'NO', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
-                    { id: '17-8', home: 'CAR', away: 'SEA', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
-                    { id: '17-9', home: 'CLE', away: 'IND', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
-                    { id: '17-10', home: 'DAL', away: 'NYG', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
-                    { id: '17-11', home: 'ARI', away: 'LV', date: 'Jan 3', time: 'Sun 4:05 PM', final: false },
-                    { id: '17-12', home: 'CHI', away: 'DET', date: 'Jan 3', time: 'Sun 4:25 PM', final: false },
-                    { id: '17-13', home: 'SF', away: 'PHI', date: 'Jan 3', time: 'Sun 8:20 PM', final: false },
-                    { id: '17-14', home: 'GB', away: 'HOU', date: 'Jan 4', time: 'Mon 8:15 PM', final: false }
+                    { id: '17-2', home: 'TB', away: 'LAR', date: 'Jan 2', time: 'Sat 4:30 PM', final: false },
+                    { id: '17-3', home: 'NO', away: 'ATL', date: 'Jan 2', time: 'Sat 8:00 PM', final: false },
+                    { id: '17-4', home: 'SEA', away: 'CAR', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
+                    { id: '17-5', home: 'IND', away: 'CLE', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
+                    { id: '17-6', home: 'NYG', away: 'DAL', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
+                    { id: '17-7', home: 'BUF', away: 'MIA', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
+                    { id: '17-8', home: 'MIN', away: 'NYJ', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
+                    { id: '17-9', home: 'PIT', away: 'TEN', date: 'Jan 3', time: 'Sun 1:00 PM', final: false },
+                    { id: '17-10', home: 'LV', away: 'ARI', date: 'Jan 3', time: 'Sun 4:05 PM', final: false },
+                    { id: '17-11', home: 'DET', away: 'CHI', date: 'Jan 3', time: 'Sun 4:25 PM', final: false },
+                    { id: '17-12', home: 'PHI', away: 'SF', date: 'Jan 3', time: 'Sun 8:20 PM', final: false },
+                    { id: '17-13', home: 'GB', away: 'HOU', date: 'Jan 4', time: 'Mon 8:15 PM', final: false },
+                    { id: '17-14', home: 'DEN', away: 'NE', date: 'Jan 4', time: 'Mon 8:15 PM', final: false },
+                    { id: '17-15', home: 'WAS', away: 'JAX', date: 'Jan 4', time: 'Mon 8:15 PM', final: false },
+                    { id: '17-16', home: 'LAC', away: 'KC', date: 'Jan 4', time: 'Mon 8:15 PM', final: false }
                 ],
                 byes: []
             },
             18: {
                 games: [
-                    { id: '18-1', home: 'BUF', away: 'NYJ', date: 'Jan 9', time: 'Sat 1:00 PM', final: false },
-                    { id: '18-2', home: 'IND', away: 'JAX', date: 'Jan 9', time: 'Sat 4:30 PM', final: false },
-                    { id: '18-3', home: 'KC', away: 'LV', date: 'Jan 9', time: 'Sat 8:00 PM', final: false },
-                    { id: '18-4', home: 'HOU', away: 'TEN', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-1', home: 'ARI', away: 'SF', date: 'Jan 9', time: 'Sat 1:00 PM', final: false },
+                    { id: '18-2', home: 'BAL', away: 'PIT', date: 'Jan 9', time: 'Sat 4:30 PM', final: false },
+                    { id: '18-3', home: 'BUF', away: 'NYJ', date: 'Jan 9', time: 'Sat 8:00 PM', final: false },
+                    { id: '18-4', home: 'CIN', away: 'CLE', date: 'Jan 10', time: 'Sun TBD', final: false },
                     { id: '18-5', home: 'DEN', away: 'LAC', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-6', home: 'NE', away: 'MIA', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-7', home: 'CIN', away: 'CLE', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-8', home: 'BAL', away: 'PIT', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-9', home: 'MIN', away: 'CHI', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-10', home: 'GB', away: 'DET', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-11', home: 'WAS', away: 'DAL', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-12', home: 'NO', away: 'TB', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-13', home: 'NYG', away: 'PHI', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-14', home: 'LAR', away: 'SEA', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-15', home: 'CAR', away: 'ATL', date: 'Jan 10', time: 'Sun TBD', final: false },
-                    { id: '18-16', home: 'ARI', away: 'SF', date: 'Jan 10', time: 'Sun TBD', final: false }
+                    { id: '18-6', home: 'DET', away: 'GB', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-7', home: 'HOU', away: 'TEN', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-8', home: 'IND', away: 'JAX', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-9', home: 'KC', away: 'LV', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-10', home: 'LAR', away: 'SEA', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-11', home: 'CHI', away: 'MIN', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-12', home: 'MIA', away: 'NE', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-13', home: 'NO', away: 'TB', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-14', home: 'PHI', away: 'NYG', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-15', home: 'ATL', away: 'CAR', date: 'Jan 10', time: 'Sun TBD', final: false },
+                    { id: '18-16', home: 'DAL', away: 'WAS', date: 'Jan 10', time: 'Sun TBD', final: false }
                 ],
                 byes: []
             }

@@ -824,6 +824,8 @@
 
         // Schedule version for tracking changes
         const SCHEDULE_VERSION = '2026-v5';
+        // Picks version - bump when correcting hardcoded picks so stale localStorage is discarded
+        const PICKS_VERSION = '2026-v5-picks';
 
         // Complete 2026 NFL Schedule (Official NFL data)
         const schedule = {
@@ -1467,21 +1469,32 @@
 
             loadPicks: function() {
                 const savedPicks = localStorage.getItem('picks');
-                if (savedPicks) {
+                const savedVersion = localStorage.getItem('picksVersion');
+                if (savedPicks && savedVersion === PICKS_VERSION) {
                     try {
                         const parsed = JSON.parse(savedPicks);
-                        picks['Jett'] = parsed['Jett'] || {};
-                        picks['Kevin'] = parsed['Kevin'] || {};
+                        // Merge saved picks over the hardcoded defaults so
+                        // corrected picks aren't wiped out by missing entries
+                        for (const name of ['Jett', 'Kevin']) {
+                            if (parsed[name]) {
+                                Object.assign(picks[name], parsed[name]);
+                            }
+                        }
                         console.log('Picks loaded from localStorage');
                     } catch (e) {
                         console.error('Error loading picks from localStorage:', e);
                     }
+                } else if (savedPicks) {
+                    // Stale picks from a previous schedule version - discard
+                    localStorage.removeItem('picks');
+                    console.log('Discarded stale picks from previous version');
                 }
             },
 
             savePicks: function() {
                 try {
                     localStorage.setItem('picks', JSON.stringify(picks));
+                    localStorage.setItem('picksVersion', PICKS_VERSION);
                     console.log('Picks saved to localStorage');
                 } catch (e) {
                     console.error('Error saving picks to localStorage:', e);

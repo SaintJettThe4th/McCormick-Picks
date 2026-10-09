@@ -2183,26 +2183,38 @@
             isGameLocked: function(game) {
                 if (game.final) return true;
 
-                // Parse game time to check if it's past
-                const gameDateTime = this.parseGameTime(game.time, this.currentWeek);
-                const now = new Date();
-
-                return now >= gameDateTime;
+                // Lock once the scheduled kickoff time has passed
+                const kickoff = this.parseGameTime(game.time, game.date);
+                if (!kickoff) return false; // TBD kickoff - leave unlocked
+                return new Date() >= kickoff;
             },
 
-            parseGameTime: function(timeStr, week) {
-                // For demo purposes, use a simplified approach
-                // Week 1 games are locked (completed)
-                // Week 2+ games are unlocked for testing
-                const now = new Date();
+            parseGameTime: function(timeStr, dateStr) {
+                // timeStr like 'Thu 8:15 PM' or 'Sun TBD'; dateStr like 'Oct 8'
+                if (!timeStr || timeStr.indexOf('TBD') !== -1) return null;
 
-                if (week === 1) {
-                    // Week 1 is in the past
-                    return new Date(now.getTime() - 86400000); // Yesterday
-                } else {
-                    // Future weeks are in the future
-                    return new Date(now.getTime() + 86400000); // Tomorrow
-                }
+                const months = { 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12, 'Jan': 1 };
+                const dateParts = dateStr.split(' ');
+                const month = months[dateParts[0]];
+                const day = parseInt(dateParts[1], 10);
+                if (!month || isNaN(day)) return null;
+                const year = month === 1 ? 2027 : 2026;
+
+                const parts = timeStr.trim().split(/\s+/);
+                const timePart = parts[parts.length - 2];
+                const ampm = parts[parts.length - 1].toUpperCase();
+                const hm = timePart.split(':');
+                let h = parseInt(hm[0], 10);
+                const m = parseInt(hm[1], 10) || 0;
+                if (isNaN(h)) return null;
+                if (ampm === 'PM' && h !== 12) h += 12;
+                if (ampm === 'AM' && h === 12) h = 0;
+
+                // Kickoff times are Eastern: EDT (UTC-4) until Nov 1 2026, EST (UTC-5) after
+                const dstSwitchUtc = Date.UTC(2026, 10, 1, 6, 0);
+                const naiveUtc = Date.UTC(year, month - 1, day, h, m);
+                const offsetHours = naiveUtc < dstSwitchUtc ? 4 : 5;
+                return new Date(naiveUtc + offsetHours * 3600000);
             },
 
             getButtonClass: function(teamCode, userPick, isFinal, isCorrect) {
@@ -2693,10 +2705,10 @@
 
                     // Check if any game in this week is in the future or has just finished
                     for (const game of weekData.games) {
-                        const gameDate = new Date(`2026-${this.parseMonth(game.date)}-${this.parseDay(game.date)} ${game.time}`);
+                        const gameDate = this.parseGameTime(game.time, game.date);
 
-                        // If game is in the future, this is the current week
-                        if (gameDate > now) {
+                        // If game is in the future (or TBD), this is the current week
+                        if (!gameDate || gameDate > now) {
                             return week;
                         }
 
@@ -2713,17 +2725,6 @@
 
                 // If all weeks are complete, return 18
                 return 18;
-            },
-
-            parseMonth: function(dateStr) {
-                const months = { 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12', 'Jan': '01' };
-                const month = dateStr.split(' ')[0];
-                return months[month] || '09';
-            },
-
-            parseDay: function(dateStr) {
-                const day = dateStr.split(' ')[1];
-                return day.padStart(2, '0');
             }
         };
 

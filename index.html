@@ -802,6 +802,12 @@
             'WAS': { name: 'Commanders', logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/was.png', stadium: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Northwest_Stadium_2024.jpg/640px-Northwest_Stadium_2024.jpg' }
         };
 
+        // ESPN team abbreviation fixes (ESPN uses WSH, we use WAS)
+        const ESPN_TEAM_MAP = { 'WSH': 'WAS' };
+        function espnCode(abbr) {
+            return ESPN_TEAM_MAP[abbr] || abbr;
+        }
+
         // Auto-pick function - selects favorite or home team if no pick made
         function autoPickIfMissing(gameId, homeTeam, awayTeam, favorite) {
             for (const user of ['Jett', 'Kevin']) {
@@ -1463,8 +1469,60 @@
                 this.createWeekButtons();
                 this.loadPicks();
                 this.autoPickLockedGames();
+                this.syncScores();
+                // Refresh live scores every 3 minutes while the page is open
+                setInterval(() => this.syncScores(), 3 * 60 * 1000);
                 // Don't call updateAllSections or updateMoneyStatus until user is logged in
                 console.log('App initialized successfully');
+            },
+
+            // Pull live/final scores from ESPN's public scoreboard API
+            syncScores: async function() {
+                try {
+                    const now = new Date();
+                    const weeksToCheck = [];
+                    for (let w = 1; w <= 18; w++) {
+                        const wd = schedule[w];
+                        if (!wd) continue;
+                        // Only weeks that still have unfinished games AND have started
+                        const hasUnfinished = wd.games.some(g => !g.final);
+                        const hasStarted = wd.games.some(g => {
+                            const t = this.parseGameTime(g.time, g.date);
+                            return t && now >= t;
+                        });
+                        if (hasUnfinished && hasStarted) weeksToCheck.push(w);
+                    }
+                    if (weeksToCheck.length === 0) return;
+
+                    let changed = false;
+                    for (const w of weeksToCheck) {
+                        const res = await fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?year=2026&seasontype=2&week=${w}`);
+                        if (!res.ok) continue;
+                        const data = await res.json();
+                        (data.events || []).forEach(ev => {
+                            const comp = ev.competitions && ev.competitions[0];
+                            if (!comp) return;
+                            const home = comp.competitors.find(c => c.homeAway === 'home');
+                            const away = comp.competitors.find(c => c.homeAway === 'away');
+                            if (!home || !away) return;
+                            const game = schedule[w].games.find(g =>
+                                g.home === espnCode(home.team.abbreviation) &&
+                                g.away === espnCode(away.team.abbreviation));
+                            if (!game) return;
+                            const hScore = parseInt(home.score, 10);
+                            const aScore = parseInt(away.score, 10);
+                            if (!isNaN(hScore)) game.homeScore = hScore;
+                            if (!isNaN(aScore)) game.awayScore = aScore;
+                            if (ev.status && ev.status.type && ev.status.type.completed) {
+                                game.final = true;
+                            }
+                            changed = true;
+                        });
+                    }
+                    if (changed && this.currentUser) this.updateAllSections();
+                } catch (e) {
+                    console.error('Score sync failed:', e);
+                }
             },
 
             loadPicks: function() {

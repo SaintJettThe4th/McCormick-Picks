@@ -808,25 +808,16 @@
             return ESPN_TEAM_MAP[abbr] || abbr;
         }
 
-        // Auto-pick function - selects favorite or home team if no pick made
-        function autoPickIfMissing(gameId, homeTeam, awayTeam, favorite) {
+        // Auto-pick function - assigns the home team if no pick was saved by kickoff
+        function autoPickIfMissing(gameId, homeTeam, awayTeam) {
             for (const user of ['Jett', 'Kevin']) {
                 if (!picks[user] || !picks[user][gameId]) {
-                    const selectedTeam = favorite || homeTeam;
                     if (!picks[user]) picks[user] = {};
-                    picks[user][gameId] = selectedTeam;
-                    console.log(`Auto-picked ${selectedTeam} for ${user} in game ${gameId}`);
+                    picks[user][gameId] = homeTeam;
+                    console.log(`Auto-picked ${homeTeam} for ${user} in game ${gameId}`);
                 }
             }
         }
-
-        // Game favorites (spread favorites - can be updated from betting lines)
-        const favorites = {
-            '1-1': 'SEA', '1-2': 'SF', '1-3': 'CIN', '1-4': 'DET', '1-5': 'BAL',
-            '1-6': 'BAL', '1-7': 'PIT', '1-8': 'CHI', '1-9': 'JAX', '1-10': 'BUF',
-            '1-11': 'LAC', '1-12': 'MIA', '1-13': 'GB', '1-14': 'PHI', '1-15': 'DAL',
-            '1-16': 'KC'
-        };
 
         // Schedule version for tracking changes
         const SCHEDULE_VERSION = '2026-v5';
@@ -1567,7 +1558,7 @@
 
                     weekData.games.forEach(game => {
                         if (this.isGameLocked(game)) {
-                            autoPickIfMissing(game.id, game.home, game.away, favorites[game.id]);
+                            autoPickIfMissing(game.id, game.home, game.away);
                         }
                     });
                 }
@@ -2045,7 +2036,7 @@
                             Save Picks
                         </button>
                         <div id="save-picks-note" style="margin-top: 8px; font-size: 12px; color: #64748b;">
-                            Picks lock at each game's kickoff. Save before games start.
+                            Picks lock at each game's kickoff. Unpicked games default to the home team.
                         </div>`;
                     container.appendChild(saveWrap);
                 }

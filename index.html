@@ -1980,7 +1980,7 @@
                 }
                 
                 weekData.games.forEach(game => {
-                    const userPick = picks[this.currentUser]?.[game.id];
+                    const userPick = this.getDraft()[game.id];
                     const winner = game.homeScore > game.awayScore ? game.home : game.away;
                     const isCorrect = userPick === winner;
                     const isLocked = this.isGameLocked(game);
@@ -2033,6 +2033,22 @@
 
                     container.appendChild(gameDiv);
                 });
+
+                // Save button at the bottom of the week (only if any game is still pickable)
+                const hasUnlocked = weekData.games.some(g => !this.isGameLocked(g));
+                if (hasUnlocked) {
+                    const saveWrap = document.createElement('div');
+                    saveWrap.style.cssText = 'text-align: center; margin: 24px 0 8px;';
+                    saveWrap.innerHTML = `
+                        <button id="save-picks-btn" onclick="app.saveWeekPicks()"
+                                style="padding: 14px 48px; font-size: 16px; font-weight: 700; color: #fff; background: #16a34a; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                            Save Picks
+                        </button>
+                        <div id="save-picks-note" style="margin-top: 8px; font-size: 12px; color: #64748b;">
+                            Picks lock at each game's kickoff. Save before games start.
+                        </div>`;
+                    container.appendChild(saveWrap);
+                }
 
                 // Update competitive message
                 this.updateStatusMessage();
@@ -2285,6 +2301,23 @@
                 return userPick === teamCode ? 'team-btn selected' : 'team-btn';
             },
 
+            // Draft of unsaved picks for the current user + week
+            getDraft: function() {
+                const key = this.currentUser + '|' + this.currentWeek;
+                if (this._draftKey !== key) {
+                    this._draftKey = key;
+                    this._draft = {};
+                    const userPicks = picks[this.currentUser] || {};
+                    const weekData = schedule[this.currentWeek];
+                    if (weekData) {
+                        weekData.games.forEach(g => {
+                            if (userPicks[g.id]) this._draft[g.id] = userPicks[g.id];
+                        });
+                    }
+                }
+                return this._draft;
+            },
+
             makePick: function(gameId, selectedTeam) {
                 if (!this.currentUser) return;
 
@@ -2296,13 +2329,46 @@
                     return;
                 }
 
-                if (!picks[this.currentUser]) {
-                    picks[this.currentUser] = {};
-                }
+                // Stage the pick in the draft - not saved until Save is pressed
+                this.getDraft()[gameId] = selectedTeam;
+                this.renderGames();
+            },
 
-                picks[this.currentUser][gameId] = selectedTeam;
+            saveWeekPicks: function() {
+                if (!this.currentUser) return;
+                const weekData = schedule[this.currentWeek];
+                if (!weekData) return;
+
+                const draft = this.getDraft();
+                if (!picks[this.currentUser]) picks[this.currentUser] = {};
+
+                let saved = 0, skipped = 0;
+                weekData.games.forEach(game => {
+                    if (this.isGameLocked(game)) {
+                        // Can't change a game that already kicked off
+                        if (draft[game.id] && draft[game.id] !== picks[this.currentUser][game.id]) skipped++;
+                        return;
+                    }
+                    if (draft[game.id]) {
+                        picks[this.currentUser][game.id] = draft[game.id];
+                        saved++;
+                    }
+                });
+
                 this.savePicks();
-                this.updateAllSections();
+
+                const btn = document.getElementById('save-picks-btn');
+                const note = document.getElementById('save-picks-note');
+                if (btn) {
+                    btn.textContent = saved > 0 ? `Saved ${saved} pick${saved !== 1 ? 's' : ''}!` : 'Saved!';
+                    btn.style.background = '#15803d';
+                }
+                if (note && skipped > 0) {
+                    note.textContent = `${skipped} pick${skipped !== 1 ? 's' : ''} not saved - game${skipped !== 1 ? 's' : ''} already locked.`;
+                    note.style.color = '#dc2626';
+                }
+                setTimeout(() => this.renderGames(), 1500);
+
                 this.updateMoneyStatus();
                 this.updateStatusMessage();
             },

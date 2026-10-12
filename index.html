@@ -2524,6 +2524,15 @@
                     }
                 });
 
+                // Include live 2026 season in overall totals
+                const live2026 = this.get2026SeasonRecord();
+                jettOverallWins += live2026.jett.wins;
+                jettOverallLosses += live2026.jett.losses;
+                jettOverallTies += live2026.jett.ties;
+                kevinOverallWins += live2026.kevin.wins;
+                kevinOverallLosses += live2026.kevin.losses;
+                kevinOverallTies += live2026.kevin.ties;
+
                 const jettTotalGames = jettOverallWins + jettOverallLosses + jettOverallTies;
                 const kevinTotalGames = kevinOverallWins + kevinOverallLosses + kevinOverallTies;
                 const jettWinPercentage = jettTotalGames > 0 ? ((jettOverallWins / jettTotalGames) * 100).toFixed(1) : 0;
@@ -2554,7 +2563,7 @@
                 overallDiv.style.background = 'linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%)';
                 overallDiv.style.color = 'white';
                 overallDiv.innerHTML = `
-                    <div class="history-year" style="color: #fbbf24;">OVERALL RECORD (2009-2025)</div>
+                    <div class="history-year" style="color: #fbbf24;">OVERALL RECORD (2009-2026)</div>
                     <div class="history-stats">
                         <div class="history-stat" style="background: rgba(255, 255, 255, 0.1);">
                             <div class="history-stat-value" style="color: #fbbf24;">${jettOverallRecord}</div>
@@ -2610,6 +2619,43 @@
                 seasonHeading.style.margin = '30px 0 15px 0';
                 seasonHeading.textContent = 'SEASON HISTORY';
                 container.appendChild(seasonHeading);
+
+                // 2026 Season - computed live from current schedule and picks
+                const cur2026 = this.get2026SeasonRecord();
+                const cur2026Div = document.createElement('div');
+                cur2026Div.className = 'history-section';
+                cur2026Div.style.border = '2px solid #16a34a';
+                const j26 = cur2026.jett, k26 = cur2026.kevin;
+                const j26Rec = `${j26.wins}-${j26.losses}-${j26.ties}`;
+                const k26Rec = `${k26.wins}-${k26.losses}-${k26.ties}`;
+                const j26Pct = j26.total > 0 ? ((j26.wins / j26.total) * 100).toFixed(1) : '0.0';
+                const k26Pct = k26.total > 0 ? ((k26.wins / k26.total) * 100).toFixed(1) : '0.0';
+                const leader2026 = j26.wins > k26.wins ? 'Jett leads' : (k26.wins > j26.wins ? 'Kevin leads' : 'Tied');
+                cur2026Div.innerHTML = `
+                    <div class="history-year" style="background: linear-gradient(135deg, #16a34a, #15803d);">2026 SEASON (IN PROGRESS)</div>
+                    <div class="history-stats">
+                        <div class="history-stat">
+                            <div class="history-stat-value">${j26Rec}</div>
+                            <div class="history-stat-label">Jett Record</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="history-stat-value">${j26Pct}%</div>
+                            <div class="history-stat-label">Jett Win %</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="history-stat-value">${k26Rec}</div>
+                            <div class="history-stat-label">Kevin Record</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="history-stat-value">${k26Pct}%</div>
+                            <div class="history-stat-label">Kevin Win %</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; padding: 10px; background: rgba(22, 163, 74, 0.15); border-radius: 8px; border: 1px solid #16a34a; margin-bottom: 15px;">
+                        <strong style="color: #16a34a;">${leader2026} | Week ${cur2026.weeksPlayed} of 18</strong>
+                    </div>
+                `;
+                container.appendChild(cur2026Div);
 
                 Object.keys(historyData).sort((a, b) => b - a).forEach(year => {
                     const yearData = historyData[year];
@@ -2802,6 +2848,34 @@
                 this.showGames();
                 console.log('Popup closed, navigating to week', this.currentWeek);
                 return false; // Prevent any default behavior
+            },
+
+            get2026SeasonRecord: function() {
+                let weeksPlayed = 0;
+                const result = { jett: { wins: 0, losses: 0, ties: 0, total: 0 }, kevin: { wins: 0, losses: 0, ties: 0, total: 0 } };
+                for (let w = 1; w <= 18; w++) {
+                    const wd = schedule[w];
+                    if (!wd) continue;
+                    let weekHasFinal = false;
+                    wd.games.forEach(game => {
+                        if (!game.final) return;
+                        weekHasFinal = true;
+                        const isTie = game.homeScore === game.awayScore;
+                        const winner = isTie ? null : (game.homeScore > game.awayScore ? game.home : game.away);
+                        ['Jett', 'Kevin'].forEach(name => {
+                            const pick = (picks[name] || {})[game.id];
+                            if (!pick) return;
+                            const r = name === 'Jett' ? result.jett : result.kevin;
+                            if (isTie) { r.ties++; }
+                            else if (pick === winner) { r.wins++; }
+                            else { r.losses++; }
+                            r.total++;
+                        });
+                    });
+                    if (weekHasFinal) weeksPlayed = w;
+                }
+                result.weeksPlayed = weeksPlayed;
+                return result;
             },
 
             getWeekRecord: function(name, week) {

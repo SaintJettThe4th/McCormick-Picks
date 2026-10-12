@@ -2603,8 +2603,8 @@
                     <div style="text-align: center; padding: 10px; background: rgba(251, 191, 36, 0.2); border-radius: 8px; border: 1px solid #fbbf24;">
                         <strong style="color: #fbbf24;">SUPER BOWL RECORD</strong>
                         <div style="margin-top: 8px; display: flex; justify-content: space-around;">
-                            <div style="color: #e5e7eb;">Jett: ${jettSuperBowlCorrect}/${totalSuperBowls}</div>
-                            <div style="color: #e5e7eb;">Kevin: ${kevinSuperBowlCorrect}/${totalSuperBowls}</div>
+                            <div style="color: #e5e7eb;">Jett: ${jettSuperBowlCorrect}-${totalSuperBowls - jettSuperBowlCorrect}</div>
+                            <div style="color: #e5e7eb;">Kevin: ${kevinSuperBowlCorrect}-${totalSuperBowls - kevinSuperBowlCorrect}</div>
                         </div>
                     </div>
                 `;
@@ -2624,7 +2624,6 @@
                 const cur2026 = this.get2026SeasonRecord();
                 const cur2026Div = document.createElement('div');
                 cur2026Div.className = 'history-section';
-                cur2026Div.style.border = '2px solid #16a34a';
                 const j26 = cur2026.jett, k26 = cur2026.kevin;
                 const j26Rec = `${j26.wins}-${j26.losses}-${j26.ties}`;
                 const k26Rec = `${k26.wins}-${k26.losses}-${k26.ties}`;
@@ -2632,7 +2631,7 @@
                 const k26Pct = k26.total > 0 ? ((k26.wins / k26.total) * 100).toFixed(1) : '0.0';
                 const leader2026 = j26.wins > k26.wins ? 'Jett leads' : (k26.wins > j26.wins ? 'Kevin leads' : 'Tied');
                 cur2026Div.innerHTML = `
-                    <div class="history-year" style="background: linear-gradient(135deg, #16a34a, #15803d);">2026 SEASON (IN PROGRESS)</div>
+                    <div class="history-year">2026 SEASON (IN PROGRESS)</div>
                     <div class="history-stats">
                         <div class="history-stat">
                             <div class="history-stat-value">${j26Rec}</div>

@@ -653,8 +653,8 @@
                     <p style="font-size: 16px; margin-bottom: 12px;">Welcome, <span id="username">User</span>!</p>
                     <p id="competitive-message" style="font-size: 14px; margin-bottom: 8px; font-weight: 600;"></p>
                     <p id="records-message" style="font-size: 14px; margin-bottom: 15px;">
-                        Week <span id="current-week">1</span>: <span id="week-record">0/0</span> |
-                        Overall: <span id="overall-record">0/0</span>
+                        Week <span id="current-week">1</span>: <span id="week-record">0-0-0</span><br>
+                        Season: <span id="overall-record">0-0-0</span>
                     </p>
                     <button class="btn" style="background: rgba(255, 255, 255, 0.9); color: #16a34a; border: 2px solid #16a34a;" onclick="app.logout()">Logout</button>
                 </div>
@@ -1568,40 +1568,42 @@
             updateMoneyStatus: function() {
                 const jettRecord = this.getUserRecord('Jett');
                 const kevinRecord = this.getUserRecord('Kevin');
-                const difference = jettRecord.correct - kevinRecord.correct;
+                const difference = jettRecord.wins - kevinRecord.wins;
                 const moneyOwed = Math.min(Math.abs(difference) * 10, 100);
                 
                 const statusDiv = document.getElementById('money-status');
+                const jStr = `${jettRecord.wins}-${jettRecord.losses}-${jettRecord.ties}`;
+                const kStr = `${kevinRecord.wins}-${kevinRecord.losses}-${kevinRecord.ties}`;
                 
                 if (difference > 0) {
                     statusDiv.innerHTML = `
                         <h3 style="margin-bottom: 8px;">Current Leader: Jett</h3>
-                        <div style="font-size: 14px; margin-bottom: 4px;">Jett: ${jettRecord.correct} wins</div>
-                        <div style="font-size: 14px; margin-bottom: 4px;">Kevin: ${kevinRecord.correct} wins</div>
+                        <div style="font-size: 14px; margin-bottom: 4px;">Jett: ${jStr}</div>
+                        <div style="font-size: 14px; margin-bottom: 4px;">Kevin: ${kStr}</div>
                         <div style="font-size: 16px; font-weight: bold; margin-top: 8px;">
                             Kevin owes Jett $${moneyOwed}
                         </div>
                         <div style="font-size: 12px; margin-top: 4px;">
-                            (${difference} games behind, $10/game max $100)
+                            (${difference} wins behind, $10/game max $100)
                         </div>
                     `;
                 } else if (difference < 0) {
                     statusDiv.innerHTML = `
                         <h3 style="margin-bottom: 8px;">Current Leader: Kevin</h3>
-                        <div style="font-size: 14px; margin-bottom: 4px;">Jett: ${jettRecord.correct} wins</div>
-                        <div style="font-size: 14px; margin-bottom: 4px;">Kevin: ${kevinRecord.correct} wins</div>
+                        <div style="font-size: 14px; margin-bottom: 4px;">Jett: ${jStr}</div>
+                        <div style="font-size: 14px; margin-bottom: 4px;">Kevin: ${kStr}</div>
                         <div style="font-size: 16px; font-weight: bold; margin-top: 8px;">
                             Jett owes Kevin $${moneyOwed}
                         </div>
                         <div style="font-size: 12px; margin-top: 4px;">
-                            (${Math.abs(difference)} games behind, $10/game max $100)
+                            (${Math.abs(difference)} wins behind, $10/game max $100)
                         </div>
                     `;
                 } else {
                     statusDiv.innerHTML = `
                         <h3 style="margin-bottom: 8px;">Current Standings</h3>
-                        <div style="font-size: 14px; margin-bottom: 4px;">Jett: ${jettRecord.correct} wins</div>
-                        <div style="font-size: 14px; margin-bottom: 4px;">Kevin: ${kevinRecord.correct} wins</div>
+                        <div style="font-size: 14px; margin-bottom: 4px;">Jett: ${jStr}</div>
+                        <div style="font-size: 14px; margin-bottom: 4px;">Kevin: ${kStr}</div>
                         <div style="font-size: 16px; font-weight: bold; margin-top: 8px;">All Tied Up! No Money Owed</div>
                     `;
                 }
@@ -1609,19 +1611,23 @@
 
             getUserRecord: function(name) {
                 const userPicks = picks[name] || {};
-                let correct = 0, total = 0;
+                let wins = 0, losses = 0, ties = 0;
                 
                 Object.values(schedule).forEach(week => {
                     week.games.forEach(game => {
                         if (game.final && userPicks[game.id]) {
-                            total++;
-                            const winner = game.homeScore > game.awayScore ? game.home : game.away;
-                            if (userPicks[game.id] === winner) correct++;
+                            if (game.homeScore === game.awayScore) {
+                                ties++;
+                            } else {
+                                const winner = game.homeScore > game.awayScore ? game.home : game.away;
+                                if (userPicks[game.id] === winner) wins++;
+                                else losses++;
+                            }
                         }
                     });
                 });
                 
-                return { correct, total };
+                return { wins, losses, ties, correct: wins, total: wins + losses + ties };
             },
 
             createWeekButtons: function() {
@@ -1866,30 +1872,30 @@
                 const userPicks = picks[this.currentUser] || {};
                 const currentWeekNum = this.getCurrentWeekNumber();
                 const weekData = schedule[currentWeekNum];
-                let weekCorrect = 0, weekTotal = 0;
-                let overallCorrect = 0, overallTotal = 0;
+                let wW = 0, lW = 0, tW = 0;
+                let wS = 0, lS = 0, tS = 0;
 
-                // Week record: count all final games in current week, then count correct picks
+                // Week record
                 if (weekData) {
                     weekData.games.forEach(game => {
-                        if (game.final) {
-                            weekTotal++;
-                            if (userPicks[game.id]) {
+                        if (game.final && userPicks[game.id]) {
+                            if (game.homeScore === game.awayScore) { tW++; }
+                            else {
                                 const winner = game.homeScore > game.awayScore ? game.home : game.away;
-                                if (userPicks[game.id] === winner) weekCorrect++;
+                                if (userPicks[game.id] === winner) wW++; else lW++;
                             }
                         }
                     });
                 }
 
-                // Overall record: count all final games across all weeks, then count correct picks
+                // Season record
                 Object.values(schedule).forEach(week => {
                     week.games.forEach(game => {
-                        if (game.final) {
-                            overallTotal++;
-                            if (userPicks[game.id]) {
+                        if (game.final && userPicks[game.id]) {
+                            if (game.homeScore === game.awayScore) { tS++; }
+                            else {
                                 const winner = game.homeScore > game.awayScore ? game.home : game.away;
-                                if (userPicks[game.id] === winner) overallCorrect++;
+                                if (userPicks[game.id] === winner) wS++; else lS++;
                             }
                         }
                     });
@@ -1898,8 +1904,8 @@
                 const weekRecordEl = document.getElementById('week-record');
                 const overallRecordEl = document.getElementById('overall-record');
                 const currentWeekEl = document.getElementById('current-week');
-                if (weekRecordEl) weekRecordEl.textContent = `${weekCorrect}/${weekTotal}`;
-                if (overallRecordEl) overallRecordEl.textContent = `${overallCorrect}/${overallTotal}`;
+                if (weekRecordEl) weekRecordEl.textContent = `${wW}-${lW}-${tW}`;
+                if (overallRecordEl) overallRecordEl.textContent = `${wS}-${lS}-${tS}`;
                 if (currentWeekEl) currentWeekEl.textContent = currentWeekNum;
 
                 // Also update competitive message
@@ -1915,7 +1921,7 @@
                 const myRecord = this.getUserRecord(this.currentUser);
                 const opponent = this.currentUser === 'Jett' ? 'Kevin' : 'Jett';
                 const opponentRecord = this.getUserRecord(opponent);
-                const difference = myRecord.correct - opponentRecord.correct;
+                const difference = myRecord.wins - opponentRecord.wins;
 
                 console.log('DEBUG - currentUser:', this.currentUser, 'opponent:', opponent, 'difference:', difference);
 
@@ -1962,18 +1968,13 @@
                 const weekData = schedule[this.currentWeek];
                 
                 const byeDiv = document.getElementById('bye-weeks');
-                if (weekData.byes.length > 0) {
-                    byeDiv.classList.remove('hidden');
-                    const byeTeams = weekData.byes.map(team => teams[team].name).join(', ');
-                    byeDiv.innerHTML = `<strong>Bye Week:</strong> ${byeTeams}`;
-                } else {
-                    byeDiv.classList.add('hidden');
-                }
+                if (byeDiv) byeDiv.classList.add('hidden');
                 
                 weekData.games.forEach(game => {
                     const userPick = this.getDraft()[game.id];
-                    const winner = game.homeScore > game.awayScore ? game.home : game.away;
-                    const isCorrect = userPick === winner;
+                    const isTie = game.final && game.homeScore === game.awayScore;
+                    const winner = isTie ? null : (game.homeScore > game.awayScore ? game.home : game.away);
+                    const isCorrect = !isTie && userPick === winner;
                     const isLocked = this.isGameLocked(game);
 
                     const gameDiv = document.createElement('div');
@@ -1993,7 +1994,7 @@
                             </div>
 
                             <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
-                                <button class="${this.getButtonClass(game.away, userPick, game.final, isCorrect)}"
+                                <button class="${this.getButtonClass(game.away, userPick, game.final, isCorrect, isTie)}"
                                         onclick="app.makePick('${game.id}', '${game.away}')"
                                         ${game.final || isLocked ? 'disabled' : ''}>
                                     <img src="${awayTeam.logo}" alt="${awayTeam.name}" class="logo">
@@ -2003,7 +2004,7 @@
 
                                 <div style="font-size: 14px; font-weight: bold; color: #1e293b;">at</div>
 
-                                <button class="${this.getButtonClass(game.home, userPick, game.final, isCorrect)}"
+                                <button class="${this.getButtonClass(game.home, userPick, game.final, isCorrect, isTie)}"
                                         onclick="app.makePick('${game.id}', '${game.home}')"
                                         ${game.final || isLocked ? 'disabled' : ''}>
                                     <img src="${homeTeam.logo}" alt="${homeTeam.name}" class="logo">
@@ -2113,18 +2114,22 @@
                         const showKevinPick = isLocked && kevinPick;
 
                         // Determine if picks are correct (for final games)
-                        const winner = game.final ? (game.homeScore > game.awayScore ? game.home : game.away) : null;
-                        const jettCorrect = game.final && jettPick === winner;
-                        const kevinCorrect = game.final && kevinPick === winner;
-                        const jettWrong = game.final && jettPick && !jettCorrect;
-                        const kevinWrong = game.final && kevinPick && !kevinCorrect;
+                        const isTieGame = game.final && game.homeScore === game.awayScore;
+                        const winner = game.final && !isTieGame ? (game.homeScore > game.awayScore ? game.home : game.away) : null;
+                        const jettCorrect = !isTieGame && game.final && jettPick === winner;
+                        const kevinCorrect = !isTieGame && game.final && kevinPick === winner;
+                        const jettWrong = !isTieGame && game.final && jettPick && !jettCorrect;
+                        const kevinWrong = !isTieGame && game.final && kevinPick && !kevinCorrect;
+
+                        const jettStyle = isTieGame ? 'color: #000; font-weight: bold;' : (jettCorrect ? 'color: #16a34a; font-weight: bold;' : (jettWrong ? 'color: #dc2626; font-weight: bold;' : ''));
+                        const kevinStyle = isTieGame ? 'color: #000; font-weight: bold;' : (kevinCorrect ? 'color: #16a34a; font-weight: bold;' : (kevinWrong ? 'color: #dc2626; font-weight: bold;' : ''));
 
                         picksDiv.innerHTML = `
-                            <div class="jett-pick" style="${jettCorrect ? 'color: #16a34a; font-weight: bold;' : ''} ${jettWrong ? 'color: #dc2626; font-weight: bold;' : ''}">
-                                Jett: ${showJettPick ? teams[jettPick].name : (isLocked ? 'No pick' : 'Hidden')}
+                            <div class="jett-pick" style="${jettStyle}">
+                                Jett: ${showJettPick ? teams[jettPick].name : (isLocked ? 'No pick' : 'Hidden')}${isTieGame ? ' (Tie)' : ''}
                             </div>
-                            <div class="kevin-pick" style="${kevinCorrect ? 'color: #16a34a; font-weight: bold;' : ''} ${kevinWrong ? 'color: #dc2626; font-weight: bold;' : ''}">
-                                Kevin: ${showKevinPick ? teams[kevinPick].name : (isLocked ? 'No pick' : 'Hidden')}
+                            <div class="kevin-pick" style="${kevinStyle}">
+                                Kevin: ${showKevinPick ? teams[kevinPick].name : (isLocked ? 'No pick' : 'Hidden')}${isTieGame ? ' (Tie)' : ''}
                             </div>
                         `;
 
@@ -2158,23 +2163,26 @@
                     const jettPicks = picks['Jett'] || {};
                     const kevinPicks = picks['Kevin'] || {};
 
-                    let jettCorrect = 0, jettTotal = 0;
-                    let kevinCorrect = 0, kevinTotal = 0;
+                    let jW = 0, jL = 0, jT = 0;
+                    let kW = 0, kL = 0, kT = 0;
                     let hasGames = false;
 
                     weekData.games.forEach(game => {
                         if (game.final) {
                             hasGames = true;
-                            const winner = game.homeScore > game.awayScore ? game.home : game.away;
+                            const isTie = game.homeScore === game.awayScore;
+                            const winner = isTie ? null : (game.homeScore > game.awayScore ? game.home : game.away);
 
                             if (jettPicks[game.id]) {
-                                jettTotal++;
-                                if (jettPicks[game.id] === winner) jettCorrect++;
+                                if (isTie) jT++;
+                                else if (jettPicks[game.id] === winner) jW++;
+                                else jL++;
                             }
 
                             if (kevinPicks[game.id]) {
-                                kevinTotal++;
-                                if (kevinPicks[game.id] === winner) kevinCorrect++;
+                                if (isTie) kT++;
+                                else if (kevinPicks[game.id] === winner) kW++;
+                                else kL++;
                             }
                         }
                     });
@@ -2183,15 +2191,15 @@
                         const resultDiv = document.createElement('div');
                         resultDiv.className = 'result-row';
 
-                        const jettWinner = jettCorrect > kevinCorrect;
-                        const kevinWinner = kevinCorrect > jettCorrect;
-                        const tied = jettCorrect === kevinCorrect;
-                        const diff = Math.abs(jettCorrect - kevinCorrect);
+                        const jettWinner = jW > kW;
+                        const kevinWinner = kW > jW;
+                        const tied = jW === kW;
+                        const diff = Math.abs(jW - kW);
 
                         resultDiv.innerHTML = `
                             <div style="flex: 0 0 60px; font-weight: 600;">${week}</div>
-                            <div style="flex: 1; text-align: center;">${jettCorrect}/${jettTotal}</div>
-                            <div style="flex: 1; text-align: center;">${kevinCorrect}/${kevinTotal}</div>
+                            <div style="flex: 1; text-align: center;">${jW}-${jL}-${jT}</div>
+                            <div style="flex: 1; text-align: center;">${kW}-${kL}-${kT}</div>
                             <div style="flex: 0 0 80px; text-align: right; font-weight: 600;">
                                 ${jettWinner ? `Jett +${diff}` :
                                   kevinWinner ? `Kevin +${diff}` :
@@ -2214,7 +2222,7 @@
                 const users = ['Jett', 'Kevin'].map(name => {
                     const record = this.getUserRecord(name);
                     return { name, ...record };
-                }).sort((a, b) => b.correct - a.correct);
+                }).sort((a, b) => b.wins - a.wins);
 
                 users.forEach((user, index) => {
                     const standingDiv = document.createElement('div');
@@ -2223,12 +2231,13 @@
                         standingDiv.style.borderLeftWidth = '6px';
                     }
 
+                    const pct = user.total > 0 ? Math.round((user.wins / user.total) * 100) : 0;
                     standingDiv.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <div style="font-size: 24px; font-weight: 700; color: #1e293b;">#${index + 1}</div>
                             <div>
                                 <div style="font-weight: 700; font-size: 18px; color: #1e293b;">${user.name}</div>
-                                <div style="color: #64748b; font-size: 13px;">${user.correct}/${user.total} (${user.total > 0 ? Math.round((user.correct/user.total)*100) : 0}%)</div>
+                                <div style="color: #64748b; font-size: 13px;">${user.wins}-${user.losses}-${user.ties} (${pct}%)</div>
                             </div>
                         </div>
                         ${user.name === this.currentUser ? '<span style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600;">YOU</span>' : ''}
@@ -2282,9 +2291,10 @@
                 return new Date(naiveUtc + offsetHours * 3600000);
             },
 
-            getButtonClass: function(teamCode, userPick, isFinal, isCorrect) {
+            getButtonClass: function(teamCode, userPick, isFinal, isCorrect, isTie) {
                 if (isFinal) {
                     if (userPick === teamCode) {
+                        if (isTie) return 'team-btn correct'; // green for ties
                         return isCorrect ? 'team-btn correct' : 'team-btn wrong';
                     }
                     return 'team-btn';
@@ -2733,7 +2743,7 @@
                     const jettRecord = this.getWeekRecord('Jett', completedWeek);
                     const kevinRecord = this.getWeekRecord('Kevin', completedWeek);
 
-                    const difference = jettRecord.correct - kevinRecord.correct;
+                    const difference = jettRecord.wins - kevinRecord.wins;
                     let message = '';
                     let highlight = '';
                     let highlightClass = '';
@@ -2755,7 +2765,7 @@
                     // Get current standings
                     const jettOverall = this.getUserRecord('Jett');
                     const kevinOverall = this.getUserRecord('Kevin');
-                    const overallDiff = jettOverall.correct - kevinOverall.correct;
+                    const overallDiff = jettOverall.wins - kevinOverall.wins;
                     let standings = '';
 
                     if (overallDiff > 0) {
@@ -2795,19 +2805,21 @@
             getWeekRecord: function(name, week) {
                 const userPicks = picks[name] || {};
                 const weekData = schedule[week];
-                let correct = 0, total = 0;
+                let wins = 0, losses = 0, ties = 0;
 
                 weekData.games.forEach(game => {
-                    if (game.final) {
-                        total++;
-                        const winner = game.homeScore > game.awayScore ? game.home : game.away;
-                        if (userPicks[game.id] === winner) {
-                            correct++;
+                    if (game.final && userPicks[game.id]) {
+                        if (game.homeScore === game.awayScore) {
+                            ties++;
+                        } else {
+                            const winner = game.homeScore > game.awayScore ? game.home : game.away;
+                            if (userPicks[game.id] === winner) wins++;
+                            else losses++;
                         }
                     }
                 });
 
-                return { correct, total };
+                return { wins, losses, ties, correct: wins, total: wins + losses + ties };
             },
 
             getCurrentWeekNumber: function() {

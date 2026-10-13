@@ -216,7 +216,7 @@
             font-size: 16px; font-weight: bold;
             border: 1px solid rgba(201, 162, 39, 0.3);
         }
-        .game-time { font-size: 11px; color: #64748b; margin-top: 6px; }
+        .game-time { font-size: 11px; color: #ffffff; margin-top: 6px; }
         .score-display { font-size: 16px; font-weight: bold; margin-top: 4px; color: #e2e8f0; }
         .standings-row {
             display: flex; justify-content: space-between; align-items: center;
@@ -552,7 +552,7 @@
 
         <!-- Navigation -->
         <div id="nav" class="hidden nav">
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; width: 100%; max-width: 400px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; width: 100%; max-width: 600px; margin: 0 auto;">
                 <button class="nav-btn" onclick="app.showGames()"><span class="nav-icon">&#127944;</span>Games</button>
                 <button class="nav-btn" onclick="app.showPicks()"><span class="nav-icon">&#128203;</span>Picks</button>
                 <button class="nav-btn" onclick="app.showResults()"><span class="nav-icon">&#128202;</span>Results</button>
@@ -1446,9 +1446,10 @@
                     const weekData = schedule[i];
                     if (weekData && weekData.games) {
                         const allFinal = weekData.games.every(game => game.final);
-                        if (allFinal) {
-                            btn.style.background = '#9ca3af';
-                            btn.style.color = '#4b5563';
+                        if (allFinal && i !== currentWeek) {
+                            btn.style.background = 'rgba(100, 116, 139, 0.25)';
+                            btn.style.color = '#64748b';
+                            btn.style.borderColor = 'rgba(100, 116, 139, 0.3)';
                         }
                     }
 

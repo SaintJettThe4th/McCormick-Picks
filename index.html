@@ -152,8 +152,7 @@
             right: 0;
             background: rgba(255, 255, 255, 0.95);
             border-top: 2px solid #16a34a;
-            padding: 12px;
-            text-align: center;
+            padding: 8px 12px;
             box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
             z-index: 1000;
             backdrop-filter: blur(10px);
@@ -665,13 +664,13 @@
                 <div id="main-menu">
                     <div class="section">
                         <h2 class="section-title">Main Menu</h2>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; max-width: 400px; margin: 0 auto;">
-                            <button class="btn btn-primary" style="padding: 20px; font-size: 16px;" onclick="app.showGames()">Games</button>
-                            <button class="btn btn-info" style="padding: 20px; font-size: 16px;" onclick="app.showPicks()">Picks</button>
-                            <button class="btn btn-secondary" style="padding: 20px; font-size: 16px;" onclick="app.showResults()">Results</button>
-                            <button class="btn" style="padding: 20px; font-size: 16px; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
-                            <button class="btn" style="padding: 20px; font-size: 16px; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: 2px solid #ca8a04;" onclick="app.showRules()">Rules</button>
-                            <button class="btn btn-danger" style="padding: 20px; font-size: 16px;" onclick="app.showHistory()">History</button>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; max-width: 400px; margin: 0 auto;">
+                            <button class="btn btn-primary" style="padding: 16px 8px; font-size: 15px; margin: 0; width: 100%;" onclick="app.showGames()">Games</button>
+                            <button class="btn btn-info" style="padding: 16px 8px; font-size: 15px; margin: 0; width: 100%;" onclick="app.showPicks()">Picks</button>
+                            <button class="btn btn-secondary" style="padding: 16px 8px; font-size: 15px; margin: 0; width: 100%;" onclick="app.showResults()">Results</button>
+                            <button class="btn" style="padding: 16px 8px; font-size: 15px; margin: 0; width: 100%; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
+                            <button class="btn" style="padding: 16px 8px; font-size: 15px; margin: 0; width: 100%; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: 2px solid #ca8a04;" onclick="app.showRules()">Rules</button>
+                            <button class="btn btn-danger" style="padding: 16px 8px; font-size: 15px; margin: 0; width: 100%;" onclick="app.showHistory()">History</button>
                         </div>
                     </div>
                 </div>
@@ -780,12 +779,14 @@
 
         <!-- Navigation -->
         <div id="nav" class="hidden nav">
-            <button class="btn btn-primary" onclick="app.showGames()">Games</button>
-            <button class="btn btn-info" onclick="app.showPicks()">Picks</button>
-            <button class="btn btn-secondary" onclick="app.showResults()">Results</button>
-            <button class="btn" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
-            <button class="btn" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: 2px solid #ca8a04;" onclick="app.showRules()">Rules</button>
-            <button class="btn btn-danger" onclick="app.showHistory()">History</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; width: 100%; max-width: 400px; margin: 0 auto;">
+                <button class="btn btn-primary" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%;" onclick="app.showGames()">Games</button>
+                <button class="btn btn-info" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%;" onclick="app.showPicks()">Picks</button>
+                <button class="btn btn-secondary" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%;" onclick="app.showResults()">Results</button>
+                <button class="btn" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
+                <button class="btn" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: 2px solid #ca8a04;" onclick="app.showRules()">Rules</button>
+                <button class="btn btn-danger" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%;" onclick="app.showHistory()">History</button>
+            </div>
         </div>
     </div>
 

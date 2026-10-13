@@ -670,6 +670,7 @@
                             <button class="btn btn-info" style="padding: 20px; font-size: 18px;" onclick="app.showPicks()">Picks</button>
                             <button class="btn btn-secondary" style="padding: 20px; font-size: 18px;" onclick="app.showResults()">Results</button>
                             <button class="btn" style="padding: 20px; font-size: 18px; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
+                            <button class="btn" style="padding: 20px; font-size: 18px; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: 2px solid #ca8a04;" onclick="app.showRules()">Rules</button>
                             <button class="btn btn-danger" style="padding: 20px; font-size: 18px;" onclick="app.showHistory()">History</button>
                         </div>
                     </div>
@@ -713,6 +714,26 @@
                     <div class="section">
                         <h2 class="section-title">Overall Standings</h2>
                         <div id="standings-list"></div>
+                    </div>
+                </div>
+
+                <!-- Rules Section -->
+                <div id="rules-section" class="hidden">
+                    <div class="section">
+                        <h2 class="section-title" style="color: #a16207;">Rules</h2>
+                        <div style="background: linear-gradient(135deg, rgba(250, 204, 21, 0.15), rgba(234, 179, 8, 0.25)); border: 2px solid #eab308; border-radius: 12px; padding: 20px;">
+                            <div style="font-size: 15px; line-height: 1.8; color: #1e293b;">
+                                <div style="font-weight: 700; font-size: 18px; color: #a16207; margin-bottom: 12px; text-align: center;">McCormick Pick'em Rules</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">1. Picking:</strong> Each user picks a winner for every game, every week (Weeks 1-18).</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">2. Saving:</strong> You must tap <strong>Save Picks</strong> to lock in your choices. Unsaved picks are lost if you leave the page.</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">3. Deadline:</strong> Picks lock at each game's kickoff time. You can change and re-save freely until then.</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">4. Missed Picks:</strong> If you don't pick a game before kickoff, the <strong>home team</strong> is automatically assigned as your pick.</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">5. Ties:</strong> If a game ends in a tie, both users receive a <strong>tie</strong> (not a win or loss). Ties appear orange in Games and neutral in Picks.</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">6. Records:</strong> Displayed as <strong>W-L-T</strong> (Wins-Losses-Ties).</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">7. Money:</strong> $10 per win difference, max $100. The user with fewer wins owes the difference.</div>
+                                <div><strong style="color: #a16207;">8. Scores:</strong> Final scores sync automatically from ESPN. No manual entry needed.</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -763,6 +784,7 @@
             <button class="btn btn-info" onclick="app.showPicks()">Picks</button>
             <button class="btn btn-secondary" onclick="app.showResults()">Results</button>
             <button class="btn" style="background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
+            <button class="btn" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: 2px solid #ca8a04;" onclick="app.showRules()">Rules</button>
             <button class="btn btn-danger" onclick="app.showHistory()">History</button>
         </div>
     </div>
@@ -1795,6 +1817,7 @@
                 document.getElementById('picks-section').classList.add('hidden');
                 document.getElementById('results-section').classList.add('hidden');
                 document.getElementById('leaderboard-section').classList.add('hidden');
+                document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
                 document.getElementById('bye-weeks').classList.add('hidden');
                 // Show bottom navigation
@@ -2386,6 +2409,7 @@
                 document.getElementById('picks-section').classList.add('hidden');
                 document.getElementById('results-section').classList.add('hidden');
                 document.getElementById('leaderboard-section').classList.add('hidden');
+                document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
@@ -2405,6 +2429,7 @@
                 document.getElementById('picks-section').classList.remove('hidden');
                 document.getElementById('results-section').classList.add('hidden');
                 document.getElementById('leaderboard-section').classList.add('hidden');
+                document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
@@ -2424,6 +2449,7 @@
                 document.getElementById('picks-section').classList.add('hidden');
                 document.getElementById('results-section').classList.remove('hidden');
                 document.getElementById('leaderboard-section').classList.add('hidden');
+                document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
@@ -2445,6 +2471,7 @@
                 document.getElementById('picks-section').classList.add('hidden');
                 document.getElementById('results-section').classList.add('hidden');
                 document.getElementById('leaderboard-section').classList.remove('hidden');
+                document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
@@ -2458,6 +2485,25 @@
                 this.renderStandings();
             },
 
+            showRules: function() {
+                document.getElementById('main-menu').classList.add('hidden');
+                document.getElementById('week-selector').classList.add('hidden');
+                document.getElementById('games-section').classList.add('hidden');
+                document.getElementById('picks-section').classList.add('hidden');
+                document.getElementById('results-section').classList.add('hidden');
+                document.getElementById('leaderboard-section').classList.add('hidden');
+                document.getElementById('rules-section').classList.remove('hidden');
+                document.getElementById('history-section').classList.add('hidden');
+                document.getElementById('nav').classList.remove('hidden');
+
+                const competitiveMsg = document.getElementById('competitive-message');
+                const recordsMsg = document.getElementById('records-message');
+                if (competitiveMsg) competitiveMsg.style.display = 'block';
+                if (recordsMsg) recordsMsg.style.display = 'block';
+
+                this.updateRecords();
+            },
+
             showHistory: function() {
                 document.getElementById('main-menu').classList.add('hidden');
                 document.getElementById('week-selector').classList.add('hidden');
@@ -2465,6 +2511,7 @@
                 document.getElementById('picks-section').classList.add('hidden');
                 document.getElementById('results-section').classList.add('hidden');
                 document.getElementById('leaderboard-section').classList.add('hidden');
+                document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.remove('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 

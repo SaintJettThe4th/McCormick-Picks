@@ -203,6 +203,7 @@
             font-size: 12px; color: #94a3b8; font-weight: 600;
         }
         .week-btn:hover { background: rgba(201, 162, 39, 0.1); border-color: #c9a227; color: #c9a227; }
+        .week-btn.complete { background: rgba(100, 116, 139, 0.25); color: #64748b; border-color: rgba(100, 116, 139, 0.3); }
         .week-btn.active { background: #c9a227; color: #0d1b2a; border-color: #c9a227; }
         .bye-weeks {
             background: rgba(201, 162, 39, 0.1); color: #c9a227;
@@ -304,9 +305,9 @@
             border-radius: 12px; border: 1px solid rgba(201, 162, 39, 0.2);
         }
         .history-year { font-size: 20px; font-weight: 700; margin-bottom: 15px; color: #c9a227; text-transform: uppercase; }
-        .history-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
-        .history-stat { background: rgba(13, 27, 42, 0.6); padding: 12px; border-radius: 8px; text-align: center; }
-        .history-stat-value { font-size: 24px; font-weight: 700; color: #e2e8f0; }
+        .history-stats { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .history-stat { background: rgba(13, 27, 42, 0.6); padding: 12px 8px; border-radius: 8px; text-align: center; overflow: hidden; }
+        .history-stat-value { font-size: 20px; font-weight: 700; color: #e2e8f0; white-space: nowrap; }
         .history-stat-label { font-size: 12px; color: #94a3b8; text-transform: uppercase; }
         #password-input {
             background: rgba(13, 27, 42, 0.8); border: 1px solid rgba(201, 162, 39, 0.3);
@@ -355,9 +356,9 @@
                     <p style="font-size: 13px; margin-top: 6px; opacity: 0.5;">The Ultimate Football Showdown</p>
                 </div>
 
-                <div id="user-select" style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; position: relative; z-index: 10;">
-                    <button class="btn btn-primary" onclick="console.log('Jett button clicked'); app.selectUser('Jett');" style="position: relative; z-index: 10;">Login as Jett</button>
-                    <button class="btn btn-secondary" onclick="console.log('Kevin button clicked'); app.selectUser('Kevin');" style="position: relative; z-index: 10;">Login as Kevin</button>
+                <div id="user-select" style="display: flex; flex-direction: column; gap: 8px; max-width: 280px; margin: 0 auto; position: relative; z-index: 10;">
+                    <button class="btn btn-primary" onclick="console.log('Jett button clicked'); app.selectUser('Jett');" style="position: relative; z-index: 10; width: 100%; margin: 0;">Login as Jett</button>
+                    <button class="btn btn-secondary" onclick="console.log('Kevin button clicked'); app.selectUser('Kevin');" style="position: relative; z-index: 10; width: 100%; margin: 0;">Login as Kevin</button>
                 </div>
 
                 <div id="password-form" class="hidden" style="max-width: 280px; margin: 15px auto 0; position: relative; z-index: 10;">
@@ -414,7 +415,7 @@
                         <span style="font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px;">Main Menu</span>
                         <div style="width: 40px; height: 2px; background: #c9a227; margin: 8px auto 0;"></div>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 400px; margin: 0 auto;">
+                    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 400px; margin: 0 auto;">
                         <div class="menu-card" onclick="app.showGames()">
                             <span class="menu-icon">&#127944;</span>
                             <span class="menu-label">Games</span>
@@ -1309,7 +1310,10 @@
                             changed = true;
                         });
                     }
-                    if (changed && this.currentUser) this.updateAllSections();
+                    if (changed) {
+                        this.createWeekButtons();
+                        if (this.currentUser) this.updateAllSections();
+                    }
                 } catch (e) {
                     console.error('Score sync failed:', e);
                 }
@@ -1432,26 +1436,24 @@
             createWeekButtons: function() {
                 const container = document.getElementById('week-buttons');
                 container.innerHTML = '';
-                const currentWeek = this.getCurrentWeekNumber();
-                this.currentWeek = currentWeek;
+                // Preserve the currently selected week across rebuilds (e.g. after a score sync);
+                // only fall back to the computed current week if nothing has been selected yet.
+                const activeWeek = this.currentWeek || this.getCurrentWeekNumber();
 
                 for (let i = 1; i <= 18; i++) {
                     const btn = document.createElement('button');
                     btn.className = 'week-btn';
-                    if (i === currentWeek) btn.classList.add('active');
                     btn.textContent = `Week ${i}`;
                     btn.onclick = () => this.selectWeek(i);
 
-                    // Check if all games in this week are final
+                    // Grey out any week whose games are all complete
                     const weekData = schedule[i];
-                    if (weekData && weekData.games) {
-                        const allFinal = weekData.games.every(game => game.final);
-                        if (allFinal && i !== currentWeek) {
-                            btn.style.background = 'rgba(100, 116, 139, 0.25)';
-                            btn.style.color = '#64748b';
-                            btn.style.borderColor = 'rgba(100, 116, 139, 0.3)';
-                        }
+                    if (weekData && weekData.games && weekData.games.every(game => game.final)) {
+                        btn.classList.add('complete');
                     }
+
+                    // Gold highlight always wins over the grey "complete" style
+                    if (i === activeWeek) btn.classList.add('active');
 
                     container.appendChild(btn);
                 }
@@ -1596,8 +1598,8 @@
                 document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
                 document.getElementById('bye-weeks').classList.add('hidden');
-                // Show bottom navigation
-                document.getElementById('nav').classList.remove('hidden');
+                // Hide bottom navigation on main menu
+                document.getElementById('nav').classList.add('hidden');
 
                 // Ensure header elements are visible and updated
                 const competitiveMsg = document.getElementById('competitive-message');
@@ -1768,7 +1770,15 @@
                 const weekData = schedule[this.currentWeek];
                 
                 const byeDiv = document.getElementById('bye-weeks');
-                if (byeDiv) byeDiv.classList.add('hidden');
+                if (byeDiv) {
+                    if (weekData.byes && weekData.byes.length > 0) {
+                        byeDiv.classList.remove('hidden');
+                        const byeTeams = weekData.byes.map(team => teams[team].name).join(', ');
+                        byeDiv.innerHTML = `<strong>Bye Week:</strong> ${byeTeams}`;
+                    } else {
+                        byeDiv.classList.add('hidden');
+                    }
+                }
                 
                 weekData.games.forEach(game => {
                     const userPick = this.getDraft()[game.id];
@@ -1799,7 +1809,7 @@
                                         ${game.final || isLocked ? 'disabled' : ''}>
                                     <img src="${awayTeam.logo}" alt="${awayTeam.name}" class="logo">
                                     <div style="font-size: 12px; font-weight: 600;">${awayTeam.name}</div>
-                                    ${game.final ? `<div class="score-display" style="color: #000;">${game.awayScore}</div>` : ''}
+                                    ${game.final ? `<div class="score-display" style="color: #94a3b8;">${game.awayScore}</div>` : ''}
                                 </button>
 
                                 <div style="font-size: 14px; font-weight: bold; color: #94a3b8;">at</div>
@@ -1809,7 +1819,7 @@
                                         ${game.final || isLocked ? 'disabled' : ''}>
                                     <img src="${homeTeam.logo}" alt="${homeTeam.name}" class="logo">
                                     <div style="font-size: 12px; font-weight: 600;">${homeTeam.name}</div>
-                                    ${game.final ? `<div class="score-display" style="color: #000;">${game.homeScore}</div>` : ''}
+                                    ${game.final ? `<div class="score-display" style="color: #94a3b8;">${game.homeScore}</div>` : ''}
                                 </button>
                             </div>
 
@@ -1856,6 +1866,17 @@
                 const currentWeekNum = this.getCurrentWeekNumber();
                 const isWeekEligible = this.currentWeek <= currentWeekNum;
 
+                const byeDiv = document.getElementById('bye-weeks');
+                if (byeDiv) {
+                    if (weekData.byes && weekData.byes.length > 0) {
+                        byeDiv.classList.remove('hidden');
+                        const byeTeams = weekData.byes.map(team => teams[team].name).join(', ');
+                        byeDiv.innerHTML = `<strong>Bye Week:</strong> ${byeTeams}`;
+                    } else {
+                        byeDiv.classList.add('hidden');
+                    }
+                }
+
                 weekData.games.forEach(game => {
                     const jettPick = jettPicks[game.id];
                     const kevinPick = kevinPicks[game.id];
@@ -1863,14 +1884,15 @@
                     const isLocked = this.isGameLocked(game);
                     const awayWinner = game.final && game.awayScore > game.homeScore;
                     const homeWinner = game.final && game.homeScore > game.awayScore;
-                    const bgColor = game.final ? 'rgba(200, 200, 200, 0.3)' : 'rgba(245, 245, 245, 0.6)';
-                    const borderColor = isLocked && !samePick ? '#FFD700' : 'rgba(0, 0, 0, 0.1)';
-                    const borderWidth = isLocked && !samePick ? '3px' : '1px';
+                    const borderColor = isLocked && !samePick ? '#c9a227' : 'rgba(201, 162, 39, 0.1)';
+                    const borderWidth = isLocked && !samePick ? '2px' : '1px';
 
                     const comparisonDiv = document.createElement('div');
                     comparisonDiv.className = 'pick-row';
-                    comparisonDiv.style.background = bgColor;
+                    comparisonDiv.style.background = 'transparent';
                     comparisonDiv.style.border = `${borderWidth} solid ${borderColor}`;
+                    comparisonDiv.style.borderRadius = '8px';
+                    comparisonDiv.style.padding = '10px';
 
                     comparisonDiv.innerHTML = `
                         <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
@@ -1878,27 +1900,27 @@
                                 <img src="${teams[game.away].logo}" alt="${teams[game.away].name}" style="width: 40px; height: 40px; object-fit: contain;">
                                 ${awayWinner ? `<span style="position: absolute; right: -18px; top: 50%; transform: translateY(-50%); font-size: 14px; line-height: 1;">⭐</span>` : ''}
                             </div>
-                            <span style="font-size: 14px; font-weight: 600;">${teams[game.away].name}</span>
-                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.awayScore}</div>` : ''}
+                            <span style="font-size: 14px; font-weight: 600; color: #e2e8f0;">${teams[game.away].name}</span>
+                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #94a3b8; margin-top: 2px;">${game.awayScore}</div>` : ''}
                         </div>
                         <div style="text-align: center; flex: 1;">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">${game.time}</div>
-                            <div style="font-size: 12px; font-weight: bold;">at</div>
+                            <div style="font-size: 11px; color: #ffffff; margin-bottom: 4px;">${game.time}</div>
+                            <div style="font-size: 12px; font-weight: bold; color: #94a3b8;">at</div>
                             ${!isWeekEligible ?
                                 `` :
                                 (isLocked ?
                                     `<span class="lock-indicator">LOCKED</span>` :
                                     ``)
                             }
-                            ${game.final ? `<div style="font-size: 11px; color: #64748b; margin-top: 2px;">Final</div>` : ''}
+                            ${game.final ? `<div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Final</div>` : ''}
                         </div>
                         <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">
                             <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 4px; position: relative;">
                                 ${homeWinner ? `<span style="position: absolute; left: -18px; top: 50%; transform: translateY(-50%); font-size: 14px; line-height: 1;">⭐</span>` : ''}
                                 <img src="${teams[game.home].logo}" alt="${teams[game.home].name}" style="width: 40px; height: 40px; object-fit: contain;">
                             </div>
-                            <span style="font-size: 14px; font-weight: 600;">${teams[game.home].name}</span>
-                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #000; margin-top: 2px;">${game.homeScore}</div>` : ''}
+                            <span style="font-size: 14px; font-weight: 600; color: #e2e8f0;">${teams[game.home].name}</span>
+                            ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #94a3b8; margin-top: 2px;">${game.homeScore}</div>` : ''}
                         </div>
                     `;
 
@@ -2033,14 +2055,12 @@
 
                     const pct = user.total > 0 ? Math.round((user.wins / user.total) * 100) : 0;
                     standingDiv.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div style="font-size: 24px; font-weight: 700; color: #c9a227;">#${index + 1}</div>
-                            <div>
-                                <div style="font-weight: 700; font-size: 18px; color: #e2e8f0;">${user.name}</div>
-                                <div style="color: #94a3b8; font-size: 13px;">${user.wins}-${user.losses}-${user.ties} (${pct}%)</div>
-                            </div>
+                        <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;">
+                            <div style="font-size: 20px; font-weight: 700; color: #c9a227; flex-shrink: 0;">#${index + 1}</div>
+                            <div style="font-weight: 700; font-size: 16px; color: #e2e8f0; flex-shrink: 0;">${user.name}</div>
+                            <div style="color: #94a3b8; font-size: 13px; white-space: nowrap;">${user.wins}-${user.losses}-${user.ties} (${pct}%)</div>
                         </div>
-                        ${user.name === this.currentUser ? '<span style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600;">YOU</span>' : ''}
+                        ${user.name === this.currentUser ? '<span style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; flex-shrink: 0;">YOU</span>' : ''}
                     `;
 
                     container.appendChild(standingDiv);
@@ -2223,6 +2243,7 @@
                 document.getElementById('leaderboard-section').classList.add('hidden');
                 document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
+                document.getElementById('bye-weeks').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
                 // Ensure header elements are visible
@@ -2245,6 +2266,7 @@
                 document.getElementById('leaderboard-section').classList.remove('hidden');
                 document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.add('hidden');
+                document.getElementById('bye-weeks').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
                 // Ensure header elements are visible
@@ -2266,6 +2288,7 @@
                 document.getElementById('leaderboard-section').classList.add('hidden');
                 document.getElementById('rules-section').classList.remove('hidden');
                 document.getElementById('history-section').classList.add('hidden');
+                document.getElementById('bye-weeks').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
                 const competitiveMsg = document.getElementById('competitive-message');
@@ -2285,6 +2308,7 @@
                 document.getElementById('leaderboard-section').classList.add('hidden');
                 document.getElementById('rules-section').classList.add('hidden');
                 document.getElementById('history-section').classList.remove('hidden');
+                document.getElementById('bye-weeks').classList.add('hidden');
                 document.getElementById('nav').classList.remove('hidden');
 
                 // Ensure header elements are visible

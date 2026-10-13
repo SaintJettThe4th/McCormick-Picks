@@ -1635,11 +1635,13 @@
             createWeekButtons: function() {
                 const container = document.getElementById('week-buttons');
                 container.innerHTML = '';
+                const currentWeek = this.getCurrentWeekNumber();
+                this.currentWeek = currentWeek;
 
                 for (let i = 1; i <= 18; i++) {
                     const btn = document.createElement('button');
                     btn.className = 'week-btn';
-                    if (i === 1) btn.classList.add('active');
+                    if (i === currentWeek) btn.classList.add('active');
                     btn.textContent = `Week ${i}`;
                     btn.onclick = () => this.selectWeek(i);
 
@@ -1954,6 +1956,7 @@
                 document.querySelectorAll('.week-btn').forEach((btn, index) => {
                     if (index + 1 === week) {
                         btn.classList.add('active');
+                        btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
                     } else {
                         btn.classList.remove('active');
                     }

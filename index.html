@@ -10,106 +10,120 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            background: linear-gradient(135deg, #2d5a27 0%, #1e3d1a 50%, #2d5a27 100%);
-            color: #1e293b;
+            background: #0d1b2a;
+            color: #e2e8f0;
             min-height: 100vh;
             padding-bottom: 80px;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="field" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23field)"/></svg>');
         }
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 15px;
             text-align: center;
-            padding-bottom: 100px;
+            padding-bottom: 130px;
         }
         .header {
-            background: linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%);
+            background: linear-gradient(180deg, #0d1b2a 0%, #1b2838 100%);
             color: white;
-            padding: 30px 15px;
+            padding: 25px 15px 15px;
             text-align: center;
             margin: -15px -15px 20px -15px;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            border-bottom: 3px solid #16a34a;
             position: relative;
             overflow: hidden;
         }
         .header::before {
             content: '';
             position: absolute;
-            font-size: 60px;
-            opacity: 0.1;
-            top: 10px;
-            right: 20px;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=800&q=30') center/cover no-repeat;
+            opacity: 0.12;
         }
-        .header::after {
-            content: '';
-            position: absolute;
-            font-size: 40px;
-            opacity: 0.1;
-            bottom: 10px;
-            left: 20px;
+        .header > * { position: relative; z-index: 1; }
+        .header-divider {
+            width: 50px; height: 2px; background: #c9a227; margin: 0 auto 6px; border-radius: 2px;
         }
+        .status-banner {
+            background: rgba(13, 27, 42, 0.85);
+            border: 1px solid rgba(201, 162, 39, 0.4);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 12px 0 0;
+            text-align: left;
+        }
+        .status-banner-top {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+        }
+        .status-banner-top .trophy { font-size: 22px; flex-shrink: 0; }
+        .status-banner-top .msg { font-size: 12px; font-weight: 700; color: #c9a227; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.3; }
+        .status-banner-records {
+            display: flex; border-top: 1px solid rgba(201, 162, 39, 0.3); padding-top: 10px;
+        }
+        .status-banner-records > div { flex: 1; text-align: center; }
+        .status-banner-records > div:first-child { border-right: 1px solid rgba(201, 162, 39, 0.3); }
+        .record-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+        .record-value { font-size: 26px; font-weight: 800; color: #ffffff; }
         .btn {
             padding: 12px 25px;
             margin: 8px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer !important;
             font-size: 14px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             pointer-events: auto !important;
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        .btn-primary { background: linear-gradient(135deg, #16a34a, #15803d); color: white; border: 2px solid #22c55e; }
-        .btn-secondary { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: 2px solid #60a5fa; }
-        .btn-info { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border: 2px solid #a78bfa; }
-        .btn-danger { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; border: 2px solid #ef4444; }
+        .btn:hover { transform: translateY(-1px); }
+        .btn-primary, .btn-secondary, .btn-info, .btn-danger {
+            background: #1b2838; color: #c9a227; border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+        .btn-gold { background: #c9a227; color: #0d1b2a; border: none; font-weight: 700; }
         .btn:hover { cursor: pointer !important; }
+        .menu-card {
+            background: rgba(27, 40, 56, 0.85);
+            border: 1px solid rgba(201, 162, 39, 0.25);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+        .menu-card:hover { border-color: #c9a227; background: rgba(27, 40, 56, 0.95); }
+        .menu-card .menu-icon { font-size: 22px; flex-shrink: 0; width: 32px; text-align: center; }
+        .menu-card .menu-label { font-size: 15px; font-weight: 700; color: #e2e8f0; text-transform: uppercase; letter-spacing: 0.5px; flex: 1; }
+        .menu-card .menu-arrow { color: #64748b; font-size: 16px; }
         .section {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(27, 40, 56, 0.8);
+            border: 1px solid rgba(201, 162, 39, 0.2);
             padding: 20px;
             margin: 15px 0;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .section-title {
-            color: #1e293b;
-            font-size: 18px;
+            color: #c9a227;
+            font-size: 14px;
             font-weight: 700;
             margin-bottom: 15px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 2px solid #16a34a;
-            padding-bottom: 8px;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid rgba(201, 162, 39, 0.3);
+            padding-bottom: 10px;
         }
         .game {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(13, 27, 42, 0.6);
+            border: 1px solid rgba(201, 162, 39, 0.12);
             padding: 15px;
             margin: 10px 0;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        .game {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         .team-btn {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid rgba(0, 0, 0, 0.1);
+            background: rgba(27, 40, 56, 0.8);
+            border: 2px solid rgba(201, 162, 39, 0.2);
             padding: 12px;
             margin: 6px;
             border-radius: 8px;
@@ -118,17 +132,17 @@
             flex: 1;
             max-width: 180px;
             text-align: center;
-            color: #1e293b;
+            color: #e2e8f0;
         }
-        .team-btn:hover:not(:disabled) { border-color: #16a34a; transform: scale(1.05); background: rgba(22, 163, 74, 0.1); }
-        .team-btn.selected { background: linear-gradient(135deg, rgba(22, 163, 74, 0.2), rgba(22, 163, 74, 0.4)); border-color: #16a34a; box-shadow: 0 0 15px rgba(22, 163, 74, 0.3); }
-        .team-btn.correct { background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.4)); border-color: #22c55e; }
-        .team-btn.tie { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.4)); border-color: #f59e0b; }
-        .team-btn.wrong { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.4)); border-color: #ef4444; }
+        .team-btn:hover:not(:disabled) { border-color: #c9a227; transform: scale(1.05); background: rgba(201, 162, 39, 0.1); }
+        .team-btn.selected { background: rgba(201, 162, 39, 0.15); border-color: #c9a227; box-shadow: 0 0 12px rgba(201, 162, 39, 0.2); }
+        .team-btn.correct { background: rgba(34, 197, 94, 0.2); border-color: #22c55e; }
+        .team-btn.tie { background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; }
+        .team-btn.wrong { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; }
         .team-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .team-button {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid rgba(0, 0, 0, 0.1);
+            background: rgba(27, 40, 56, 0.8);
+            border: 2px solid rgba(201, 162, 39, 0.2);
             padding: 12px;
             margin: 6px;
             border-radius: 8px;
@@ -137,469 +151,183 @@
             flex: 1;
             max-width: 180px;
             text-align: center;
-            color: #1e293b;
+            color: #e2e8f0;
         }
-        .team-button:hover:not(:disabled) { border-color: #16a34a; transform: scale(1.05); background: rgba(22, 163, 74, 0.1); }
-        .team-button.selected { background: linear-gradient(135deg, rgba(22, 163, 74, 0.2), rgba(22, 163, 74, 0.4)); border-color: #16a34a; box-shadow: 0 0 15px rgba(22, 163, 74, 0.3); }
-        .team-button.correct { background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.4)); border-color: #22c55e; }
-        .team-button.tie { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.4)); border-color: #f59e0b; }
-        .team-button.wrong { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.4)); border-color: #ef4444; }
+        .team-button:hover:not(:disabled) { border-color: #c9a227; transform: scale(1.05); background: rgba(201, 162, 39, 0.1); }
+        .team-button.selected { background: rgba(201, 162, 39, 0.15); border-color: #c9a227; box-shadow: 0 0 12px rgba(201, 162, 39, 0.2); }
+        .team-button.correct { background: rgba(34, 197, 94, 0.2); border-color: #22c55e; }
+        .team-button.tie { background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; }
+        .team-button.wrong { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; }
         .team-button:disabled { opacity: 0.5; cursor: not-allowed; }
         .nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            border-top: 2px solid #16a34a;
-            padding: 8px 12px;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            bottom: 0; left: 0; right: 0;
+            background: #0d1b2a;
+            border-top: 2px solid #c9a227;
+            padding: 6px 10px;
             z-index: 1000;
-            backdrop-filter: blur(10px);
         }
+        .nav-btn {
+            background: none; border: none; color: #64748b;
+            font-size: 9px; font-weight: 600; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
+            padding: 4px 2px; transition: color 0.2s;
+            text-transform: uppercase; letter-spacing: 0.3px; width: 100%;
+        }
+        .nav-btn:hover, .nav-btn:active { color: #c9a227; }
+        .nav-btn .nav-icon { font-size: 18px; }
         .hidden { display: none; }
         .status {
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding: 4px 10px; border-radius: 12px; font-size: 10px;
+            font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;
         }
-        .final { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
-        .upcoming { background: linear-gradient(135deg, #64748b, #475569); color: white; }
-        .live { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; animation: pulse 2s infinite; }
-        .locked { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
+        .final { background: #22c55e; color: white; }
+        .upcoming { background: #475569; color: white; }
+        .live { background: #dc2626; color: white; animation: pulse 2s infinite; }
+        .locked { background: #c9a227; color: #0d1b2a; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         .logo {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
-            margin-bottom: 8px;
+            width: 40px; height: 40px; object-fit: contain; margin-bottom: 6px;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
         .week-selector {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(27, 40, 56, 0.8);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            padding: 12px; margin-bottom: 15px; border-radius: 12px;
         }
         .week-btn {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            padding: 8px 14px;
-            margin: 4px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #1e293b;
-            font-weight: 600;
+            background: rgba(13, 27, 42, 0.8);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            padding: 6px 12px; margin: 3px; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s ease;
+            font-size: 12px; color: #94a3b8; font-weight: 600;
         }
-        .week-btn:hover { background: rgba(22, 163, 74, 0.1); border-color: #16a34a; }
-        .week-btn.active { background: linear-gradient(135deg, #16a34a, #15803d); border-color: #22c55e; color: white; }
-        .money-display {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 12px;
-            border: 2px solid #16a34a;
-            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
-        }
-        .standings-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            margin: 8px 0;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 8px;
-            border-left: 4px solid #16a34a;
-        }
-        .standings-row.winner {
-            border-left-color: #22c55e;
-            background: rgba(34, 197, 94, 0.1);
-        }
-        .standings-row.loser {
-            border-left-color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-        }
-        .popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            padding: 20px;
-        }
-        .popup-content {
-            background: linear-gradient(135deg, #ffffff, #f8fafc);
-            padding: 30px;
-            border-radius: 16px;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            border: 2px solid #16a34a;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        }
-        .popup-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #1e293b;
-        }
-        .popup-message {
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: #475569;
-        }
-        .popup-highlight {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 15px 0;
-            color: #22c55e;
-        }
-        .popup-highlight.win {
-            color: #22c55e;
-        }
-        .popup-highlight.lose {
-            color: #ef4444;
-        }
-        .popup-highlight.tie {
-            color: #f59e0b;
-        }
-        .history-section {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-        .history-year {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #16a34a;
-            text-transform: uppercase;
-        }
-        .history-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .history-stat {
-            background: rgba(255, 255, 255, 0.7);
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .history-stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1e293b;
-        }
-        .history-stat-label {
-            font-size: 12px;
-            color: #64748b;
-            text-transform: uppercase;
-        }
-        #password-input {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            color: #1e293b;
-            border-radius: 8px;
-        }
-        #password-input:focus {
-            outline: none;
-            border-color: #16a34a;
-        }
-        #password-input::placeholder {
-            color: #64748b;
-        }
-        #password-error {
-            color: #dc2626;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-        .hidden-pick {
-            color: #94a3b8;
-            font-style: italic;
-        }
-        .game-time {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-top: 4px;
-        }
-        .lock-indicator {
-            font-size: 10px;
-            color: #f59e0b;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-        .score-display {
-            font-size: 18px;
-            font-weight: 700;
-            color: #f1f5f9;
-            margin-top: 4px;
-        }
-        .team-logo-small {
-            width: 25px;
-            height: 25px;
-            object-fit: contain;
-            margin: 0 6px;
-        }
-        .pick-row {
-            background: rgba(51, 65, 85, 0.4);
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border: 1px solid rgba(148, 163, 184, 0.2);
-        }
-        .locked { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
-        .logo { 
-            width: 40px; 
-            height: 40px; 
-            object-fit: contain; 
-            margin-bottom: 6px;
-        }
-        .week-selector { 
-            background: white; 
-            padding: 12px; 
-            margin-bottom: 15px; 
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .week-btn {
-            background: white;
-            border: 1px solid #e2e8f0;
-            padding: 6px 12px;
-            margin: 3px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 12px;
-        }
-        .week-btn:hover { background: #f8fafc; }
-        .week-btn.active { background: #16a34a; color: white; border-color: #16a34a; }
+        .week-btn:hover { background: rgba(201, 162, 39, 0.1); border-color: #c9a227; color: #c9a227; }
+        .week-btn.active { background: #c9a227; color: #0d1b2a; border-color: #c9a227; }
         .bye-weeks {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            color: #92400e;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            font-size: 13px;
+            background: rgba(201, 162, 39, 0.1); color: #c9a227;
+            padding: 12px; border-radius: 12px; margin-bottom: 15px;
+            font-weight: 600; font-size: 13px;
+            border: 1px solid rgba(201, 162, 39, 0.3);
         }
         .money-display {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            color: #1e40af;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(27, 40, 56, 0.8); color: #c9a227;
+            padding: 15px; border-radius: 12px; margin: 15px 0;
+            font-size: 16px; font-weight: bold;
+            border: 1px solid rgba(201, 162, 39, 0.3);
         }
-        .game-time {
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 6px;
+        .game-time { font-size: 11px; color: #64748b; margin-top: 6px; }
+        .score-display { font-size: 16px; font-weight: bold; margin-top: 4px; color: #e2e8f0; }
+        .standings-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px; margin: 8px 0;
+            background: rgba(13, 27, 42, 0.6); border-radius: 8px;
+            border-left: 4px solid #c9a227;
         }
-        .score-display {
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 4px;
-        }
+        .standings-row.winner { border-left-color: #22c55e; background: rgba(34, 197, 94, 0.1); }
+        .standings-row.loser { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
         .leaderboard-item {
-            background: white;
-            border: 1px solid #e2e8f0;
-            padding: 15px;
-            margin: 8px 0;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(27, 40, 56, 0.6);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            padding: 15px; margin: 8px 0; border-radius: 10px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .leaderboard-item.current-user {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            border-color: #3b82f6;
-        }
-        .rank {
-            font-size: 20px;
-            font-weight: bold;
-            color: #64748b;
-            margin-right: 12px;
-        }
-        .rank.first { color: #f59e0b; }
+        .leaderboard-item.current-user { background: rgba(201, 162, 39, 0.1); border-color: #c9a227; }
+        .rank { font-size: 20px; font-weight: bold; color: #64748b; margin-right: 12px; }
+        .rank.first { color: #c9a227; }
         .rank.second { color: #6b7280; }
         .picks-comparison {
-            background: white;
-            border: 1px solid #e2e8f0;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(27, 40, 56, 0.6);
+            border: 1px solid rgba(201, 162, 39, 0.15);
+            padding: 15px; margin: 10px 0; border-radius: 12px;
         }
         .pick-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 0; border-bottom: 1px solid rgba(201, 162, 39, 0.1);
         }
-        .pick-row:last-child {
-            border-bottom: none;
-        }
-        .jett-pick {
-            color: #16a34a;
-            font-weight: 600;
-        }
-        .kevin-pick {
-            color: #3b82f6;
-            font-weight: 600;
-        }
+        .pick-row:last-child { border-bottom: none; }
+        .jett-pick { color: #c9a227; font-weight: 600; }
+        .kevin-pick { color: #60a5fa; font-weight: 600; }
         .same-pick {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.4));
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #16a34a;
-            border: 1px solid #22c55e;
+            background: rgba(34, 197, 94, 0.2); padding: 4px 8px; border-radius: 6px;
+            font-size: 12px; color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3);
         }
         .different-pick {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.4));
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #dc2626;
-            border: 1px solid #ef4444;
+            background: rgba(239, 68, 68, 0.2); padding: 4px 8px; border-radius: 6px;
+            font-size: 12px; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);
         }
         .weekly-results {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: rgba(27, 40, 56, 0.6);
+            border: 1px solid rgba(201, 162, 39, 0.15);
+            padding: 15px; margin: 10px 0; border-radius: 12px;
         }
         .result-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid rgba(201, 162, 39, 0.1); color: #e2e8f0;
         }
-        .result-row:last-child {
-            border-bottom: none;
-        }
-        .correct-count {
-            color: #16a34a;
-            font-weight: bold;
-        }
-        .wrong-count {
-            color: #dc2626;
-            font-weight: bold;
-        }
+        .result-row:last-child { border-bottom: none; }
+        .correct-count { color: #22c55e; font-weight: bold; }
+        .wrong-count { color: #ef4444; font-weight: bold; }
         .winner-indicator {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: bold;
+            background: #c9a227; color: #0d1b2a;
+            padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold;
         }
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #1e293b;
-        }
-        .team-logo-small {
-            width: 25px;
-            height: 25px;
-            object-fit: contain;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
+        .team-logo-small { width: 25px; height: 25px; object-fit: contain; margin-right: 8px; vertical-align: middle; }
         .hidden-pick {
-            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-            color: #6b7280;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-style: italic;
+            background: rgba(27, 40, 56, 0.6); color: #64748b;
+            padding: 4px 8px; border-radius: 6px; font-size: 12px; font-style: italic;
         }
         .lock-indicator {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
-            margin-left: 4px;
+            background: #c9a227; color: #0d1b2a;
+            padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 4px;
         }
+        .total-count { color: #94a3b8; font-weight: 600; }
+        .popup {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2000; padding: 20px;
+        }
+        .popup-content {
+            background: #1b2838; padding: 30px; border-radius: 16px;
+            max-width: 400px; width: 100%; text-align: center;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+        .popup-title { font-size: 24px; font-weight: 700; margin-bottom: 20px; color: #c9a227; }
+        .popup-message { font-size: 16px; margin-bottom: 10px; color: #94a3b8; }
+        .popup-highlight { font-size: 28px; font-weight: 700; margin: 15px 0; color: #22c55e; }
+        .popup-highlight.win { color: #22c55e; }
+        .popup-highlight.lose { color: #ef4444; }
+        .popup-highlight.tie { color: #f59e0b; }
+        .history-section {
+            background: rgba(27, 40, 56, 0.8); padding: 20px; margin: 15px 0;
+            border-radius: 12px; border: 1px solid rgba(201, 162, 39, 0.2);
+        }
+        .history-year { font-size: 20px; font-weight: 700; margin-bottom: 15px; color: #c9a227; text-transform: uppercase; }
+        .history-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        .history-stat { background: rgba(13, 27, 42, 0.6); padding: 12px; border-radius: 8px; text-align: center; }
+        .history-stat-value { font-size: 24px; font-weight: 700; color: #e2e8f0; }
+        .history-stat-label { font-size: 12px; color: #94a3b8; text-transform: uppercase; }
+        #password-input {
+            background: rgba(13, 27, 42, 0.8); border: 1px solid rgba(201, 162, 39, 0.3);
+            color: #e2e8f0; border-radius: 8px;
+        }
+        #password-input:focus { outline: none; border-color: #c9a227; }
+        #password-input::placeholder { color: #64748b; }
+        #password-error { color: #ef4444; font-size: 13px; margin-bottom: 8px; }
 
-        /* Mobile-specific styles */
         @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-                padding-bottom: 120px;
-            }
-            .header {
-                padding: 20px 10px;
-                margin: -10px -10px 15px -10px;
-            }
-            .header h1 {
-                font-size: 20px !important;
-            }
-            .header p {
-                font-size: 14px !important;
-            }
-            .btn {
-                padding: 10px 20px;
-                margin: 5px;
-                font-size: 13px;
-            }
-            .week-btn {
-                padding: 8px 12px;
-                font-size: 12px;
-                margin: 3px;
-            }
-            .game-card {
-                padding: 12px;
-            }
-            .team-logo-small {
-                width: 20px;
-                height: 20px;
-            }
-            .nav {
-                padding: 10px 5px;
-            }
-            .nav button {
-                padding: 8px 12px;
-                font-size: 11px;
-            }
-            .comparison-card {
-                padding: 10px;
-            }
-            .section-title {
-                font-size: 16px;
-            }
-        }
-        .total-count {
-            color: #64748b;
-            font-weight: 600;
+            .container { padding: 10px; padding-bottom: 140px; }
+            .header { padding: 20px 10px; margin: -10px -10px 15px -10px; }
+            .header h1 { font-size: 22px !important; }
+            .header p { font-size: 14px !important; }
+            .btn { padding: 10px 20px; margin: 5px; font-size: 13px; }
+            .week-btn { padding: 6px 10px; font-size: 11px; margin: 2px; }
+            .team-btn { padding: 10px; margin: 4px; max-width: 150px; }
+            .logo { width: 35px; height: 35px; }
+            .section { padding: 15px; margin: 10px 0; }
+            .game { padding: 12px; margin: 8px 0; }
+            .section-title { font-size: 13px; }
         }
         @media (max-width: 768px) {
             .container { padding: 10px; }
@@ -619,9 +347,12 @@
         <div id="login-screen">
             <div class="container">
                 <div class="header">
-                    <h1 style="font-size: 32px; margin-bottom: 4px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">#1 McCormick Son '26</h1>
-                    <p style="font-size: 18px; opacity: 0.95; font-weight: 600;">Jett vs Kevin Competition</p>
-                    <p style="font-size: 14px; margin-top: 8px; opacity: 0.8;">The Ultimate Football Showdown</p>
+                    <div class="header-divider"></div>
+                    <div style="font-size: 30px; margin-bottom: 6px;">&#127944;</div>
+                    <div class="header-divider"></div>
+                    <h1 style="font-size: 28px; margin: 8px 0 4px; font-weight: 800; letter-spacing: -0.5px;">#1 McCormick Son '26</h1>
+                    <p style="font-size: 15px; opacity: 0.7; font-weight: 500;">Jett vs Kevin Competition</p>
+                    <p style="font-size: 13px; margin-top: 6px; opacity: 0.5;">The Ultimate Football Showdown</p>
                 </div>
 
                 <div id="user-select" style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; position: relative; z-index: 10;">
@@ -630,17 +361,17 @@
                 </div>
 
                 <div id="password-form" class="hidden" style="max-width: 280px; margin: 15px auto 0; position: relative; z-index: 10;">
-                    <p style="margin-bottom: 10px; font-size: 15px; color: #1e293b;">Logging in as <strong id="password-username" style="color: #16a34a;"></strong></p>
+                    <p style="margin-bottom: 10px; font-size: 15px; color: #94a3b8;">Logging in as <strong id="password-username" style="color: #c9a227;"></strong></p>
                     <input type="password" id="password-input" placeholder="Password" autocomplete="current-password"
-                        style="width: 100%; padding: 12px; border: 2px solid rgba(0, 0, 0, 0.1); border-radius: 10px; font-size: 16px; margin-bottom: 8px; background: rgba(255, 255, 255, 0.9); color: #1e293b;"
+                        style="width: 100%; padding: 12px; border: 1px solid rgba(201, 162, 39, 0.3); border-radius: 10px; font-size: 16px; margin-bottom: 8px; background: rgba(13, 27, 42, 0.8); color: #e2e8f0;"
                         onkeydown="if(event.key==='Enter') app.login()">
-                    <p id="password-error" class="hidden" style="color: #dc2626; font-size: 13px; margin-bottom: 8px;">Incorrect password. Try again.</p>
-                    <button class="btn btn-primary" style="width: 100%; position: relative; z-index: 10;" onclick="app.login()">Login</button>
-                    <button class="btn" style="width: 100%; background: rgba(255, 255, 255, 0.8); color: #64748b; border: 1px solid rgba(0, 0, 0, 0.1); position: relative; z-index: 10;" onclick="app.cancelLogin()">Back</button>
+                    <p id="password-error" class="hidden" style="color: #ef4444; font-size: 13px; margin-bottom: 8px;">Incorrect password. Try again.</p>
+                    <button class="btn btn-gold" style="width: 100%; position: relative; z-index: 10;" onclick="app.login()">Login</button>
+                    <button class="btn" style="width: 100%; background: rgba(27, 40, 56, 0.8); color: #94a3b8; border: 1px solid rgba(201, 162, 39, 0.2); position: relative; z-index: 10;" onclick="app.cancelLogin()">Back</button>
                 </div>
 
                 <p style="margin-top: 20px; text-align: center; color: #64748b; font-size: 13px;">
-                    <strong>$10 per game | $100 season maximum</strong><br>
+                    <strong style="color: #94a3b8;">$10 per game | $100 season maximum</strong><br>
                     Picks hidden until game time | Complete 2026 Season
                 </p>
             </div>
@@ -650,34 +381,76 @@
         <div id="main-screen" class="hidden">
             <div class="container">
                 <div class="header">
-                    <h1 style="font-size: 24px; margin-bottom: 8px;">#1 McCormick Son '26</h1>
-                    <p style="font-size: 16px; margin-bottom: 12px;">Welcome, <span id="username">User</span>!</p>
-                    <p id="competitive-message" style="font-size: 14px; margin-bottom: 8px; font-weight: 600;"></p>
-                    <p id="records-message" style="font-size: 14px; margin-bottom: 15px;">
-                        Week <span id="current-week">1</span>: <span id="week-record">0-0-0</span><br>
-                        Season: <span id="overall-record">0-0-0</span>
-                    </p>
-                    <button class="btn" style="background: rgba(255, 255, 255, 0.9); color: #16a34a; border: 2px solid #16a34a;" onclick="app.logout()">Logout</button>
+                    <div style="display: flex; justify-content: flex-end; margin-bottom: -10px;">
+                        <button onclick="app.logout()" style="background: none; border: none; color: #64748b; cursor: pointer; font-size: 18px; padding: 4px;" title="Logout">&#x2192;</button>
+                    </div>
+                    <div class="header-divider"></div>
+                    <div style="font-size: 28px; margin-bottom: 4px;">&#127944;</div>
+                    <div class="header-divider"></div>
+                    <h1 style="font-size: 24px; margin: 6px 0 2px; font-weight: 800; letter-spacing: -0.5px;">#1 McCormick Son '26</h1>
+                    <p style="font-size: 14px; opacity: 0.7; margin-bottom: 4px;">Welcome, <span id="username">User</span>!</p>
+
+                    <div class="status-banner">
+                        <div class="status-banner-top">
+                            <span class="trophy">&#127942;</span>
+                            <span class="msg" id="competitive-message"></span>
+                        </div>
+                        <div class="status-banner-records">
+                            <div>
+                                <div class="record-label">Week <span id="current-week">1</span></div>
+                                <div class="record-value" id="week-record">0-0-0</div>
+                            </div>
+                            <div>
+                                <div class="record-label">Season</div>
+                                <div class="record-value" id="overall-record">0-0-0</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- Main Menu (shown initially after login) -->
+
+                <!-- Main Menu -->
                 <div id="main-menu">
-                    <div class="section">
-                        <h2 class="section-title">Main Menu</h2>
-                        <div style="display: flex; flex-direction: column; gap: 8px; max-width: 400px; margin: 0 auto;">
-                            <button class="btn btn-primary" style="padding: 14px; font-size: 16px; margin: 0; width: 100%;" onclick="app.showGames()">Games</button>
-                            <button class="btn btn-info" style="padding: 14px; font-size: 16px; margin: 0; width: 100%;" onclick="app.showPicks()">Picks</button>
-                            <button class="btn btn-secondary" style="padding: 14px; font-size: 16px; margin: 0; width: 100%;" onclick="app.showResults()">Results</button>
-                            <button class="btn" style="padding: 14px; font-size: 16px; margin: 0; width: 100%; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
-                            <button class="btn" style="padding: 14px; font-size: 16px; margin: 0; width: 100%; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: 2px solid #ca8a04;" onclick="app.showRules()">Rules</button>
-                            <button class="btn btn-danger" style="padding: 14px; font-size: 16px; margin: 0; width: 100%;" onclick="app.showHistory()">History</button>
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <span style="font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px;">Main Menu</span>
+                        <div style="width: 40px; height: 2px; background: #c9a227; margin: 8px auto 0;"></div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 400px; margin: 0 auto;">
+                        <div class="menu-card" onclick="app.showGames()">
+                            <span class="menu-icon">&#127944;</span>
+                            <span class="menu-label">Games</span>
+                            <span class="menu-arrow">&#8250;</span>
+                        </div>
+                        <div class="menu-card" onclick="app.showPicks()">
+                            <span class="menu-icon">&#128203;</span>
+                            <span class="menu-label">Picks</span>
+                            <span class="menu-arrow">&#8250;</span>
+                        </div>
+                        <div class="menu-card" onclick="app.showResults()">
+                            <span class="menu-icon">&#128202;</span>
+                            <span class="menu-label">Results</span>
+                            <span class="menu-arrow">&#8250;</span>
+                        </div>
+                        <div class="menu-card" onclick="app.showLeaderboard()">
+                            <span class="menu-icon">&#127942;</span>
+                            <span class="menu-label">Standings</span>
+                            <span class="menu-arrow">&#8250;</span>
+                        </div>
+                        <div class="menu-card" onclick="app.showRules()">
+                            <span class="menu-icon">&#128220;</span>
+                            <span class="menu-label">Rules</span>
+                            <span class="menu-arrow">&#8250;</span>
+                        </div>
+                        <div class="menu-card" onclick="app.showHistory()">
+                            <span class="menu-icon">&#128336;</span>
+                            <span class="menu-label">History</span>
+                            <span class="menu-arrow">&#8250;</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Week Selector -->
                 <div id="week-selector" class="week-selector hidden">
-                    <h3 style="margin-bottom: 12px; color: #1e293b; font-size: 16px;">Select Week</h3>
+                    <h3 style="margin-bottom: 12px; color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Select Week</h3>
                     <div id="week-buttons"></div>
                 </div>
 
@@ -719,18 +492,18 @@
                 <!-- Rules Section -->
                 <div id="rules-section" class="hidden">
                     <div class="section">
-                        <h2 class="section-title" style="color: #a16207;">Rules</h2>
-                        <div style="background: linear-gradient(135deg, rgba(250, 204, 21, 0.15), rgba(234, 179, 8, 0.25)); border: 2px solid #eab308; border-radius: 12px; padding: 20px;">
-                            <div style="font-size: 15px; line-height: 1.8; color: #1e293b;">
-                                <div style="font-weight: 700; font-size: 18px; color: #a16207; margin-bottom: 12px; text-align: center;">McCormick Pick'em Rules</div>
-                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">1. Picking:</strong> Each user picks a winner for every game, every week (Weeks 1-18).</div>
-                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">2. Saving:</strong> You must tap <strong>Save Picks</strong> to lock in your choices. Unsaved picks are lost if you leave the page.</div>
-                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">3. Deadline:</strong> Picks lock at each game's kickoff time. You can change and re-save freely until then.</div>
-                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">4. Missed Picks:</strong> If you don't pick a game before kickoff, the <strong>home team</strong> is automatically assigned as your pick.</div>
-                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">5. Ties:</strong> If a game ends in a tie, both users receive a <strong>tie</strong> (not a win or loss). Ties appear orange in Games and neutral in Picks.</div>
-                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">6. Records:</strong> Displayed as <strong>W-L-T</strong> (Wins-Losses-Ties).</div>
-                                <div style="margin-bottom: 10px;"><strong style="color: #a16207;">7. Money:</strong> $10 per win difference, max $100. The user with fewer wins owes the difference.</div>
-                                <div><strong style="color: #a16207;">8. Scores:</strong> Final scores sync automatically from ESPN. No manual entry needed.</div>
+                        <h2 class="section-title">Rules</h2>
+                        <div style="background: rgba(201, 162, 39, 0.08); border: 1px solid rgba(201, 162, 39, 0.25); border-radius: 12px; padding: 20px;">
+                            <div style="font-size: 15px; line-height: 1.8; color: #e2e8f0;">
+                                <div style="font-weight: 700; font-size: 16px; color: #c9a227; margin-bottom: 12px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">McCormick Pick'em Rules</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #c9a227;">1. Picking:</strong> Each user picks a winner for every game, every week (Weeks 1-18).</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #c9a227;">2. Saving:</strong> You must tap <strong>Save Picks</strong> to lock in your choices. Unsaved picks are lost if you leave the page.</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #c9a227;">3. Deadline:</strong> Picks lock at each game's kickoff time. You can change and re-save freely until then.</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #c9a227;">4. Missed Picks:</strong> If you don't pick a game before kickoff, the <strong>home team</strong> is automatically assigned as your pick.</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #c9a227;">5. Ties:</strong> If a game ends in a tie, both users receive a <strong>tie</strong> (not a win or loss). Ties appear orange in Games and neutral in Picks.</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #c9a227;">6. Records:</strong> Displayed as <strong>W-L-T</strong> (Wins-Losses-Ties).</div>
+                                <div style="margin-bottom: 10px;"><strong style="color: #c9a227;">7. Money:</strong> $10 per win difference, max $100. The user with fewer wins owes the difference.</div>
+                                <div><strong style="color: #c9a227;">8. Scores:</strong> Final scores sync automatically from ESPN. No manual entry needed.</div>
                             </div>
                         </div>
                     </div>
@@ -753,7 +526,7 @@
                 <p class="popup-message" id="popup-message"></p>
                 <div class="popup-highlight" id="popup-highlight"></div>
                 <p class="popup-message" id="popup-standings"></p>
-                <button class="btn btn-primary" onclick="app.closePopup(); return false;">Continue to Current Week</button>
+                <button class="btn btn-gold" onclick="app.closePopup(); return false;">Continue to Current Week</button>
             </div>
         </div>
 
@@ -763,7 +536,7 @@
                 <h2 class="popup-title">Schedule Updated</h2>
                 <p class="popup-message">The NFL schedule has been updated. Some game times or matchups may have changed.</p>
                 <p class="popup-message" style="font-size: 13px; color: #64748b;">Please review your picks for any affected games.</p>
-                <button class="btn btn-primary" onclick="app.closeScheduleUpdatePopup()">OK</button>
+                <button class="btn btn-gold" onclick="app.closeScheduleUpdatePopup()">OK</button>
             </div>
         </div>
 
@@ -773,22 +546,23 @@
                 <h2 class="popup-title">Pick Reminder</h2>
                 <p class="popup-message" id="pick-reminder-message">You have upcoming games without picks!</p>
                 <p class="popup-message" style="font-size: 13px; color: #64748b;">Don't forget to submit your picks before the games start.</p>
-                <button class="btn btn-primary" onclick="app.closePickReminderPopup()">OK</button>
+                <button class="btn btn-gold" onclick="app.closePickReminderPopup()">OK</button>
             </div>
         </div>
 
         <!-- Navigation -->
         <div id="nav" class="hidden nav">
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; width: 100%; max-width: 400px; margin: 0 auto;">
-                <button class="btn btn-primary" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%;" onclick="app.showGames()">Games</button>
-                <button class="btn btn-info" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%;" onclick="app.showPicks()">Picks</button>
-                <button class="btn btn-secondary" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%;" onclick="app.showResults()">Results</button>
-                <button class="btn" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%; background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: 2px solid #ea580c;" onclick="app.showLeaderboard()">Standings</button>
-                <button class="btn" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: 2px solid #ca8a04;" onclick="app.showRules()">Rules</button>
-                <button class="btn btn-danger" style="margin: 0; padding: 10px 4px; font-size: 12px; width: 100%;" onclick="app.showHistory()">History</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; width: 100%; max-width: 400px; margin: 0 auto;">
+                <button class="nav-btn" onclick="app.showGames()"><span class="nav-icon">&#127944;</span>Games</button>
+                <button class="nav-btn" onclick="app.showPicks()"><span class="nav-icon">&#128203;</span>Picks</button>
+                <button class="nav-btn" onclick="app.showResults()"><span class="nav-icon">&#128202;</span>Results</button>
+                <button class="nav-btn" onclick="app.showLeaderboard()"><span class="nav-icon">&#127942;</span>Standings</button>
+                <button class="nav-btn" onclick="app.showRules()"><span class="nav-icon">&#128220;</span>Rules</button>
+                <button class="nav-btn" onclick="app.showHistory()"><span class="nav-icon">&#128336;</span>History</button>
             </div>
         </div>
     </div>
+
 
     <script>
         // NFL Teams with logos and stadium images
@@ -1954,21 +1728,17 @@
                 console.log('DEBUG - currentUser:', this.currentUser, 'opponent:', opponent, 'difference:', difference);
 
                 if (difference > 0) {
-                    statusEl.innerHTML = `You are currently ahead of ${opponent} by ${difference} game${difference > 1 ? 's' : ''}! Fuck yeah!`;
-                    statusEl.style.color = '#16a34a';
+                    statusEl.innerHTML = `You are currently ahead of ${opponent} by ${difference} game${difference > 1 ? 's' : ''}!`;
+                    statusEl.style.color = '#c9a227';
                 } else if (difference < 0) {
-                    statusEl.innerHTML = `${opponent} is currently ahead of you by ${Math.abs(difference)} game${Math.abs(difference) > 1 ? 's' : ''}! Step up your shit!`;
-                    statusEl.style.color = '#dc2626';
+                    statusEl.innerHTML = `${opponent} is ahead of you by ${Math.abs(difference)} game${Math.abs(difference) > 1 ? 's' : ''}!`;
+                    statusEl.style.color = '#ef4444';
                 } else {
                     statusEl.innerHTML = `You and ${opponent} are currently tied!`;
-                    statusEl.style.color = '#f59e0b';
+                    statusEl.style.color = '#c9a227';
                 }
 
-                // Ensure records message is also visible
-                const recordsEl = document.getElementById('records-message');
-                if (recordsEl) {
-                    recordsEl.style.display = 'block';
-                }
+                // Records are now inline in the status banner - no separate element needed
             },
 
             selectWeek: function(week) {
@@ -2031,7 +1801,7 @@
                                     ${game.final ? `<div class="score-display" style="color: #000;">${game.awayScore}</div>` : ''}
                                 </button>
 
-                                <div style="font-size: 14px; font-weight: bold; color: #1e293b;">at</div>
+                                <div style="font-size: 14px; font-weight: bold; color: #94a3b8;">at</div>
 
                                 <button class="${this.getButtonClass(game.home, userPick, game.final, isCorrect, isTie)}"
                                         onclick="app.makePick('${game.id}', '${game.home}')"
@@ -2043,7 +1813,7 @@
                             </div>
 
                             ${userPick && !game.final ? `
-                                <div style="text-align: center; margin-top: 12px; color: #16a34a; font-weight: 600; font-size: 13px;">
+                                <div style="text-align: center; margin-top: 12px; color: #c9a227; font-weight: 600; font-size: 13px;">
                                     Your pick: ${teams[userPick].name}
                                 </div>
                             ` : ''}
@@ -2062,7 +1832,7 @@
                     saveWrap.style.cssText = 'text-align: center; margin: 24px 0 8px;';
                     saveWrap.innerHTML = `
                         <button id="save-picks-btn" onclick="app.saveWeekPicks()"
-                                style="padding: 14px 48px; font-size: 16px; font-weight: 700; color: #fff; background: #16a34a; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                                style="padding: 14px 48px; font-size: 16px; font-weight: 700; color: #0d1b2a; background: #c9a227; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
                             Save Picks
                         </button>
                         <div id="save-picks-note" style="margin-top: 8px; font-size: 12px; color: #64748b;">
@@ -2150,8 +1920,8 @@
                         const jettWrong = !isTieGame && game.final && jettPick && !jettCorrect;
                         const kevinWrong = !isTieGame && game.final && kevinPick && !kevinCorrect;
 
-                        const jettStyle = isTieGame ? 'color: #000; font-weight: bold;' : (jettCorrect ? 'color: #16a34a; font-weight: bold;' : (jettWrong ? 'color: #dc2626; font-weight: bold;' : ''));
-                        const kevinStyle = isTieGame ? 'color: #000; font-weight: bold;' : (kevinCorrect ? 'color: #16a34a; font-weight: bold;' : (kevinWrong ? 'color: #dc2626; font-weight: bold;' : ''));
+                        const jettStyle = isTieGame ? 'color: #f59e0b; font-weight: bold;' : (jettCorrect ? 'color: #22c55e; font-weight: bold;' : (jettWrong ? 'color: #ef4444; font-weight: bold;' : 'color: #e2e8f0;'));
+                        const kevinStyle = isTieGame ? 'color: #f59e0b; font-weight: bold;' : (kevinCorrect ? 'color: #22c55e; font-weight: bold;' : (kevinWrong ? 'color: #ef4444; font-weight: bold;' : 'color: #e2e8f0;'));
 
                         picksDiv.innerHTML = `
                             <div class="jett-pick" style="${jettStyle}">
@@ -2263,10 +2033,10 @@
                     const pct = user.total > 0 ? Math.round((user.wins / user.total) * 100) : 0;
                     standingDiv.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <div style="font-size: 24px; font-weight: 700; color: #1e293b;">#${index + 1}</div>
+                            <div style="font-size: 24px; font-weight: 700; color: #c9a227;">#${index + 1}</div>
                             <div>
-                                <div style="font-weight: 700; font-size: 18px; color: #1e293b;">${user.name}</div>
-                                <div style="color: #64748b; font-size: 13px;">${user.wins}-${user.losses}-${user.ties} (${pct}%)</div>
+                                <div style="font-weight: 700; font-size: 18px; color: #e2e8f0;">${user.name}</div>
+                                <div style="color: #94a3b8; font-size: 13px;">${user.wins}-${user.losses}-${user.ties} (${pct}%)</div>
                             </div>
                         </div>
                         ${user.name === this.currentUser ? '<span style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600;">YOU</span>' : ''}
@@ -2601,7 +2371,7 @@
                 overallHeading.style.textAlign = 'center';
                 overallHeading.style.fontSize = '24px';
                 overallHeading.style.fontWeight = 'bold';
-                overallHeading.style.color = '#1e3a5f';
+                overallHeading.style.color = '#c9a227';
                 overallHeading.style.margin = '20px 0 15px 0';
                 overallHeading.textContent = 'OVERALL HISTORY';
                 container.appendChild(overallHeading);
@@ -2609,7 +2379,7 @@
                 // Add overall section at the top
                 const overallDiv = document.createElement('div');
                 overallDiv.className = 'history-section';
-                overallDiv.style.background = 'linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%)';
+                overallDiv.style.background = 'linear-gradient(135deg, #1b2838 0%, #0d1b2a 100%)';
                 overallDiv.style.color = 'white';
                 overallDiv.innerHTML = `
                     <div class="history-year" style="color: #fbbf24;">OVERALL RECORD (2009-2026)</div>
@@ -2664,7 +2434,7 @@
                 seasonHeading.style.textAlign = 'center';
                 seasonHeading.style.fontSize = '24px';
                 seasonHeading.style.fontWeight = 'bold';
-                seasonHeading.style.color = '#1e3a5f';
+                seasonHeading.style.color = '#c9a227';
                 seasonHeading.style.margin = '30px 0 15px 0';
                 seasonHeading.textContent = 'SEASON HISTORY';
                 container.appendChild(seasonHeading);
@@ -2699,8 +2469,8 @@
                             <div class="history-stat-label">Kevin Win %</div>
                         </div>
                     </div>
-                    <div style="text-align: center; padding: 10px; background: rgba(22, 163, 74, 0.15); border-radius: 8px; border: 1px solid #16a34a; margin-bottom: 15px;">
-                        <strong style="color: #16a34a;">${leader2026} | Week ${cur2026.weeksPlayed} of 18</strong>
+                    <div style="text-align: center; padding: 10px; background: rgba(201, 162, 39, 0.1); border-radius: 8px; border: 1px solid rgba(201, 162, 39, 0.3); margin-bottom: 15px;">
+                        <strong style="color: #c9a227;">${leader2026} | Week ${cur2026.weeksPlayed} of 18</strong>
                     </div>
                 `;
                 container.appendChild(cur2026Div);
@@ -2734,13 +2504,13 @@
                                         <div style="font-weight: 600; margin-bottom: 5px;">JETT</div>
                                         <img src="${teams[sb.jettPick].logo}" alt="${teams[sb.jettPick].name}" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
                                         <div style="font-size: 12px;">${teams[sb.jettPick].name}</div>
-                                        <div style="color: ${sb.jettResult === 'Correct' ? '#16a34a' : '#dc2626'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.jettResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
+                                        <div style="color: ${sb.jettResult === 'Correct' ? '#22c55e' : '#ef4444'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.jettResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
                                     </div>
                                     <div style="text-align: center;">
                                         <div style="font-weight: 600; margin-bottom: 5px;">KEVIN</div>
                                         <img src="${teams[sb.kevinPick].logo}" alt="${teams[sb.kevinPick].name}" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
                                         <div style="font-size: 12px;">${teams[sb.kevinPick].name}</div>
-                                        <div style="color: ${sb.kevinResult === 'Correct' ? '#16a34a' : '#dc2626'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.kevinResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
+                                        <div style="color: ${sb.kevinResult === 'Correct' ? '#22c55e' : '#ef4444'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.kevinResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
                                     </div>
                                 </div>
                             </div>
@@ -2773,8 +2543,8 @@
                                     <div class="history-stat-label">Kevin Win %</div>
                                 </div>
                             </div>
-                            <div style="text-align: center; padding: 10px; background: rgba(34, 197, 94, 0.2); border-radius: 8px; border: 1px solid #22c55e; margin-bottom: 15px;">
-                                <strong style="color: #22c55e;">Champion: ${yearData.champion}</strong>
+                            <div style="text-align: center; padding: 10px; background: rgba(201, 162, 39, 0.1); border-radius: 8px; border: 1px solid rgba(201, 162, 39, 0.3); margin-bottom: 15px;">
+                                <strong style="color: #c9a227;">Champion: ${yearData.champion}</strong>
                             </div>
                             <div class="history-stats" style="background: rgba(59, 130, 246, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
                                 <div class="history-stat">
@@ -2801,13 +2571,13 @@
                                         <div style="font-weight: 600; margin-bottom: 5px;">JETT</div>
                                         <img src="${teams[sb.jettPick].logo}" alt="${teams[sb.jettPick].name}" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
                                         <div style="font-size: 12px;">${teams[sb.jettPick].name}</div>
-                                        <div style="color: ${sb.jettResult === 'Correct' ? '#16a34a' : '#dc2626'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.jettResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
+                                        <div style="color: ${sb.jettResult === 'Correct' ? '#22c55e' : '#ef4444'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.jettResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
                                     </div>
                                     <div style="text-align: center;">
                                         <div style="font-weight: 600; margin-bottom: 5px;">KEVIN</div>
                                         <img src="${teams[sb.kevinPick].logo}" alt="${teams[sb.kevinPick].name}" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
                                         <div style="font-size: 12px;">${teams[sb.kevinPick].name}</div>
-                                        <div style="color: ${sb.kevinResult === 'Correct' ? '#16a34a' : '#dc2626'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.kevinResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
+                                        <div style="color: ${sb.kevinResult === 'Correct' ? '#22c55e' : '#ef4444'}; font-weight: bold; font-size: 11px; margin-top: 3px;">${sb.kevinResult === 'Correct' ? '✓ CORRECT' : '✕ INCORRECT'}</div>
                                     </div>
                                 </div>
                             </div>

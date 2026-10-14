@@ -5,6 +5,7 @@ const cfg = window.MCCORMICK_SUPABASE_CONFIG;
 if (cfg?.enableSupabaseMode === true) {
   if (!db) throw new Error('Supabase mode enabled without a valid public client configuration.');
   const nameByUser = new Map();
+  const verifiedKickoffs = new Map();
   const status = (message) => {
     let node = document.getElementById('supabase-status');
     if (!node) {
@@ -35,11 +36,16 @@ if (cfg?.enableSupabaseMode === true) {
   app.passwords = Object.create(null);
 
   async function loadAuthoritativePicks() {
-    const [{data:members,error:membersError},{data:rows,error:picksError}] = await Promise.all([
+    const [{data:members,error:membersError},{data:rows,error:picksError},{data:games,error:gamesError}] = await Promise.all([
       db.from('league_members').select('user_id,display_name'),
       db.from('league_picks').select('game_id,user_id,team'),
+      db.from('league_games').select('id,kickoff_at'),
     ]);
-    if (membersError || picksError) throw membersError || picksError;
+    if (membersError || picksError || gamesError) throw membersError || picksError || gamesError;
+    verifiedKickoffs.clear();
+    for (const game of games || []) {
+      if (game.kickoff_at) verifiedKickoffs.set(game.id,Date.parse(game.kickoff_at));
+    }
     for (const name of ['Jett','Kevin']) {
       for (const key of Object.keys(picks[name])) delete picks[name][key];
     }
@@ -61,6 +67,8 @@ if (cfg?.enableSupabaseMode === true) {
         .select('display_name').eq('user_id',data.user.id).single();
       if (memberError || !member || member.display_name !== selected) throw new Error('Account does not match selected player.');
       await loadAuthoritativePicks();
+      app._draftKey = null;
+      app._draft = {};
       app.currentUser = selected;
       app.selectedUser = null;
       document.getElementById('login-screen').classList.add('hidden');
@@ -82,7 +90,14 @@ if (cfg?.enableSupabaseMode === true) {
   }
   app.login = authenticatedLogin;
   app.selectUser = function(name) { baseSelectUser(name); email.value = ''; status(''); };
-  app.logout = async function() { await db.auth.signOut(); baseLogout(); };
+  app.logout = async function() { await db.auth.signOut(); app._draftKey = null; app._draft = {}; baseLogout(); };
+  // Fail closed on games without a verified server kickoff. Client display is advisory;
+  // submit_league_pick independently enforces the deadline using the server clock.
+  app.isGameLocked = function(game) {
+    if (!game || game.final) return true;
+    const kickoff = verifiedKickoffs.get(game.id);
+    return !Number.isFinite(kickoff) || Date.now() >= kickoff;
+  };
 
   app.saveWeekPicks = async function() {
     if (!this.currentUser) return;

@@ -60,16 +60,24 @@ Deno.serve(async (req) => {
         body: `Pick ${game.away_team} vs. ${game.home_team} before kickoff!`,
         url: '/McCormick-Picks/',
       });
+      let deliveredToUser = 0;
       for (const device of devices ?? []) {
         try {
           await webpush.sendNotification(device.subscription, payload);
           sent++;
+          deliveredToUser++;
         } catch (error) {
           const status = (error as { statusCode?: number }).statusCode;
           if (status === 404 || status === 410) {
             await db.from('push_subscriptions').delete().eq('endpoint', device.endpoint);
           } else console.error('Push delivery failed', status ?? 'unknown');
         }
+      }
+      // A reservation must not permanently suppress reminders if every device failed.
+      // Keep successful deliveries deduplicated; retry failed-only deliveries next run.
+      if (deliveredToUser === 0) {
+        await db.from('tnf_reminder_deliveries').delete()
+          .eq('game_id',game.id).eq('user_id',userId).eq('slot',slot);
       }
     }
   }

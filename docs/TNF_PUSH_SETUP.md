@@ -1,6 +1,6 @@
 # McCormick Picks secure cutover checklist (PR #4: DRAFT)
 
-**Not deployed, not end-to-end tested.** The live app remains unchanged.
+**Not deployed, not end-to-end tested.** The live app remains unchanged.\n\n## Migration status (October 14, 2026)\n\n- Jett and Kevin activated in Supabase Auth and mapped to `league_members`.\n- 268 fixtures imported; only 1 kickoff populated, 267 require verification.\n- 158 historical picks verified against Weeks 1–5 comparison screenshots and imported: Jett 79, Kevin 79.\n- Historical import SQL corrected for Kevin Week 5 Broncos and Bears. Do not re-import as a substitute for verifying current DB state.\n- Secure mode is still disabled; no end-to-end authentication, pick lock or push test has passed.\n- Before release: populate official kickoff timestamps for all remaining future games, test both identities and server RPC lock behavior on staging, deploy and test push scheduler.\n
 Never merge or enable Supabase mode before verified migration.
 
 ## 1. Accounts and migration

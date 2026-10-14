@@ -62,14 +62,17 @@ if (cfg?.enableSupabaseMode === true) {
       if (name && picks[name]) picks[name][row.game_id] = row.team;
     }
   }
+  let loginPending = false;
   async function authenticatedLogin() {
+    if (loginPending) return;
+    loginPending = true;
     status('Signing in…');
     const selected = app.selectedUser;
-    const {data,error} = await db.auth.signInWithPassword({
-      email: email.value.trim(), password: document.getElementById('password-input').value
-    });
-    if (error || !data.user) { status('Unable to sign in. Check your credentials.'); return; }
     try {
+      const {data,error} = await db.auth.signInWithPassword({
+        email: email.value.trim(), password: document.getElementById('password-input').value
+      });
+      if (error || !data?.user) throw new Error('Sign-in rejected');
       const {data:member,error:memberError} = await db.from('league_members')
         .select('display_name').eq('user_id',data.user.id).single();
       if (memberError || !member || member.display_name !== selected) throw new Error('Account does not match selected player.');
@@ -91,8 +94,12 @@ if (cfg?.enableSupabaseMode === true) {
       addPushButton();
       status('');
     } catch (err) {
-      await db.auth.signOut();
-      status('Login could not be completed. Verify membership and migrated picks.');
+      await db.auth.signOut().catch(() => {});
+      app.currentUser = null;
+      status('Login failed. Check your credentials, selected player, and connection.');
+    } finally {
+      loginPending = false;
+      document.getElementById('password-input').value = '';
     }
   }
   app.login = authenticatedLogin;

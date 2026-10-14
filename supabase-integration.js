@@ -27,6 +27,7 @@ if (cfg?.enableSupabaseMode === true) {
   document.getElementById('password-input').autocomplete = 'current-password';
 
   const baseLogout = app.logout.bind(app);
+  const baseInit = app.init.bind(app);
   const baseSelectUser = app.selectUser.bind(app);
 
   // Never synthesize historical selections or save them to localStorage in secure mode.
@@ -34,6 +35,14 @@ if (cfg?.enableSupabaseMode === true) {
   app.autoPickLockedGames = () => {};
   app.savePicks = () => {};
   app.passwords = Object.create(null);
+  // Inline script initializes on DOMContentLoaded; modules may execute later.
+  // Clear baked-in selections immediately so no hardcoded picks leak into secure mode.
+  for (const name of ['Jett','Kevin']) {
+    for (const key of Object.keys(picks[name])) delete picks[name][key];
+  }
+  app.init = function() { baseInit(); };
+  // The live legacy init may already have run. No localStorage writes are allowed
+  // after secure mode is enabled; authoritative picks load only after login.
 
   async function loadAuthoritativePicks() {
     const [{data:members,error:membersError},{data:rows,error:picksError},{data:games,error:gamesError}] = await Promise.all([
@@ -90,7 +99,15 @@ if (cfg?.enableSupabaseMode === true) {
   }
   app.login = authenticatedLogin;
   app.selectUser = function(name) { baseSelectUser(name); email.value = ''; status(''); };
-  app.logout = async function() { await db.auth.signOut(); app._draftKey = null; app._draft = {}; baseLogout(); };
+  app.logout = async function() {
+    app.currentUser = null;
+    app._draftKey = null;
+    app._draft = {};
+    for (const name of ['Jett','Kevin']) {
+      for (const key of Object.keys(picks[name])) delete picks[name][key];
+    }
+    try { await db.auth.signOut(); } finally { baseLogout(); }
+  };
   // Fail closed on games without a verified server kickoff. Client display is advisory;
   // submit_league_pick independently enforces the deadline using the server clock.
   app.isGameLocked = function(game) {

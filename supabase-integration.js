@@ -197,7 +197,8 @@ if (cfg?.enableSupabaseMode === true) {
     const button = document.createElement('button');
     button.id = 'enable-tnf-push';
     button.className = 'btn btn-gold';
-    button.textContent = 'Enable TNF Notifications';
+    button.textContent = cfg.vapidPublicKey ? 'Enable TNF Notifications' : 'TNF Notifications: Setup Pending';
+    button.disabled = !cfg.vapidPublicKey;
     button.style.margin = '10px';
     button.addEventListener('click',()=>enablePush().catch(()=>alert('Could not enable notifications. Please try again.')));
     document.getElementById('main-screen').prepend(button);

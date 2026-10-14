@@ -2856,7 +2856,14 @@
             console.log('DOM loaded, initializing app...');
             console.log('app object:', typeof app);
             if (typeof app !== 'undefined') {
-                app.init();
+                if (window.MCCORMICK_SUPABASE_CONFIG?.enableSupabaseMode === true) {
+                    // Never run legacy loadPicks/autoPickLockedGames when Supabase is authoritative.
+                    app.createWeekButtons();
+                    app.syncScores();
+                    setInterval(() => app.syncScores(), 3 * 60 * 1000);
+                } else {
+                    app.init();
+                }
             } else {
                 console.error('app object is not defined!');
             }

@@ -210,5 +210,21 @@ if (cfg?.enableSupabaseMode === true) {
     button.addEventListener('click',()=>enablePush().catch(()=>alert('Could not enable notifications. Please try again.')));
     document.getElementById('main-screen').prepend(button);
   }
+  // Preview-only diagnostics: never silently show an empty games list.
+  const originalRenderGames = app.renderGames.bind(app);
+  app.renderGames = function() {
+    const container = document.getElementById('games-list');
+    try {
+      originalRenderGames();
+      const count = schedule[this.currentWeek]?.games?.length ?? 0;
+      if (count && !container.querySelector('.game')) {
+        container.textContent = 'Preview error: no game cards rendered for this week.';
+      }
+    } catch (error) {
+      console.error('Secure preview games rendering failed', error);
+      container.textContent = 'Unable to display games. Error: ' + (error?.message || 'unknown');
+    }
+  };
+
   // Player selection does not mutate the existing auth session; login checks identity.
 }

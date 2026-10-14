@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
       byUser.set(sub.user_id, group);
     }
     for (const [userId, devices] of byUser) {
-      const { data: existingPick, error: pickError } = await db.from('tnf_picks')
+      const { data: existingPick, error: pickError } = await db.from('league_picks')
         .select('team').eq('game_id', game.id).eq('user_id', userId).maybeSingle();
       if (pickError || existingPick) continue; // Fail closed if pick status is uncertain.
       // Unique constraint prevents duplicate reminders for this user/game/slot.

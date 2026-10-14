@@ -7,6 +7,7 @@ create temporary table security_test_results (
   result text not null,
   detail text
 ) on commit drop;
+grant select, insert on security_test_results to authenticated;
 set local role authenticated;
 select set_config('request.jwt.claim.sub','35f21e03-743a-4fb2-8b58-8f4425bcb6d4',true);
 

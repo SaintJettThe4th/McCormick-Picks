@@ -3,5 +3,7 @@
 // The integration stays inactive until auth and historical pick migration are ready.
 window.MCCORMICK_SUPABASE_CONFIG = Object.freeze({
   url: 'https://bquxrvtsuqcmlnuejxxn.supabase.co',
-  publishableKey: 'sb_publishable_BB1y7vflwxgBUOXFV-0mrw_PaDKn24G'
+  publishableKey: 'sb_publishable_BB1y7vflwxgBUOXFV-0mrw_PaDKn24G',
+  enableSupabaseMode: false, // Switch on ONLY after server-side migration and testing.
+  vapidPublicKey: '' // Public VAPID key, after notification service setup.
 });

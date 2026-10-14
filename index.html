@@ -1269,6 +1269,18 @@
             }
         };
 
+        // Confirmed Week 5 selections. These are authoritative after kickoff and
+        // cannot be replaced by stale browser storage or automatic home picks.
+        const confirmedWeek5Picks = {
+            'Jett': { '5-1': 'DAL', '5-2': 'JAX', '5-3': 'NE', '5-4': 'HOU', '5-5': 'CLE', '5-6': 'PIT', '5-7': 'CIN', '5-8': 'NO', '5-9': 'WAS', '5-10': 'DEN', '5-11': 'GB', '5-12': 'DET', '5-13': 'SEA', '5-14': 'ATL', '5-15': 'BUF' },
+            'Kevin': { '5-1': 'DAL', '5-2': 'JAX', '5-3': 'LV', '5-4': 'HOU', '5-5': 'NYJ', '5-6': 'IND', '5-7': 'CIN', '5-8': 'MIN', '5-9': 'WAS', '5-10': 'CHI', '5-11': 'DEN', '5-12': 'DET', '5-13': 'SEA', '5-14': 'ATL', '5-15': 'LAR' }
+        };
+        function restoreConfirmedWeek5Picks() {
+            for (const user of ['Jett', 'Kevin']) {
+                Object.assign(picks[user], confirmedWeek5Picks[user]);
+            }
+        }
+
         // Main app object
         const app = {
             currentUser: null,
@@ -1343,6 +1355,30 @@
                 }
             },
 
+            // Keep a separate snapshot of picks once their games have kicked off.
+            // This key is independent of schedule/picks version migrations.
+            preserveLockedPicks: function() {
+                let locked = {};
+                try { locked = JSON.parse(localStorage.getItem('lockedPicks2026') || '{}') || {}; }
+                catch (e) { locked = {}; }
+                for (const user of ['Jett', 'Kevin']) {
+                    if (!locked[user]) locked[user] = {};
+                    for (const weekData of Object.values(schedule)) {
+                        for (const game of weekData.games) {
+                            if (!this.isGameLocked(game)) continue;
+                            if (confirmedWeek5Picks[user][game.id]) {
+                                locked[user][game.id] = confirmedWeek5Picks[user][game.id];
+                            } else if (locked[user][game.id]) {
+                                picks[user][game.id] = locked[user][game.id];
+                            } else if (picks[user][game.id]) {
+                                locked[user][game.id] = picks[user][game.id];
+                            }
+                        }
+                    }
+                }
+                localStorage.setItem('lockedPicks2026', JSON.stringify(locked));
+            },
+
             loadPicks: function() {
                 const savedPicks = localStorage.getItem('picks');
                 const savedVersion = localStorage.getItem('picksVersion');
@@ -1365,9 +1401,13 @@
                     localStorage.removeItem('picks');
                     console.log('Discarded stale picks from previous version');
                 }
+                restoreConfirmedWeek5Picks();
+                this.preserveLockedPicks();
             },
 
             savePicks: function() {
+                restoreConfirmedWeek5Picks();
+                this.preserveLockedPicks();
                 try {
                     localStorage.setItem('picks', JSON.stringify(picks));
                     localStorage.setItem('picksVersion', PICKS_VERSION);

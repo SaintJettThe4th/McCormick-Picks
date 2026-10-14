@@ -162,6 +162,8 @@ if (cfg?.enableSupabaseMode === true) {
       this.updateStatusMessage();
     } catch (_) {
       if (button) button.textContent = 'Save failed. Retry.';
+      const note = document.getElementById('save-picks-note');
+      if (note) note.textContent = 'Unable to verify saved picks. Check your connection and reload before retrying.';
     } finally { if (button) button.disabled = false; }
   };
 

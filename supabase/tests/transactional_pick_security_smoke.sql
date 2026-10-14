@@ -54,5 +54,6 @@ begin
     raise notice 'PASS: direct pick table write blocked';
   end;
   if v_result is not null then raise exception '%',v_result; end if;
-end $$;
+  raise notice 'PASS: security smoke test completed; transaction will roll back';
+end $;
 rollback;

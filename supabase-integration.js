@@ -185,9 +185,14 @@ if (cfg?.enableSupabaseMode === true) {
     if (!user) throw new Error('Sign in first');
     const subscription = sub.toJSON();
     // The endpoint uniquely identifies this browser's subscription.
-    const {error} = await db.from('push_subscriptions').upsert({
+    const {error} = await db.from('push_subscriptions').insert({
       endpoint:sub.endpoint,user_id:user.id,subscription
-    }, {onConflict:'endpoint'});
+    });
+    // Existing subscription is already registered; never delete another account's endpoint.
+    if (error?.code === '23505') {
+      alert('This device is already registered. Sign out of the other account before switching notifications.');
+      return;
+    }
     if (error) throw error;
     alert('Push reminders enabled for this device.');
   }

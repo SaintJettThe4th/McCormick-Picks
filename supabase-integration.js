@@ -155,7 +155,7 @@ if (cfg?.enableSupabaseMode === true) {
       await loadAuthoritativePicks();
       if (button) button.textContent = rejected ? `Saved ${saved} of ${attempted}` : `Saved ${saved} pick(s)`;
       const note = document.getElementById('save-picks-note');
-      if (note) note.textContent = rejected ? `${rejected} pick(s) rejected or locked by server.` : 'Picks confirmed by server.';
+      if (note) note.textContent = rejected ? `${rejected} pick(s) not saved. Check locks and retry before kickoff.` : 'Picks confirmed by server.';
       this._draftKey = null;
       this.renderGames();
       this.updateMoneyStatus();

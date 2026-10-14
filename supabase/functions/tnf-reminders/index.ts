@@ -32,14 +32,16 @@ Deno.serve(async (req) => {
   let sent = 0;
   for (const game of games ?? []) {
     const until = new Date(game.kickoff_at).getTime() - now.getTime();
-    const oneHourWindow = until > 55 * 60_000 && until <= 60 * 60_000;
-    const slot = isNoonWindow ? 'noon' : oneHourWindow ? 'one_hour' : null;
+    // Cron runs every five minutes. Accept a small window around the one-hour mark
+    // so a delayed invocation does not silently miss the reminder.
+    const oneHourWindow = until > 50 * 60_000 && until <= 60 * 60_000;
+    const slot = oneHourWindow ? 'one_hour' : isNoonWindow ? 'noon' : null;
     if (!slot) continue;
     // Authenticated users who opted in are discovered by subscriptions.
     const { data: subscriptions, error: subError } = await db.from('push_subscriptions')
       .select('user_id,endpoint,subscription');
     if (subError) return new Response('Subscription lookup failed', { status: 500 });
-    const byUser = new Map<string, typeof subscriptions>();
+    const byUser = new Map<string, NonNullable<typeof subscriptions>>();
     for (const sub of subscriptions ?? []) {
       const group = byUser.get(sub.user_id) ?? [];
       group.push(sub);

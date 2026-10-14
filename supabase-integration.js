@@ -138,7 +138,7 @@ if (cfg?.enableSupabaseMode === true) {
     if (!week) return;
     const button = document.getElementById('save-picks-btn');
     if (button) button.disabled = true;
-    let saved = 0, rejected = 0;
+    let saved = 0, rejected = 0, attempted = 0;
     try {
       for (const game of week.games) {
         const choice = draft[game.id];

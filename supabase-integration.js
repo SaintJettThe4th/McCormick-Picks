@@ -28,6 +28,7 @@ if (cfg?.enableSupabaseMode === true) {
 
   const baseLogout = app.logout.bind(app);
   const baseSelectUser = app.selectUser.bind(app);
+  const baseCancelLogin = app.cancelLogin.bind(app);
 
   // Never synthesize historical selections or save them to localStorage in secure mode.
   app.loadPicks = () => {};
@@ -107,6 +108,7 @@ if (cfg?.enableSupabaseMode === true) {
   }
   app.login = authenticatedLogin;
   app.selectUser = function(name) { baseSelectUser(name); email.value = ''; status(''); };
+  app.cancelLogin = function() { email.value = ''; status(''); baseCancelLogin(); };
   app.logout = async function() {
     app.currentUser = null;
     app._draftKey = null;
@@ -114,7 +116,7 @@ if (cfg?.enableSupabaseMode === true) {
     for (const name of ['Jett','Kevin']) {
       for (const key of Object.keys(picks[name])) delete picks[name][key];
     }
-    try { await db.auth.signOut(); } finally { baseLogout(); }
+    try { await db.auth.signOut(); } finally { email.value = ''; status(''); baseLogout(); }
   };
   // Fail closed on games without a verified server kickoff. Client display is advisory;
   // submit_league_pick independently enforces the deadline using the server clock.

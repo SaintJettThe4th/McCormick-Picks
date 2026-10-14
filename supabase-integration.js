@@ -69,6 +69,11 @@ if (cfg?.enableSupabaseMode === true) {
     loginPending = true;
     status('Signing in…');
     const selected = app.selectedUser;
+    if (!selected || !['Jett','Kevin'].includes(selected)) {
+      loginPending = false;
+      status('Choose Jett or Kevin before signing in.');
+      return;
+    }
     try {
       const {data,error} = await db.auth.signInWithPassword({
         email: email.value.trim(), password: document.getElementById('password-input').value

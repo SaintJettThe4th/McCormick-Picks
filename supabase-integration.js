@@ -170,5 +170,5 @@ if (cfg?.enableSupabaseMode === true) {
     button.addEventListener('click',()=>enablePush().catch(()=>alert('Could not enable notifications. Please try again.')));
     document.getElementById('main-screen').prepend(button);
   }
-  // Require an explicit sign-in for each player selection. Sign out before showing login.\n  const originalSelectUser = app.selectUser;\n  app.selectUser = async function(name) {\n    await db.auth.signOut();\n    originalSelectUser(name);\n  };
+  // Player selection does not mutate the existing auth session; login checks identity.
 }

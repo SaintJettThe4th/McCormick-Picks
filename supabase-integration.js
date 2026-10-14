@@ -185,10 +185,9 @@ if (cfg?.enableSupabaseMode === true) {
     if (!user) throw new Error('Sign in first');
     const subscription = sub.toJSON();
     // The endpoint uniquely identifies this browser's subscription.
-    await db.from('push_subscriptions').delete().eq('endpoint',sub.endpoint);
-    const {error} = await db.from('push_subscriptions').insert({
+    const {error} = await db.from('push_subscriptions').upsert({
       endpoint:sub.endpoint,user_id:user.id,subscription
-    });
+    }, {onConflict:'endpoint'});
     if (error) throw error;
     alert('Push reminders enabled for this device.');
   }

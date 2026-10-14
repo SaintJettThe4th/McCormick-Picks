@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>McCormick Picks - Account Setup</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0d1b2a;color:#e2e8f0;margin:0;padding:2rem}
+main{max-width:430px;margin:5vh auto;background:#152b42;border-radius:16px;padding:2rem}
+label{display:block;margin:1rem 0 .4rem}input,button{box-sizing:border-box;width:100%;padding:.8rem;border-radius:8px;font:inherit}
+button{margin-top:1rem;background:#c7a34c;border:0;color:#101a25;font-weight:bold;cursor:pointer}
+input{background:#fff;color:#111;border:0}a{color:#f3cd74}
+#status{min-height:2.5rem}#setup{display:none}
+</style>
+</head>
+<body><main>
+<h1>McCormick Picks</h1>
+<h2>Finish account setup</h2>
+<p id="status" role="status">Checking your invitation…</p>
+<form id="setup">
+<label for="password">Choose a new password (at least 12 characters)</label>
+<input id="password" type="password" autocomplete="new-password" minlength="12" required>
+<label for="confirm">Confirm password</label>
+<input id="confirm" type="password" autocomplete="new-password" minlength="12" required>
+<button type="submit">Save password</button>
+</form>
+<p><a href="./">Return to McCormick Picks</a></p>
+<p><small>The main app will use Supabase login after the secure pick migration is complete.</small></p>
+</main>
+<script src="./supabase-config.js"></script>
+<script type="module">
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
+const status=document.getElementById('status');
+const form=document.getElementById('setup');
+const cfg=window.MCCORMICK_SUPABASE_CONFIG;
+if(!cfg || !/^sb_publishable_[A-Za-z0-9_-]+$/.test(cfg.publishableKey)){
+ status.textContent='Supabase configuration is unavailable.';
+}else{
+ const client=createClient(cfg.url,cfg.publishableKey,{auth:{detectSessionInUrl:true}});
+ try{
+   const params=new URLSearchParams(location.hash.slice(1));
+   const error=params.get('error_description');
+   const code=new URLSearchParams(location.search).get('code');
+   const {data,error:sessionError}=await client.auth.getSession();
+   // Clear any URL token immediately after Supabase has processed it.
+   history.replaceState({},'',location.pathname);
+   if(error) throw new Error(error);
+   if(sessionError) throw sessionError;
+   if(!data.session){
+     status.textContent=code?'Invitation link could not be completed. Request a fresh invitation.':'Open this page using your Supabase invitation link.';
+   }else{
+     status.textContent='Invitation verified. Set a password for your account.';
+     form.style.display='block';
+     form.addEventListener('submit',async e=>{
+       e.preventDefault();
+       const password=document.getElementById('password').value;
+       const confirm=document.getElementById('confirm').value;
+       if(password!==confirm){status.textContent='Passwords do not match.';return;}
+       const button=form.querySelector('button');
+       button.disabled=true;
+       const {error}=await client.auth.updateUser({password});
+       if(error){status.textContent=error.message;button.disabled=false;return;}
+       await client.auth.signOut();
+       form.style.display='none';
+       status.textContent='Account password saved. Your account is ready; app login will be enabled after migration.';
+     });
+   }
+ }catch(e){
+   history.replaceState({},'',location.pathname);
+   status.textContent='Could not complete invitation. Check your redirect settings and request a fresh invitation.';
+ }
+}
+</script>
+</body></html>

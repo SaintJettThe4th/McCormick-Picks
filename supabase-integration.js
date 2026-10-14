@@ -27,7 +27,6 @@ if (cfg?.enableSupabaseMode === true) {
   document.getElementById('password-input').autocomplete = 'current-password';
 
   const baseLogout = app.logout.bind(app);
-  const baseInit = app.init.bind(app);
   const baseSelectUser = app.selectUser.bind(app);
 
   // Never synthesize historical selections or save them to localStorage in secure mode.
@@ -40,7 +39,6 @@ if (cfg?.enableSupabaseMode === true) {
   for (const name of ['Jett','Kevin']) {
     for (const key of Object.keys(picks[name])) delete picks[name][key];
   }
-  app.init = function() { baseInit(); };
   // The live legacy init may already have run. No localStorage writes are allowed
   // after secure mode is enabled; authoritative picks load only after login.
 

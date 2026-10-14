@@ -143,6 +143,7 @@ if (cfg?.enableSupabaseMode === true) {
       for (const game of week.games) {
         const choice = draft[game.id];
         if (!choice || choice === picks[this.currentUser][game.id]) continue;
+        attempted++;
         const {error} = await db.rpc('submit_league_pick', {
           p_game_id:game.id, p_team:choice
         });

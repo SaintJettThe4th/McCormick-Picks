@@ -1,7 +1,7 @@
 -- RUN ONLY after: (1) both authenticated accounts exist, (2) league_members
 -- has exactly one UUID for each player, (3) review of historical-picks-review.json
 -- against original messages AND browser storage, (4) league_games fixtures loaded.
--- This is a provisional source-code snapshot. DO NOT run without confirmation.
+-- Verified against screenshots for Weeks 1-5. Already imported in production with the two Week 5 Kevin picks repaired separately.\n-- Re-running is idempotent: ON CONFLICT DO NOTHING.
 do $$
 begin
  if (select count(*) from public.league_members where display_name in ('Jett','Kevin')) <> 2 then
@@ -162,8 +162,8 @@ with verified_source(display_name,game_id,team) as (
 ('Kevin','5-7','CIN'),
 ('Kevin','5-8','MIN'),
 ('Kevin','5-9','WAS'),
-('Kevin','5-10','CHI'),
-('Kevin','5-11','DEN'),
+('Kevin','5-10','DEN'),
+('Kevin','5-11','CHI'),
 ('Kevin','5-12','DET'),
 ('Kevin','5-13','SEA'),
 ('Kevin','5-14','ATL'),

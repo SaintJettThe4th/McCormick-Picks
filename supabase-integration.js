@@ -153,7 +153,7 @@ if (cfg?.enableSupabaseMode === true) {
       }
       // Reconcile with authoritative state after submissions.
       await loadAuthoritativePicks();
-      if (button) button.textContent = `Saved ${saved} pick(s)`;
+      if (button) button.textContent = rejected ? `Saved ${saved} of ${attempted}` : `Saved ${saved} pick(s)`;
       const note = document.getElementById('save-picks-note');
       if (note) note.textContent = rejected ? `${rejected} pick(s) rejected or locked by server.` : 'Picks confirmed by server.';
       this._draftKey = null;

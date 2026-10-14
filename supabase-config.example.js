@@ -3,5 +3,5 @@
 // The integration stays inactive until auth and historical pick migration are ready.
 window.MCCORMICK_SUPABASE_CONFIG = Object.freeze({
   url: 'https://bquxrvtsuqcmlnuejxxn.supabase.co',
-  publishableKey: 'REPLACE_WITH_SB_PUBLISHABLE_KEY'
+  publishableKey: 'sb_publishable_BB1y7vflwxgBUOXFV-0mrw_PaDKn24G'
 });

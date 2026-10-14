@@ -25,6 +25,12 @@ input{background:#fff;color:#111;border:0}a{color:#f3cd74}
 <input id="confirm" type="password" autocomplete="new-password" minlength="12" required>
 <button type="submit">Save password</button>
 </form>
+<div id="recovery" style="margin-top:1rem">
+<p>If your invitation failed, request a new password setup email:</p>
+<label for="email">Account email</label>
+<input id="email" type="email" autocomplete="email" placeholder="Email address">
+<button type="button" id="send-recovery">Send password setup email</button>
+</div>
 <p><a href="./">Return to McCormick Picks</a></p>
 <p><small>The main app will use Supabase login after the secure pick migration is complete.</small></p>
 </main>
@@ -37,20 +43,44 @@ const cfg=window.MCCORMICK_SUPABASE_CONFIG;
 if(!cfg || !/^sb_publishable_[A-Za-z0-9_-]+$/.test(cfg.publishableKey)){
  status.textContent='Supabase configuration is unavailable.';
 }else{
- const client=createClient(cfg.url,cfg.publishableKey,{auth:{detectSessionInUrl:true}});
+
+ const client=createClient(cfg.url,cfg.publishableKey,{auth:{detectSessionInUrl:true,flowType:'implicit'}});
+ const recovery=document.getElementById('recovery');
+ const query=new URLSearchParams(location.search);
+ const hash=new URLSearchParams(location.hash.slice(1));
+ const errorCode=query.get('error_code')||hash.get('error_code');
+ const errorDescription=query.get('error_description')||hash.get('error_description');
+ const hadInvite=Boolean(query.get('code')||query.get('token_hash')||hash.get('access_token')||errorCode);
+ function showError(e){
+   const msg=(e?.message||'').toLowerCase();
+   if(errorCode==='otp_expired'||msg.includes('expired')) status.textContent='This invitation has expired or was already used. Request a password setup email below.';
+   else status.textContent='Could not verify this invitation. Request a password setup email below.';
+ }
+ document.getElementById('send-recovery').addEventListener('click',async()=>{
+   const email=document.getElementById('email').value.trim();
+   if(!email){status.textContent='Enter your account email.';return;}
+   const button=document.getElementById('send-recovery');
+   button.disabled=true;
+   try{
+     const {error}=await client.auth.resetPasswordForEmail(email,{
+       redirectTo:'https://saintjettthe4th.github.io/McCormick-Picks/auth-setup.html'
+     });
+     if(error) throw error;
+     status.textContent='If this email belongs to an existing account, a password setup link will arrive shortly. Check spam too.';
+   }catch(e){status.textContent='Could not send the email. Check Supabase email settings or try again later.';}
+   finally{button.disabled=false;}
+ });
  try{
-   const params=new URLSearchParams(location.hash.slice(1));
-   const error=params.get('error_description');
-   const code=new URLSearchParams(location.search).get('code');
+   // Supabase JS processes implicit recovery/invite hash tokens during initialization.
    const {data,error:sessionError}=await client.auth.getSession();
-   // Clear any URL token immediately after Supabase has processed it.
-   history.replaceState({},'',location.pathname);
-   if(error) throw new Error(error);
    if(sessionError) throw sessionError;
+   if(errorDescription) throw new Error(errorDescription);
    if(!data.session){
-     status.textContent=code?'Invitation link could not be completed. Request a fresh invitation.':'Open this page using your Supabase invitation link.';
+     status.textContent=hadInvite?'Invitation could not be verified. Request a password setup email below.':'Open this page using an invitation or request a password setup email below.';
    }else{
-     status.textContent='Invitation verified. Set a password for your account.';
+     history.replaceState({},'',location.pathname);
+     status.textContent='Account verified. Set your password.';
+     recovery.style.display='none';
      form.style.display='block';
      form.addEventListener('submit',async e=>{
        e.preventDefault();
@@ -63,12 +93,12 @@ if(!cfg || !/^sb_publishable_[A-Za-z0-9_-]+$/.test(cfg.publishableKey)){
        if(error){status.textContent=error.message;button.disabled=false;return;}
        await client.auth.signOut();
        form.style.display='none';
-       status.textContent='Account password saved. Your account is ready; app login will be enabled after migration.';
+       status.textContent='Password saved. Your account is ready for the new app login after migration.';
      });
    }
  }catch(e){
    history.replaceState({},'',location.pathname);
-   status.textContent='Could not complete invitation. Check your redirect settings and request a fresh invitation.';
+   showError(e);
  }
 }
 </script>

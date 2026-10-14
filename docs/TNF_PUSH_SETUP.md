@@ -32,7 +32,7 @@ Never merge or enable Supabase mode before verified migration.
    existing database picks. Compare every row against the verified backup.
    Do not automatically import browser auto-picks as user-confirmed picks.
 
-## 2. App cutover
+## Security test preparation\n\nA rollback-only RPC test is staged at `supabase/tests/transactional_pick_security_smoke.sql`. It has not been executed. Run it only with a verified future kickoff and inspect its notices; a locked or unverified game produces an inconclusive result, not a pass.\n\n## 2. App cutover
 
 7. In `supabase-config.js`, set `enableSupabaseMode: true` on a **test
    deployment** only after the above data checks pass. In secure mode,

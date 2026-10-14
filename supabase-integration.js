@@ -25,10 +25,7 @@ if (cfg?.enableSupabaseMode === true) {
   document.getElementById('password-input').before(email);
   document.getElementById('password-input').autocomplete = 'current-password';
 
-  const baseInit = app.init.bind(app);
   const baseLogout = app.logout.bind(app);
-  const baseShowMainMenu = app.showMainMenu.bind(app);
-  const baseSaveWeekPicks = app.saveWeekPicks.bind(app);
   const baseSelectUser = app.selectUser.bind(app);
 
   // Never synthesize historical selections or save them to localStorage in secure mode.
@@ -158,7 +155,5 @@ if (cfg?.enableSupabaseMode === true) {
     button.addEventListener('click',()=>enablePush().catch(()=>alert('Could not enable notifications. Please try again.')));
     document.getElementById('main-screen').prepend(button);
   }
-  // Do not reuse browser sessions across user selections; login requires explicit identity.
-  db.auth.signOut().catch(()=>{});
-  app.init = function() { baseInit(); };
+  // Require an explicit sign-in for each player selection. Sign out before showing login.\n  const originalSelectUser = app.selectUser;\n  app.selectUser = async function(name) {\n    await db.auth.signOut();\n    originalSelectUser(name);\n  };
 }

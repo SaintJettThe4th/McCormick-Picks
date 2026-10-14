@@ -96,6 +96,9 @@ if (cfg?.enableSupabaseMode === true) {
     } catch (err) {
       await db.auth.signOut().catch(() => {});
       app.currentUser = null;
+      for (const name of ['Jett','Kevin']) {
+        for (const key of Object.keys(picks[name])) delete picks[name][key];
+      }
       status('Login failed. Check your credentials, selected player, and connection.');
     } finally {
       loginPending = false;

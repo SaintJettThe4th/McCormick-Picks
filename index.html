@@ -1355,6 +1355,30 @@
                 }
             },
 
+            // Keep a separate snapshot of picks once their games have kicked off.
+            // This key is independent of schedule/picks version migrations.
+            preserveLockedPicks: function() {
+                let locked = {};
+                try { locked = JSON.parse(localStorage.getItem('lockedPicks2026') || '{}') || {}; }
+                catch (e) { locked = {}; }
+                for (const user of ['Jett', 'Kevin']) {
+                    if (!locked[user]) locked[user] = {};
+                    for (const weekData of Object.values(schedule)) {
+                        for (const game of weekData.games) {
+                            if (!this.isGameLocked(game)) continue;
+                            if (confirmedWeek5Picks[user][game.id]) {
+                                locked[user][game.id] = confirmedWeek5Picks[user][game.id];
+                            } else if (locked[user][game.id]) {
+                                picks[user][game.id] = locked[user][game.id];
+                            } else if (picks[user][game.id]) {
+                                locked[user][game.id] = picks[user][game.id];
+                            }
+                        }
+                    }
+                }
+                localStorage.setItem('lockedPicks2026', JSON.stringify(locked));
+            },
+
             loadPicks: function() {
                 const savedPicks = localStorage.getItem('picks');
                 const savedVersion = localStorage.getItem('picksVersion');
@@ -1378,10 +1402,12 @@
                     console.log('Discarded stale picks from previous version');
                 }
                 restoreConfirmedWeek5Picks();
+                this.preserveLockedPicks();
             },
 
             savePicks: function() {
                 restoreConfirmedWeek5Picks();
+                this.preserveLockedPicks();
                 try {
                     localStorage.setItem('picks', JSON.stringify(picks));
                     localStorage.setItem('picksVersion', PICKS_VERSION);

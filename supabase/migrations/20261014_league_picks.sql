@@ -22,8 +22,8 @@ create table if not exists public.league_picks (
 alter table public.league_members enable row level security;
 alter table public.league_games enable row level security;
 alter table public.league_picks enable row level security;
-create policy "members read own membership" on public.league_members
- for select to authenticated using (user_id=auth.uid());
+create policy "members read league membership" on public.league_members
+ for select to authenticated using (true);
 create policy "members read games" on public.league_games
  for select to authenticated using (exists (select 1 from public.league_members m where m.user_id=auth.uid()));
 create policy "members read league picks" on public.league_picks

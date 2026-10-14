@@ -63,7 +63,7 @@ end $$;
 update public.league_games g set kickoff_at=v.kickoff_at
 from verified_2026_kickoffs v where g.id=v.id
 and g.home_team=v.home_team and g.away_team=v.away_team;
--- Align reminder fixture with authoritative league game.
+-- Add upcoming Thursday reminders only for NFL-confirmed TNF matchups.\ninsert into public.tnf_games(id,away_team,home_team,kickoff_at,season,week)\nselect g.id,g.away_team,g.home_team,g.kickoff_at,g.season,g.week\nfrom public.league_games g where g.id in ('6-1','7-1','8-1')\non conflict (id) do update set kickoff_at=excluded.kickoff_at,\n  away_team=excluded.away_team,home_team=excluded.home_team;\n-- Align reminder fixture with authoritative league game.
 update public.tnf_games t set kickoff_at=g.kickoff_at
 from public.league_games g where t.id=g.id and t.id in (select id from verified_2026_kickoffs);
 commit;

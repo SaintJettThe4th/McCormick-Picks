@@ -123,6 +123,35 @@ if (cfg?.enableSupabaseMode === true) {
     }
     try { await db.auth.signOut(); } finally { email.value = ''; status(''); baseLogout(); }
   };
+  // Capture game clicks before legacy inline handlers; keep selection in the secure draft.
+  // This does not submit anything to the database until Save Picks is pressed.
+  document.getElementById('games-list')?.addEventListener('click', (event) => {
+    const button = event.target.closest('button.team-btn[data-team-code]');
+    if (!button) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const card = button.closest('.game[data-game-id]');
+    const gameId = card?.dataset.gameId;
+    const teamCode = button.dataset.teamCode;
+    const week = schedule[app.currentWeek];
+    const game = week?.games.find(g => g.id === gameId);
+    if (!app.currentUser || !game || app.isGameLocked(game)) return;
+    app.getDraft()[gameId] = teamCode;
+    card.querySelectorAll('button.team-btn').forEach(el => {
+      const selected = el.dataset.teamCode === teamCode;
+      el.classList.toggle('selected', selected);
+      el.setAttribute('aria-pressed', String(selected));
+    });
+    let label = card.querySelector('.preview-pick-label');
+    if (!label) {
+      label = document.createElement('div');
+      label.className = 'preview-pick-label';
+      label.style.cssText = 'text-align:center;margin-top:12px;color:#c9a227;font-weight:600;font-size:13px';
+      card.querySelector('.game-content').appendChild(label);
+    }
+    label.textContent = 'Your pick: ' + (teams[teamCode]?.name || teamCode) + ' (not saved)';
+  }, true);
+
   // Fail closed on games without a verified server kickoff. Client display is advisory;
   // submit_league_pick independently enforces the deadline using the server clock.
   app.isGameLocked = function(game) {

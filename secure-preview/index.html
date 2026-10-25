@@ -1837,12 +1837,18 @@
                     }
                 });
 
+                // Render the selected week's games independently of records/standings.
+                // A failure in another section must not leave stale games on screen.
+                const gamesList = document.getElementById('games-list');
                 try {
-                    this.updateAllSections();
+                    this.renderGames();
                 } catch (error) {
-                    console.error('Week rendering failed', error);
-                    const gamesList = document.getElementById('games-list');
-                    if (gamesList) gamesList.textContent = 'Game display error: ' + (error?.message || String(error));
+                    console.error('Selected week games failed', error);
+                    if (gamesList) gamesList.textContent = 'Week ' + week + ' games error: ' + (error?.message || String(error));
+                }
+                for (const method of ['updateRecords', 'renderPicksComparison', 'renderWeeklyResults', 'renderStandings']) {
+                    try { this[method](); }
+                    catch (error) { console.error(method + ' failed', error); }
                 }
                 this.updateStatusMessage();
             },

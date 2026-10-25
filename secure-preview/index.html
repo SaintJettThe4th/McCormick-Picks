@@ -1837,7 +1837,13 @@
                     }
                 });
 
-                this.updateAllSections();
+                try {
+                    this.updateAllSections();
+                } catch (error) {
+                    console.error('Week rendering failed', error);
+                    const gamesList = document.getElementById('games-list');
+                    if (gamesList) gamesList.textContent = 'Game display error: ' + (error?.message || String(error));
+                }
                 this.updateStatusMessage();
             },
 

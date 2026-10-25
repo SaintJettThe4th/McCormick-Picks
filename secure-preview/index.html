@@ -2296,6 +2296,19 @@
                 if (recordsMsg) recordsMsg.style.display = 'block';
 
                 this.selectWeek(this.getCurrentWeekNumber());
+                // Secure preview: independently verify that the game cards are present.
+                const list = document.getElementById('games-list');
+                const week = schedule[this.currentWeek];
+                if (list && !list.querySelector('.game')) {
+                    try { this.renderGames(); }
+                    catch (error) {
+                        console.error('Direct games render failed', error);
+                        list.textContent = 'Games error: ' + (error?.message || String(error));
+                    }
+                }
+                if (list && !list.querySelector('.game') && !list.textContent.trim()) {
+                    list.textContent = 'Games unavailable. Week ' + this.currentWeek + ', fixtures: ' + (week?.games?.length ?? 'missing') + '. Please report this message.';
+                }
             },
 
             showPicks: function() {

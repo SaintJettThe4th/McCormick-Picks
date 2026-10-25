@@ -2240,9 +2240,20 @@
                     return;
                 }
 
-                // Stage the pick in the draft - not saved until Save is pressed
-                this.getDraft()[gameId] = selectedTeam;
-                this.renderGames();
+                // Stage the pick in the draft - not saved until Save is pressed.
+                const draft = this.getDraft();
+                draft[gameId] = selectedTeam;
+                try {
+                    this.renderGames();
+                    const selected = document.querySelector('#games-list .team-btn.selected');
+                    if (!selected) throw new Error('Selected team did not render');
+                } catch (error) {
+                    console.error('Pick selection rendering failed', error);
+                    const note = document.createElement('div');
+                    note.style.cssText = 'padding:12px;color:#f3cd74;font-weight:bold;';
+                    note.textContent = 'Selection error: ' + (error?.message || String(error));
+                    document.getElementById('games-list').prepend(note);
+                }
             },
 
             saveWeekPicks: function() {

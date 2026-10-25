@@ -1879,6 +1879,7 @@
 
                     const gameDiv = document.createElement('div');
                     gameDiv.className = 'game';
+                    gameDiv.dataset.gameId = game.id;
 
                     const homeTeam = teams[game.home];
                     const awayTeam = teams[game.away];
@@ -1895,7 +1896,7 @@
 
                             <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
                                 <button class="${this.getButtonClass(game.away, userPick, game.final, isCorrect, isTie)}"
-                                        onclick="app.makePick('${game.id}', '${game.away}')"
+                                        data-team-code="${game.away}" aria-pressed="${userPick === game.away}" onclick="app.makePick('${game.id}', '${game.away}')"
                                         ${game.final || isLocked ? 'disabled' : ''}>
                                     <img src="${awayTeam.logo}" alt="${awayTeam.name}" class="logo">
                                     <div style="font-size: 12px; font-weight: 600;">${awayTeam.name}</div>
@@ -1905,7 +1906,7 @@
                                 <div style="font-size: 14px; font-weight: bold; color: #94a3b8;">at</div>
 
                                 <button class="${this.getButtonClass(game.home, userPick, game.final, isCorrect, isTie)}"
-                                        onclick="app.makePick('${game.id}', '${game.home}')"
+                                        data-team-code="${game.home}" aria-pressed="${userPick === game.home}" onclick="app.makePick('${game.id}', '${game.home}')"
                                         ${game.final || isLocked ? 'disabled' : ''}>
                                     <img src="${homeTeam.logo}" alt="${homeTeam.name}" class="logo">
                                     <div style="font-size: 12px; font-weight: 600;">${homeTeam.name}</div>
@@ -2240,19 +2241,27 @@
                     return;
                 }
 
-                // Stage the pick in the draft - not saved until Save is pressed.
-                const draft = this.getDraft();
-                draft[gameId] = selectedTeam;
-                try {
+                // Keep the draft and immediately paint the selected team in this card.
+                // Avoid rebuilding the whole page on each click, which could reset the UI.
+                this.getDraft()[gameId] = selectedTeam;
+                const card = Array.from(document.querySelectorAll('#games-list .game'))
+                    .find(el => el.dataset.gameId === gameId);
+                if (card) {
+                    card.querySelectorAll('.team-btn').forEach(btn => {
+                        const chosen = btn.dataset.teamCode === selectedTeam;
+                        btn.classList.toggle('selected', chosen);
+                        btn.setAttribute('aria-pressed', String(chosen));
+                    });
+                    let label = card.querySelector('.preview-pick-label');
+                    if (!label) {
+                        label = document.createElement('div');
+                        label.className = 'preview-pick-label';
+                        label.style.cssText = 'text-align:center;margin-top:12px;color:#c9a227;font-weight:600;font-size:13px;';
+                        card.querySelector('.game-content').appendChild(label);
+                    }
+                    label.textContent = 'Your pick: ' + (teams[selectedTeam]?.name || selectedTeam) + ' (not saved)';
+                } else {
                     this.renderGames();
-                    const selected = document.querySelector('#games-list .team-btn.selected');
-                    if (!selected) throw new Error('Selected team did not render');
-                } catch (error) {
-                    console.error('Pick selection rendering failed', error);
-                    const note = document.createElement('div');
-                    note.style.cssText = 'padding:12px;color:#f3cd74;font-weight:bold;';
-                    note.textContent = 'Selection error: ' + (error?.message || String(error));
-                    document.getElementById('games-list').prepend(note);
                 }
             },
 

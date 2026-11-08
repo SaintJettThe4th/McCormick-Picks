@@ -12,6 +12,8 @@ This release branch was created from the current main branch to avoid merging th
 - User confirmed the eight verification rows matched the expected weekly counts (14, 14, 14, 15 per player).
 - The import rejects any conflicting existing pick and does not silently overwrite saved choices.
 
+- User confirmed the secure preview displays both players' imported Weeks 6–9 picks correctly.
+
 ## Must pass before production cutover
 - [ ] Verify every remaining 2026 kickoff against ESPN and NFL.com; install verified timestamps in Supabase. Never guess kickoff times.
 - [x] Read-only opponent-pick privacy test: four PASS results (user-confirmed).

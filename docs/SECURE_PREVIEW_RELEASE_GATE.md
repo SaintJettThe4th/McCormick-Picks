@@ -14,7 +14,9 @@ This release branch was created from the current main branch to avoid merging th
 
 ## Must pass before production cutover
 - [ ] Verify every remaining 2026 kickoff against ESPN and NFL.com; install verified timestamps in Supabase. Never guess kickoff times.
-- [ ] Re-run read-only privacy tests and post-kickoff lock tests after timestamps are installed.
+- [x] Read-only opponent-pick privacy test: four PASS results (user-confirmed).
+- [x] Existing post-kickoff lock test: PASS (user-confirmed; rollback-only).
+- [ ] Re-run privacy and lock tests after any further kickoff timestamp updates.
 - [ ] Confirm Kevin can authenticate and save his own pick, without sharing his password.
 - [ ] Audit all app links, navigation, scoring, weekly results, and picks history against authoritative Supabase data.
 - [ ] Confirm old client-side password paths cannot be used for authentication in the production entrypoint.

@@ -26,6 +26,14 @@ if (cfg?.enableSupabaseMode === true) {
   document.getElementById('password-input').before(email);
   document.getElementById('password-input').autocomplete = 'current-password';
 
+  // The preview has no #money-status panel. Legacy updateMoneyStatus throws
+  // when called after a successful login, which previously triggered sign-out.
+  const baseUpdateMoneyStatus = app.updateMoneyStatus.bind(app);
+  app.updateMoneyStatus = function() {
+    if (!document.getElementById('money-status')) return;
+    return baseUpdateMoneyStatus();
+  };
+
   const baseLogout = app.logout.bind(app);
   const baseSelectUser = app.selectUser.bind(app);
   const baseCancelLogin = app.cancelLogin.bind(app);
@@ -100,12 +108,15 @@ if (cfg?.enableSupabaseMode === true) {
       addPushButton();
       status('');
     } catch (err) {
+      console.error('Secure preview login failed', err);
+      document.getElementById('main-screen').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
       await db.auth.signOut().catch(() => {});
       app.currentUser = null;
       for (const name of ['Jett','Kevin']) {
         for (const key of Object.keys(picks[name])) delete picks[name][key];
       }
-      status('Login failed. Check your credentials, selected player, and connection.');
+      status('Login failed: ' + (err?.message || 'Check credentials and connection.'));
     } finally {
       loginPending = false;
       document.getElementById('password-input').value = '';

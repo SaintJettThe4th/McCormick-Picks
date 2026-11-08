@@ -99,13 +99,19 @@ if (cfg?.enableSupabaseMode === true) {
       document.getElementById('main-screen').classList.remove('hidden');
       document.getElementById('username').textContent = selected;
       document.getElementById('password-input').value = '';
-      app.showMainMenu();
-      app.updateMoneyStatus();
-      app.updateRecords();
-      app.updateStatusMessage();
-      app.checkScheduleUpdate();
-      app.checkPickReminders();
-      addPushButton();
+      // Auth is complete. Never undo a valid session because optional UI fails.
+      const postLoginSteps = [
+        () => app.showMainMenu(),
+        () => app.updateMoneyStatus(),
+        () => app.updateRecords(),
+        () => app.updateStatusMessage(),
+        () => app.checkScheduleUpdate(),
+        () => app.checkPickReminders(),
+        () => addPushButton()
+      ];
+      for (const step of postLoginSteps) {
+        try { step(); } catch (uiError) { console.error('Post-login UI error', uiError); }
+      }
       status('');
     } catch (err) {
       console.error('Secure preview login failed', err);
@@ -134,6 +140,27 @@ if (cfg?.enableSupabaseMode === true) {
     }
     try { await db.auth.signOut(); } finally { email.value = ''; status(''); baseLogout(); }
   };
+  // Diagnostic stays on the games screen so users do not need DevTools.
+  function displayGameFeedback(message, error = false) {
+    let node = document.getElementById('preview-game-feedback');
+    if (!node) {
+      node = document.createElement('div');
+      node.id = 'preview-game-feedback';
+      node.setAttribute('role', 'status');
+      node.style.cssText = 'padding:12px;margin:10px 0;border-radius:8px;border:1px solid #c9a227;background:#172635;font-size:13px;font-weight:600;text-align:center;';
+      document.getElementById('games-list').before(node);
+    }
+    node.style.color = error ? '#fca5a5' : '#86efac';
+    node.textContent = message;
+  }
+  const baseShowGames = app.showGames.bind(app);
+  app.showGames = function() {
+    baseShowGames();
+    displayGameFeedback(this.currentUser
+      ? 'Signed in as ' + this.currentUser + '. Select an unlocked game.'
+      : 'NOT SIGNED IN. Return to login and sign in with Supabase.', !this.currentUser);
+  };
+
   // Capture game clicks before legacy inline handlers; keep selection in the secure draft.
   // This does not submit anything to the database until Save Picks is pressed.
   document.getElementById('games-list')?.addEventListener('click', (event) => {
@@ -146,7 +173,14 @@ if (cfg?.enableSupabaseMode === true) {
     const teamCode = button.dataset.teamCode;
     const week = schedule[app.currentWeek];
     const game = week?.games.find(g => g.id === gameId);
-    if (!app.currentUser || !game || app.isGameLocked(game)) return;
+    if (!app.currentUser) {
+      displayGameFeedback('Selection blocked: no active login session. Sign in again.', true);
+      return;
+    }
+    if (!game || app.isGameLocked(game)) {
+      displayGameFeedback('Selection blocked: this game is locked or kickoff has not been verified.', true);
+      return;
+    }
     app.getDraft()[gameId] = teamCode;
     card.querySelectorAll('button.team-btn').forEach(el => {
       const selected = el.dataset.teamCode === teamCode;
@@ -161,6 +195,7 @@ if (cfg?.enableSupabaseMode === true) {
       card.querySelector('.game-content').appendChild(label);
     }
     label.textContent = 'Your pick: ' + (teams[teamCode]?.name || teamCode) + ' (not saved)';
+    displayGameFeedback('Selected ' + (teams[teamCode]?.name || teamCode) + ' (not saved).');
   }, true);
 
   // Fail closed on games without a verified server kickoff. Client display is advisory;
@@ -285,6 +320,12 @@ if (cfg?.enableSupabaseMode === true) {
     const container = document.getElementById('games-list');
     try {
       originalRenderGames();
+      if (document.getElementById('games-section') && !document.getElementById('games-section').classList.contains('hidden')) {
+        const current = document.getElementById('preview-game-feedback')?.textContent || '';
+        if (!current.startsWith('Selected ')) displayGameFeedback(this.currentUser
+          ? 'Signed in as ' + this.currentUser + '. Select an unlocked game.'
+          : 'NOT SIGNED IN. Return to login and sign in with Supabase.', !this.currentUser);
+      }
       if (lastSaveFeedback) showSaveFeedback(lastSaveFeedback, /failed|locked|rejected|Only |Confirmed \\d+ of/.test(lastSaveFeedback));
       const count = schedule[this.currentWeek]?.games?.length ?? 0;
       if (count && !container.querySelector('.game')) {

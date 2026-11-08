@@ -160,40 +160,69 @@ if (cfg?.enableSupabaseMode === true) {
     return !Number.isFinite(kickoff) || Date.now() >= kickoff;
   };
 
+  // Show a durable status after renderGames rebuilds the save button.
+  let lastSaveFeedback = '';
+  const showSaveFeedback = (message, error = false) => {
+    lastSaveFeedback = message;
+    const note = document.getElementById('save-picks-note');
+    if (note) {
+      note.textContent = message;
+      note.style.color = error ? '#fca5a5' : '#86efac';
+      note.style.fontWeight = '700';
+      note.setAttribute('role', 'status');
+      note.setAttribute('aria-live', 'polite');
+    }
+  };
   app.saveWeekPicks = async function() {
-    if (!this.currentUser) return;
-    const draft = this.getDraft();
+    if (!this.currentUser) { showSaveFeedback('Sign in before saving picks.', true); return; }
     const week = schedule[this.currentWeek];
-    if (!week) return;
+    if (!week) { showSaveFeedback('No games found for this week.', true); return; }
+    const draft = this.getDraft();
+    const pending = week.games.filter(game => draft[game.id] && draft[game.id] !== picks[this.currentUser]?.[game.id]);
+    if (!pending.length) {
+      showSaveFeedback('No new picks to save. Your existing selections are unchanged.');
+      return;
+    }
     const button = document.getElementById('save-picks-btn');
-    if (button) button.disabled = true;
-    let saved = 0, rejected = 0, attempted = 0;
+    if (button) { button.disabled = true; button.textContent = 'Saving…'; }
+    let saved = 0;
+    const errors = [];
     try {
-      for (const game of week.games) {
-        const choice = draft[game.id];
-        if (!choice || choice === picks[this.currentUser][game.id]) continue;
-        attempted++;
+      for (const game of pending) {
+        if (this.isGameLocked(game)) {
+          errors.push(game.id + ': game is locked or kickoff is unverified');
+          continue;
+        }
         const {error} = await db.rpc('submit_league_pick', {
-          p_game_id:game.id, p_team:choice
+          p_game_id: game.id, p_team: draft[game.id]
         });
-        if (error) { rejected++; continue; }
-        picks[this.currentUser][game.id] = choice;
+        if (error) {
+          console.error('Pick submission rejected', game.id, error);
+          errors.push(game.id + ': ' + (error.message || 'server rejected pick'));
+          continue;
+        }
         saved++;
       }
-      // Reconcile with authoritative state after submissions.
       await loadAuthoritativePicks();
-      if (button) button.textContent = rejected ? `Saved ${saved} of ${attempted}` : `Saved ${saved} pick(s)`;
-      const note = document.getElementById('save-picks-note');
-      if (note) note.textContent = rejected ? `${rejected} pick(s) not saved. Check locks and retry before kickoff.` : 'Picks confirmed by server.';
       this._draftKey = null;
+      this._draft = {};
       this.renderGames();
+      const confirmed = pending.filter(game => picks[this.currentUser]?.[game.id] === draft[game.id]).length;
+      const message = errors.length
+        ? 'Confirmed ' + confirmed + ' of ' + pending.length + ' picks. ' + errors[0]
+        : confirmed === pending.length
+          ? 'Confirmed: ' + confirmed + ' pick(s) saved and verified with Supabase.'
+          : 'Only ' + confirmed + ' of ' + pending.length + ' picks verified after reload. Please retry.';
+      showSaveFeedback(message, errors.length > 0 || confirmed !== pending.length);
       this.updateMoneyStatus();
       this.updateStatusMessage();
-    } catch (_) {
-      if (button) button.textContent = 'Save failed. Retry.';
-      const note = document.getElementById('save-picks-note');
-      if (note) note.textContent = 'Unable to verify saved picks. Check your connection and reload before retrying.';
-    } finally { if (button) button.disabled = false; }
+    } catch (error) {
+      console.error('Save Picks failed', error);
+      showSaveFeedback('Save failed: ' + (error?.message || 'Unable to verify picks.'), true);
+    } finally {
+      const currentButton = document.getElementById('save-picks-btn');
+      if (currentButton) { currentButton.disabled = false; currentButton.textContent = 'Save Picks'; }
+    }
   };
 
   function base64UrlToBytes(value) {
@@ -245,6 +274,7 @@ if (cfg?.enableSupabaseMode === true) {
     const container = document.getElementById('games-list');
     try {
       originalRenderGames();
+      if (lastSaveFeedback) showSaveFeedback(lastSaveFeedback, /failed|locked|rejected|Only |Confirmed \\d+ of/.test(lastSaveFeedback));
       const count = schedule[this.currentWeek]?.games?.length ?? 0;
       if (count && !container.querySelector('.game')) {
         container.textContent = 'Preview error: no game cards rendered for this week.';

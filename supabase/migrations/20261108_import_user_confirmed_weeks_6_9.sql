@@ -79,7 +79,7 @@ INSERT INTO screenshot_picks(display_name,game_id,team) VALUES
  ('Kevin','6-13','SF'),
  ('Kevin','6-14','PIT'),
  ('Kevin','7-1','CHI'),
- ('Kevin','7-2','NO'),
+ ('Kevin','7-2','PIT'),
  ('Kevin','7-3','CLE'),
  ('Kevin','7-4','NYJ'),
  ('Kevin','7-5','MIN'),

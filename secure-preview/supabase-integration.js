@@ -200,10 +200,12 @@ if (cfg?.enableSupabaseMode === true) {
 
   // Fail closed on games without a verified server kickoff. Client display is advisory;
   // submit_league_pick independently enforces the deadline using the server clock.
+  // A missing kickoff is UNCONFIRMED, not already started. Display it as
+  // upcoming/TBD; the server still rejects submissions until verified.
   app.isGameLocked = function(game) {
     if (!game || game.final) return true;
     const kickoff = verifiedKickoffs.get(game.id);
-    return !Number.isFinite(kickoff) || Date.now() >= kickoff;
+    return Number.isFinite(kickoff) && Date.now() >= kickoff;
   };
 
   // Show a durable status after renderGames rebuilds the save button.

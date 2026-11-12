@@ -1,15 +1,17 @@
-// Deploy as a scheduled Supabase Edge Function, with JWT verification enabled.
-// Invoke with a service-role JWT from a trusted scheduler, never from the browser.
+// Deploy with platform JWT verification OFF; modern sb_secret keys are not JWTs.
+// Authenticate each invocation using a private cron token stored in Vault and Edge Function secrets.
+// Never expose either secret to the browser.
 // ESPN odds are advisory. Missing odds are not guessed.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const mapping: Record<string,string> = {WSH:'WAS',JAC:'JAX',LA:'LAR',OAK:'LV',SD:'LAC',STL:'LAR'};
 const norm=(s:string)=>mapping[s]||s;
 Deno.serve(async(req)=>{
  if(req.method!=='POST')return new Response('Method not allowed',{status:405});
- const key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+ const key=Deno.env.get('SUPABASE_SECRET_KEY');
+ const cronToken=Deno.env.get('ESPN_SPREAD_CRON_TOKEN');
  const url=Deno.env.get('SUPABASE_URL');
- if(!key||!url)return new Response('Server configuration missing',{status:500});
- if(req.headers.get('Authorization')!==`Bearer ${key}`)return new Response('Unauthorized',{status:401});
+ if(!key||!url||!cronToken)return new Response('Server configuration missing',{status:500});
+ if(req.headers.get('x-cron-token')!==cronToken)return new Response('Unauthorized',{status:401});
  const db=createClient(url,key);
  const {data:games,error}=await db.from('league_games').select('id,week,season,home_team,away_team,kickoff_at').eq('season',2026);
  if(error)return new Response('Database error',{status:500});

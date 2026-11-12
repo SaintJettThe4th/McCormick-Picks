@@ -24,7 +24,7 @@ create or replace function public.record_espn_spread(
 ) returns void language plpgsql security definer set search_path='' as $$
 declare g public.league_games%rowtype;
 begin
- if current_user <> 'service_role' then raise exception 'Service role only'; end if;
+ if auth.role() is distinct from 'service_role' then raise exception 'Service role only'; end if;
  select * into g from public.league_games where id=p_game_id for update;
  if not found or g.kickoff_at is null then return; end if;
  if clock_timestamp() >= g.kickoff_at then

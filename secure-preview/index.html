@@ -1827,8 +1827,7 @@
                                 <span class="status ${game.final ? 'final' : (isLocked ? 'locked' : 'upcoming')}">
                                     ${game.final ? (isTie ? 'Final - Tie' : 'Final') : (isLocked ? 'Locked' : 'Upcoming')}
                                 </span>
-                                ${isLocked && !game.final ? '<span class="lock-indicator">LOCKED</span>' : ''}
-                                <div class="game-time">${game.date} ${game.time} EST</div>
+                                <div class="game-time">${game.time === 'TBD' || game.date === 'TBD' ? 'TBD' : game.date + ' ' + game.time + ' EST'}</div>
                             </div>
 
                             <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
@@ -1932,14 +1931,9 @@
                             ${game.final ? `<div style="font-size: 16px; font-weight: bold; color: #94a3b8; margin-top: 2px;">${game.awayScore}</div>` : ''}
                         </div>
                         <div style="text-align: center; flex: 1;">
-                            <div style="font-size: 11px; color: #ffffff; margin-bottom: 4px;">${game.time}</div>
+
                             <div style="font-size: 12px; font-weight: bold; color: #94a3b8;">at</div>
-                            ${!isWeekEligible ?
-                                `` :
-                                (isLocked ?
-                                    `<span class="lock-indicator">LOCKED</span>` :
-                                    ``)
-                            }
+
                             ${game.final ? `<div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Final</div>` : ''}
                         </div>
                         <div style="display: flex; align-items: center; flex: 1; flex-direction: column;">

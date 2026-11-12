@@ -1850,6 +1850,10 @@
                                 </button>
                             </div>
 
+                            <div class="spread-chip" data-spread-game="${game.id}" style="margin: 12px auto 0; width: fit-content; max-width: 90%; border: 1px solid #9b7925; border-radius: 10px; padding: 7px 13px; color: #d6dce5; font-size: 13px; font-weight: 600;">
+                                Spread: <span style="color: #f0bd35;">${window.McCormickSpreads?.format(game) || 'N/A'}</span>
+                            </div>
+
                             ${userPick && !game.final ? `
                                 <div style="text-align: center; margin-top: 12px; color: #c9a227; font-weight: 600; font-size: 13px;">
                                     Your pick: ${teams[userPick].name}
@@ -2849,5 +2853,6 @@
     <!-- Supabase mode remains disabled until both users and historical picks are migrated. -->
     <script src="./secure-preview/supabase-config.js"></script>
     <script type="module" src="./secure-preview/supabase-integration.js?v=20261112-lock-ui2"></script>
+    <script type="module" src="./secure-preview/spreads.js?v=20261112-spreads1"></script>
 </body>
 </html>

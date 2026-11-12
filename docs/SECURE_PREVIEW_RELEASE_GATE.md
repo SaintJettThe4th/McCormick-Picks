@@ -26,8 +26,9 @@ This release branch was created from the current main branch to avoid merging th
 - [ ] Re-run privacy and lock tests after any further kickoff timestamp updates.
 - [x] Kevin confirmed he completed his own-account checks successfully; no password was shared.
 - [ ] Audit all app links, navigation, scoring, weekly results, and picks history against authoritative Supabase data.
-- [ ] Confirm old client-side password paths cannot be used for authentication in the production entrypoint.
-- [ ] Decide whether TNF push notifications are in scope. They are **not yet configured**; do not advertise them as live.
+- [x] Production candidate staged in release-branch root index.html from tested secure preview; legacy password map is empty and Supabase Auth is enabled in configuration.
+- [ ] Independently test the release-branch production candidate before merge (GitHub Pages serves main, not this branch by default).
+- [x] Defer TNF push notifications until after the initial launch; they are **not yet configured** and must not be advertised as live.
 - [ ] Obtain explicit owner approval before replacing the live `index.html` or merging this release PR.
 
 ## Cutover strategy

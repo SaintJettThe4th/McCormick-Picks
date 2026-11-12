@@ -14,12 +14,17 @@ This release branch was created from the current main branch to avoid merging th
 
 - User confirmed the secure preview displays both players' imported Weeks 6–9 picks correctly.
 
+## Kevin Week 7 correction (user-confirmed November 12, 2026)
+- Kevin clarified that his Week 7 pick was Steelers (PIT), not Saints (NO), for game 7-2.
+- One-record guarded correction script was prepared; user reported successful execution.
+- Original screenshot import script updated to match Kevin's corrected selection.
+
 ## Must pass before production cutover
-- [ ] Verify every remaining 2026 kickoff against ESPN and NFL.com; install verified timestamps in Supabase. Never guess kickoff times.
+- [ ] User reports future kickoff times populated; independently verify all remaining 2026 kickoff timestamps against ESPN and NFL.com before launch. Never guess kickoff times.
 - [x] Read-only opponent-pick privacy test: four PASS results (user-confirmed).
 - [x] Existing post-kickoff lock test: PASS (user-confirmed; rollback-only).
 - [ ] Re-run privacy and lock tests after any further kickoff timestamp updates.
-- [ ] Confirm Kevin can authenticate and save his own pick, without sharing his password.
+- [x] Kevin confirmed he completed his own-account checks successfully; no password was shared.
 - [ ] Audit all app links, navigation, scoring, weekly results, and picks history against authoritative Supabase data.
 - [ ] Confirm old client-side password paths cannot be used for authentication in the production entrypoint.
 - [ ] Decide whether TNF push notifications are in scope. They are **not yet configured**; do not advertise them as live.
